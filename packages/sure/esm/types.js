@@ -9,28 +9,19 @@ export function after(fromStruct, validate, meta) {
     return structValue;
 }
 /**
- * Necessary because `typeof x` is not a type guard.
+Necessary because `typeof x` is not a type guard.
  */
 function isObject(x) {
     return typeof x === 'object' && x !== null;
 }
-const record = sure(value => {
-    return isObject(value) ? good(value) : evil('not an object');
-});
-export const rawString = sure(value => {
-    return typeof value === 'string' ? good(value) : evil('not a string');
-});
 export function object(schema) {
-    const entries = Object.entries(schema).map(([key, struct]) => {
-        return [key, struct.meta];
-    });
-    // get meta of all fields
-    const objectMeta = Object.fromEntries(entries);
+    const metaEntries = Object.entries(schema).map(([key, struct]) => [key, struct.meta]);
+    const objectMeta = Object.fromEntries(metaEntries);
     const struct = sure(value => {
-        if (!isObject(value))
+        if (!isObject(value)) {
             return evil({});
+        }
         const groupIssue = {};
-        // @ts-expect-error TODO: Fix this
         const groupValue = {};
         for (const [key, struct] of Object.entries(schema)) {
             const [good, unsure] = struct(value[key]);

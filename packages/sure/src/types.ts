@@ -2,13 +2,13 @@ import { sure, good, evil } from './sure.js'
 import type { Sure, InferGood, InferEvil, Unsure, Dictionary } from './sure.js'
 
 /**
-  A common use-case is to first validate that a value is a string.
-  And then validate other things about the string.
+A common use-case is to first validate that a value is a string.
+And then validate other things about the string.
 
-  This function will run the @see fromStruct validator first.
-  If it returns a bad value, then the bad value is returned.
+This function will run the @see fromStruct validator first.
+If it returns a bad value, then the bad value is returned.
 
-  If it returns a good value, then the new @see validate function will be run.
+If it returns a good value, then the new @see validate function will be run.
  */
 
 export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure>(
@@ -39,19 +39,11 @@ export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure,
 }
 
 /**
- * Necessary because `typeof x` is not a type guard.
+Necessary because `typeof x` is not a type guard.
  */
 function isObject(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null
 }
-
-const record = sure(value => {
-  return isObject(value) ? good(value) : evil('not an object')
-})
-
-export const rawString = sure(value => {
-  return typeof value === 'string' ? good(value) : evil('not a string' as const)
-})
 
 export function object<
   //
@@ -67,24 +59,16 @@ export function object<
   unknown,
   { [K in keyof TSchema & string]: TMeta }
 > {
-  const entries = Object.entries(schema).map(([key, struct]) => {
-    return [key, struct.meta] as const
-  })
-
-  // get meta of all fields
-  const objectMeta = Object.fromEntries(entries)
+  const metaEntries = Object.entries(schema).map(([key, struct]) => [key, struct.meta])
+  const objectMeta = Object.fromEntries(metaEntries)
 
   const struct = sure(value => {
-    if (!isObject(value)) return evil<{ [K in keyof TSchema]?: InferEvil<TSchema[K]> }>({})
+    if (!isObject(value)) {
+      return evil({})
+    }
 
-    const groupIssue: {
-      [K in keyof TSchema]?: InferEvil<TSchema[K]>
-    } = {}
-
-    // @ts-expect-error TODO: Fix this
-    const groupValue: {
-      [K in keyof TSchema]: InferGood<TSchema[K]>
-    } = {}
+    const groupIssue = {}
+    const groupValue = {}
 
     for (const [key, struct] of Object.entries(schema)) {
       const [good, unsure] = struct(value[key])

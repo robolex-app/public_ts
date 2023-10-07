@@ -1,6 +1,6 @@
 {
   "name": "@robotsx/sure",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "prepublish": "npm run build",
     "clean": "pnpm run clean:remove-generated",
     "clean:remove-generated": "find ./src -type f -name '*.js' -delete && find ./src -type f -name '*.d.ts' -delete",
     "dev": "tsc --watch",
