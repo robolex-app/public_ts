@@ -1,4 +1,3 @@
-import { objEntries, objMapEntries } from '@robo/dependent-ts';
 import { sure, good, evil } from './sure.js';
 export function after(fromStruct, validate, meta) {
     const structValue = sure((value) => {
@@ -22,17 +21,18 @@ export const rawString = sure(value => {
     return typeof value === 'string' ? good(value) : evil('not a string');
 });
 export function object(schema) {
-    // get meta of all fields
-    const objectMeta = objMapEntries(schema, ([key, struct]) => {
+    const entries = Object.entries(schema).map(([key, struct]) => {
         return [key, struct.meta];
     });
+    // get meta of all fields
+    const objectMeta = Object.fromEntries(entries);
     const struct = sure(value => {
         if (!isObject(value))
             return evil({});
         const groupIssue = {};
         // @ts-expect-error TODO: Fix this
         const groupValue = {};
-        for (const [key, struct] of objEntries(schema)) {
+        for (const [key, struct] of Object.entries(schema)) {
             const [good, unsure] = struct(value[key]);
             if (good) {
                 // @ts-expect-error TODO: Fix this
@@ -48,5 +48,6 @@ export function object(schema) {
         }
         return good(groupValue);
     }, objectMeta);
+    // @ts-expect-error fix please
     return struct;
 }

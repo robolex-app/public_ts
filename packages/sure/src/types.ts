@@ -1,4 +1,3 @@
-import { objEntries, objMapEntries } from '@robotsx/dependent-ts'
 import { sure, good, evil } from './sure.js'
 import type { Sure, InferGood, InferEvil, Unsure, Dictionary } from './sure.js'
 
@@ -68,10 +67,12 @@ export function object<
   unknown,
   { [K in keyof TSchema & string]: TMeta }
 > {
-  // get meta of all fields
-  const objectMeta = objMapEntries(schema, ([key, struct]) => {
+  const entries = Object.entries(schema).map(([key, struct]) => {
     return [key, struct.meta] as const
   })
+
+  // get meta of all fields
+  const objectMeta = Object.fromEntries(entries)
 
   const struct = sure(value => {
     if (!isObject(value)) return evil<{ [K in keyof TSchema]?: InferEvil<TSchema[K]> }>({})
@@ -85,7 +86,7 @@ export function object<
       [K in keyof TSchema]: InferGood<TSchema[K]>
     } = {}
 
-    for (const [key, struct] of objEntries(schema)) {
+    for (const [key, struct] of Object.entries(schema)) {
       const [good, unsure] = struct(value[key])
 
       if (good) {
@@ -104,5 +105,6 @@ export function object<
     return good(groupValue)
   }, objectMeta)
 
+  // @ts-expect-error fix please
   return struct
 }

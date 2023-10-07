@@ -1,12 +1,9 @@
 {
   "name": "@robotsx/sure",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
-  "files": [
-    "prod/**"
-  ],
   "publishConfig": {
     "access": "public"
   },
@@ -30,8 +27,5 @@
     "jest-presets": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "5.3.0-beta"
-  },
-  "dependencies": {
-    "@robotsx/dependent": "0.0.1"
   }
 }

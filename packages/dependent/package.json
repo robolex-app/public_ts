@@ -1,12 +1,9 @@
 {
   "name": "@robotsx/dependent",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./dist/index.js",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist/**"
-  ],
   "publishConfig": {
     "access": "public"
   },
