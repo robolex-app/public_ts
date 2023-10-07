@@ -1,10 +1,8 @@
-import { sure, good, evil } from './sure.js';
+import { sure, good } from './sure.js';
 export function after(fromStruct, validate, meta) {
     const structValue = sure((value) => {
         const [good, out] = fromStruct(value);
-        if (!good)
-            return evil(out);
-        return validate(out);
+        return good ? validate(out) : fail(out);
     }, meta);
     return structValue;
 }
@@ -19,7 +17,7 @@ export function object(schema) {
     const objectMeta = Object.fromEntries(metaEntries);
     const struct = sure(value => {
         if (!isObject(value)) {
-            return evil({});
+            return fail({});
         }
         const groupIssue = {};
         const groupValue = {};
@@ -35,7 +33,7 @@ export function object(schema) {
             }
         }
         if (Object.keys(groupIssue).length) {
-            return evil(groupIssue);
+            return fail(groupIssue);
         }
         return good(groupValue);
     }, objectMeta);

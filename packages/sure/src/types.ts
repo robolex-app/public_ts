@@ -1,5 +1,5 @@
-import { sure, good, evil } from './sure.js'
-import type { Sure, InferGood, InferEvil, Unsure, Dictionary } from './sure.js'
+import { sure, good, Fail } from './sure.js'
+import type { Sure, InferGood, InferFail, Unsure, Dictionary } from './sure.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -30,9 +30,7 @@ export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure,
   const structValue = sure((value: TFromInput) => {
     const [good, out] = fromStruct(value)
 
-    if (!good) return evil<TFailure | TFromFailures>(out)
-
-    return validate(out)
+    return good ? validate(out) : fail(out)
   }, meta)
 
   return structValue
@@ -54,7 +52,7 @@ export function object<
 >(
   schema: TSchema
 ): Sure<
-  { [K in keyof TSchema & string]?: InferEvil<TSchema[K]> },
+  { [K in keyof TSchema & string]?: InferFail<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   unknown,
   { [K in keyof TSchema & string]: TMeta }
@@ -64,7 +62,7 @@ export function object<
 
   const struct = sure(value => {
     if (!isObject(value)) {
-      return evil({})
+      return fail({})
     }
 
     const groupIssue = {}
@@ -83,7 +81,7 @@ export function object<
     }
 
     if (Object.keys(groupIssue).length) {
-      return evil(groupIssue)
+      return fail(groupIssue)
     }
 
     return good(groupValue)

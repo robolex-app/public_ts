@@ -1,14 +1,14 @@
-import { evil, good, sure } from './sure.js';
+import { good, sure } from './sure.js';
 /**
 `isNumber` on hover `Sure<"not a number", number, unknown>`
 */
 const number = sure(value => {
     return typeof value === 'number' //
         ? good(value)
-        : evil('not a number');
+        : fail('not a number');
 }, 'number');
 /**
-`isGood` on hover: `"good" | "evil"`
+`isGood` on hover: `"good" | "fail"`
 `unsure` on hover: `number | "not a number"`
  */
 const [isNumber, unsure] = number(1);
