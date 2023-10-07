@@ -1,4 +1,4 @@
-import { objEntries, objMapEntries } from '@robo/dependent-ts'
+import { objEntries, objMapEntries } from '@robotsx/dependent-ts'
 import { sure, good, evil } from './sure.js'
 import type { Sure, InferGood, InferEvil, Unsure, Dictionary } from './sure.js'
 

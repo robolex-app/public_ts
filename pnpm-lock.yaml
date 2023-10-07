@@ -18,7 +18,7 @@ importers:
         specifier: 1.10.15
         version: 1.10.15
 
-  packages/dependent-ts:
+  packages/dependent:
     devDependencies:
       '@types/jest':
         specifier: 29.5.5
@@ -110,9 +110,9 @@ importers:
 
   packages/sure:
     dependencies:
-      '@robo/dependent-ts':
-        specifier: workspace:*
-        version: link:../dependent-ts
+      '@robotsx/dependent':
+        specifier: 0.0.1
+        version: link:../dependent
     devDependencies:
       '@types/jest':
         specifier: 29.5.5
