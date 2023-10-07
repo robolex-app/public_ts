@@ -1,11 +1,15 @@
 {
-  "name": "@robo/sure",
+  "name": "@robotsx/sure",
+  "version": "0.0.1",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
   "files": [
     "prod/**"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "clean": "pnpm run clean:remove-generated",

@@ -1,4 +1,4 @@
-import { objEntries, objFromEntries, objMapEntries } from '@robo/dependent-ts'
+import { objEntries, objMapEntries } from '@robo/dependent-ts'
 import { sure, good, evil } from './sure.js'
 import type { Sure, InferGood, InferEvil, Unsure, Dictionary } from './sure.js'
 
@@ -59,7 +59,7 @@ export function object<
   TFailures,
   TPropParsed,
   TMeta,
-  TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>
+  TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
 >(
   schema: TSchema
 ): Sure<
