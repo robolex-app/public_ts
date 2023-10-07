@@ -24,11 +24,11 @@ export function object(schema) {
         for (const [key, struct] of Object.entries(schema)) {
             const [good, unsure] = struct(value[key]);
             if (good) {
-                // @ts-expect-error TODO: Fix this
+                // @ts-expect-error
                 groupValue[key] = unsure;
             }
             else {
-                // @ts-expect-error TODO: Fix this
+                // @ts-expect-error
                 groupIssue[key] = unsure;
             }
         }
@@ -37,6 +37,6 @@ export function object(schema) {
         }
         return good(groupValue);
     }, objectMeta);
-    // @ts-expect-error fix please
+    // @ts-expect-error
     return struct;
 }

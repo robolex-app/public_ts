@@ -72,10 +72,10 @@ export function object<
       const [good, unsure] = struct(value[key])
 
       if (good) {
-        // @ts-expect-error TODO: Fix this
+        // @ts-expect-error
         groupValue[key] = unsure
       } else {
-        // @ts-expect-error TODO: Fix this
+        // @ts-expect-error
         groupIssue[key] = unsure
       }
     }
@@ -87,6 +87,6 @@ export function object<
     return good(groupValue)
   }, objectMeta)
 
-  // @ts-expect-error fix please
+  // @ts-expect-error
   return struct
 }
