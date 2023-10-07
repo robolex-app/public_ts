@@ -1,0 +1,22 @@
+# All .env files are ignored expect for .env.template
+.env*
+!.env.template
+
+# Ignore /cypress/videos folder
+**/cypress/videos
+
+
+.DS_Store
+node_modules
+.turbo
+*.log
+.next
+dist
+dist-ssr
+*.local
+.env
+.cache
+server/dist
+public/dist
+.turbo
+.vercel

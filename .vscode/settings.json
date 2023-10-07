@@ -1,0 +1,12 @@
+{
+  // These are the correct way to import ESM modules.
+  // But there seem to be issues in Next.js
+  // "typescript.preferences.importModuleSpecifierEnding": "js",
+  // "javascript.preferences.importModuleSpecifierEnding": "js",
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#501C22",
+    "titleBar.activeBackground": "#70272F",
+    "titleBar.activeForeground": "#FEFBFC"
+  },
+  "jest.virtualFolders": [{ "name": "docs_robolex", "rootPath": "./apps/docs_robolex" }]
+}

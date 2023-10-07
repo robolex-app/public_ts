@@ -1,0 +1,30 @@
+{
+  "name": "@robo/dependent-ts",
+  "private": true,
+  "main": "./dist/index.js",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "lint": "eslint \"src/**/*.ts*\" --quiet",
+    "lint:warn": "eslint \"src/**/*.ts*\"",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-presets/jest/node"
+  },
+  "devDependencies": {
+    "@types/jest": "29.5.5",
+    "eslint": "8.50.0",
+    "eslint-config-custom": "workspace:*",
+    "jest": "29.7.0",
+    "jest-presets": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "5.3.0-beta"
+  }
+}

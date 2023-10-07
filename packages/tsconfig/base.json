@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
+  "compilerOptions": {
+    // https://www.typescriptlang.org/tsconfig#composite
+    // TODO: Research if it would benefit us to have it enabled.
+    "composite": false,
+
+    // Create .d.ts files
+    "declaration": true,
+    // Create .d.ts.map files
+    "declarationMap": true,
+
+    "esModuleInterop": true,
+
+    "allowJs": true,
+    "checkJs": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
+    "noErrorTruncation": true,
+    "skipLibCheck": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true
+    // Differentiate between undefined and optional
+    // But MUI doesn't work with it for the `sx` property, lots of issues
+    // https://github.com/mui/material-ui/issues/28745
+    // "exactOptionalPropertyTypes": true
+  },
+  "exclude": ["node_modules"]
+}
