@@ -1,5 +1,6 @@
 import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../sure.js'
 import { assertIs, AssertEqual, assertEqual } from '../typeTestUtils.js'
+import isUUID from 'validator/lib/isUUID.js'
 
 /**
 Validator for numbers without any meta.
@@ -43,6 +44,14 @@ const sureMultipleErrors = sure(value => {
   // The `string & {}` is used as an example, when the return type has to be more controlled
   return good<string & {}>(value)
 })
+
+/**
+With custom type guard
+ */
+function isUuid(value: string): value is string & { _brand: 'uuid' } {
+  // @ts-expect-error - fix issues with default import
+  return isUUID(value)
+}
 
 describe('core', () => {
   it('should return good value', () => {
