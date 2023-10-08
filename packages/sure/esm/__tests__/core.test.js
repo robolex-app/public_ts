@@ -11,7 +11,7 @@ Validator for strings with meta.
  */
 const sureStringMeta = sure(value => typeof value === 'string' //
     ? good(value)
-    : fail('not a string'), 'my meta');
+    : fail('not a string'), { myMeta: 'my meta' });
 /**
 Validator that expects the input to already be a string.
  */
@@ -81,7 +81,6 @@ describe('core', () => {
         assertEqual(true);
         assertEqual(true);
         assertEqual(true);
-        assertEqual(true);
     });
     it('should have strong types with meta', () => {
         assertEqual(true);
@@ -95,10 +94,8 @@ describe('core', () => {
         assertEqual(true);
         assertEqual(true);
         assertEqual(true);
-        assertEqual(true);
     });
     it('should have strong types for validators with multiple errors', () => {
-        assertEqual(true);
         assertEqual(true);
         assertEqual(true);
         assertEqual(true);

@@ -1,5 +1,5 @@
-import { sure, good, Fail } from './sure.js'
-import type { Sure, InferGood, InferFail, Unsure, Dictionary } from './sure.js'
+import { sure, good, fail } from './sure.js'
+import type { Sure, InferGood, InferFail, Unsure, Dictionary, Pure } from './sure.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -11,29 +11,16 @@ If it returns a bad value, then the bad value is returned.
 If it returns a good value, then the new @see validate function will be run.
  */
 
-export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure>(
-  fromStruct: Sure<TFromFailures, TFromParsed, TFromInput, unknown>,
-  validate: (value: TFromParsed) => Unsure<TFailure, TDefine>
-): Sure<TFromFailures | TFailure, TDefine, TFromInput, unknown>
-
-export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure, TMeta>(
-  fromStruct: Sure<TFromFailures, TFromParsed, TFromInput>,
-  validate: (value: TFromParsed) => Unsure<TFailure, TDefine>,
-  meta: TMeta
-): Sure<TFromFailures | TFailure, TDefine, TFromInput, TMeta>
-
-export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure, TMeta>(
-  fromStruct: Sure<TFromFailures, TFromParsed, TFromInput, unknown>,
-  validate: (value: TFromParsed) => Unsure<TFailure, TDefine>,
+export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure, TMeta extends {}>(
+  fromStruct: Pure<TFromFailures, TFromParsed, TFromInput>,
+  validate: Pure<TFailure, TDefine, TFromParsed>,
   meta?: TMeta
 ): Sure<TFromFailures | TFailure, TDefine, TFromInput, TMeta> {
-  const structValue = sure((value: TFromInput) => {
+  return sure((value: TFromInput) => {
     const [good, out] = fromStruct(value)
 
-    return good ? validate(out) : fail(out)
+    return good ? validate(out) : fail<TFromFailures | TFailure>(out)
   }, meta)
-
-  return structValue
 }
 
 /**
