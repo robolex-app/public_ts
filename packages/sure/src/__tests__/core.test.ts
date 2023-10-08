@@ -102,30 +102,30 @@ describe('core', () => {
   })
 
   it('type inference should work', () => {
-    assertEqual<number, InferGood<typeof sureNumber>>(true)
-    assertEqual<'not a number', InferFail<typeof sureNumber>>(true)
-    assertEqual<unknown, InferInput<typeof sureNumber>>(true)
-    assertEqual<undefined, InferMeta<typeof sureNumber>>(true)
+    assertEqual<InferGood<typeof sureNumber>, number>(true)
+    assertEqual<InferFail<typeof sureNumber>, 'not a number'>(true)
+    assertEqual<InferInput<typeof sureNumber>, unknown>(true)
+    assertEqual<InferMeta<typeof sureNumber>, undefined>(true)
   })
 
   it('should have strong types with meta', () => {
-    assertEqual<string, InferGood<typeof sureStringMeta>>(true)
-    assertEqual<'not a string', InferFail<typeof sureStringMeta>>(true)
-    assertEqual<unknown, InferInput<typeof sureStringMeta>>(true)
-    assertEqual<'my meta', InferMeta<typeof sureStringMeta>>(true)
+    assertEqual<InferGood<typeof sureStringMeta>, string>(true)
+    assertEqual<InferFail<typeof sureStringMeta>, 'not a string'>(true)
+    assertEqual<InferInput<typeof sureStringMeta>, unknown>(true)
+    assertEqual<InferMeta<typeof sureStringMeta>, 'my meta'>(true)
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<string, InferGood<typeof sureNonEmptyString>>(true)
-    assertEqual<'empty string', InferFail<typeof sureNonEmptyString>>(true)
-    assertEqual<string, InferInput<typeof sureNonEmptyString>>(true)
-    assertEqual<undefined, InferMeta<typeof sureNonEmptyString>>(true)
+    assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
+    assertEqual<InferFail<typeof sureNonEmptyString>, 'empty string'>(true)
+    assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
+    assertEqual<InferMeta<typeof sureNonEmptyString>, undefined>(true)
   })
 
   it('should have strong types for validators with multiple errors', () => {
-    assertEqual<string & {}, InferGood<typeof sureMultipleErrors>>(true)
-    assertEqual<'not a string' | 'too small' | 'too big', InferFail<typeof sureMultipleErrors>>(true)
-    assertEqual<unknown, InferInput<typeof sureMultipleErrors>>(true)
-    assertEqual<undefined, InferMeta<typeof sureMultipleErrors>>(true)
+    assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
+    assertEqual<InferFail<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
+    assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
+    assertEqual<InferMeta<typeof sureMultipleErrors>, undefined>(true)
   })
 })
