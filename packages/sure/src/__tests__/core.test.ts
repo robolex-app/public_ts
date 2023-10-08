@@ -1,4 +1,4 @@
-import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta } from '../sure.js'
+import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../sure.js'
 import { assertIs, AssertEqual, assertEqual } from '../typeTestUtils.js'
 
 /**
@@ -102,6 +102,8 @@ describe('core', () => {
   })
 
   it('type inference should work', () => {
+    assertEqual<typeof sureNumber, Sure<'not a number', number, unknown, undefined>>(true)
+
     assertEqual<InferGood<typeof sureNumber>, number>(true)
     assertEqual<InferFail<typeof sureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof sureNumber>, unknown>(true)
@@ -109,6 +111,8 @@ describe('core', () => {
   })
 
   it('should have strong types with meta', () => {
+    assertEqual<typeof sureStringMeta, Sure<'not a string', string, unknown, 'my meta'>>(true)
+
     assertEqual<InferGood<typeof sureStringMeta>, string>(true)
     assertEqual<InferFail<typeof sureStringMeta>, 'not a string'>(true)
     assertEqual<InferInput<typeof sureStringMeta>, unknown>(true)
@@ -116,6 +120,8 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with custom input', () => {
+    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, undefined>>(true)
+
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferFail<typeof sureNonEmptyString>, 'empty string'>(true)
     assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
@@ -123,6 +129,11 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with multiple errors', () => {
+    assertEqual<
+      typeof sureMultipleErrors,
+      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, undefined>
+    >(true)
+
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
     assertEqual<InferFail<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
     assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
