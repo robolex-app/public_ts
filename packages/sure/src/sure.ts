@@ -9,9 +9,15 @@ export type Dictionary = Record<string, unknown>
          so you can base a numeric string on a string struct (if you want).
          By default the `unknown` struct is used. That is the only core struct
  */
-export type Sure<TFail, TGood, TInput, TMeta> = ((value: TInput) => Good<TGood> | Fail<TFail>) & { meta: TMeta }
+export type Sure<TFail = unknown, TGood = unknown, TInput = unknown, TMeta = unknown> = ((
+  value: TInput
+) => Good<TGood> | Fail<TFail>) &
+  TMeta
 
-export type PureSure<TFail, TGood, TInput> = (value: TInput) => Good<TGood> | Fail<TFail>
+type myType<T> = ((a: string) => number) & T
+
+type test = myType<unknown>
+
 /**
 Returns the exact function back.
 But the types are inferred automatically for you.
@@ -30,20 +36,18 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
  */
 
 //
-export function sure<TFail, TGood, TInput>(
-  insure: PureSure<TFail, TGood, TInput>
-): Sure<TFail, TGood, TInput, undefined>
+export function sure<TFail, TGood, TInput>(insure: Sure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, Dictionary>
 
 export function sure<TFail, TGood, TInput, TMeta>(
-  insure: PureSure<TFail, TGood, TInput>,
+  insure: Sure<TFail, TGood, TInput>,
   meta: TMeta
 ): Sure<TFail, TGood, TInput, TMeta>
 
 export function sure<TGood, TFail, TInput, TMeta>(
-  insure: PureSure<TFail, TGood, TInput>,
+  insure: Sure<TFail, TGood, TInput>,
   meta?: TMeta
-): Sure<TFail, TGood, TInput, TMeta | undefined> {
-  return Object.assign(insure, { meta })
+): Sure<TFail, TGood, TInput, TMeta> {
+  return Object.assign(insure, meta)
 }
 //
 export const fail = <TFail>(fail: TFail): Fail<TFail> => [false, fail]
@@ -56,22 +60,22 @@ export type Unsure<TFail, TGood> = //
 export type Good<T> = [true, T]
 export type Fail<T> = [false, T]
 
-export type InferGood<T extends Sure<unknown, unknown, any, unknown>> = //
-  T extends Sure<unknown, infer CDefine, any, unknown> //
-    ? CDefine
-    : never
-
-export type InferFail<T extends Sure<unknown, unknown, any, unknown>> = //
-  T extends Sure<infer CFailure, unknown, any, unknown> //
+export type InferFail<T extends Sure> = //
+  T extends Sure<infer CFailure> //
     ? CFailure
     : never
 
-export type InferInput<T extends Sure<unknown, unknown, any, unknown>> = //
-  T extends Sure<unknown, unknown, infer CFrom, unknown> //
+export type InferGood<T extends Sure> = //
+  T extends Sure<unknown, infer CDefine> //
+    ? CDefine
+    : never
+
+export type InferInput<T extends Sure> = //
+  T extends Sure<unknown, unknown, infer CFrom> //
     ? CFrom
     : never
 
-export type InferMeta<T extends Sure<unknown, unknown, any, unknown>> = //
+export type InferMeta<T extends Sure> = //
   T extends Sure<unknown, unknown, any, infer CMeta> //
     ? CMeta
     : never

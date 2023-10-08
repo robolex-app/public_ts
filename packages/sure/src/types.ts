@@ -14,10 +14,10 @@ If it returns a good value, then the new @see validate function will be run.
 export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure>(
   fromStruct: Sure<TFromFailures, TFromParsed, TFromInput, unknown>,
   validate: (value: TFromParsed) => Unsure<TFailure, TDefine>
-): Sure<TFromFailures | TFailure, TDefine, TFromInput, undefined>
+): Sure<TFromFailures | TFailure, TDefine, TFromInput, unknown>
 
 export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure, TMeta>(
-  fromStruct: Sure<TFromFailures, TFromParsed, TFromInput, unknown>,
+  fromStruct: Sure<TFromFailures, TFromParsed, TFromInput>,
   validate: (value: TFromParsed) => Unsure<TFailure, TDefine>,
   meta: TMeta
 ): Sure<TFromFailures | TFailure, TDefine, TFromInput, TMeta>
@@ -26,7 +26,7 @@ export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure,
   fromStruct: Sure<TFromFailures, TFromParsed, TFromInput, unknown>,
   validate: (value: TFromParsed) => Unsure<TFailure, TDefine>,
   meta?: TMeta
-): Sure<TFromFailures | TFailure, TDefine, TFromInput, TMeta | undefined> {
+): Sure<TFromFailures | TFailure, TDefine, TFromInput, TMeta> {
   const structValue = sure((value: TFromInput) => {
     const [good, out] = fromStruct(value)
 
@@ -47,7 +47,7 @@ export function object<
   //
   TFailures,
   TPropParsed,
-  TMeta,
+  TMeta extends Dictionary,
   TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
 >(
   schema: TSchema
@@ -57,9 +57,6 @@ export function object<
   unknown,
   { [K in keyof TSchema & string]: TMeta }
 > {
-  const metaEntries = Object.entries(schema).map(([key, struct]) => [key, struct.meta])
-  const objectMeta = Object.fromEntries(metaEntries)
-
   const struct = sure(value => {
     if (!isObject(value)) {
       return fail({})
@@ -85,7 +82,7 @@ export function object<
     }
 
     return good(groupValue)
-  }, objectMeta)
+  }, schema)
 
   // @ts-expect-error
   return struct
