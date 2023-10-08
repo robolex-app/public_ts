@@ -56,22 +56,22 @@ export type Unsure<TFail, TGood> = //
 export type Good<T> = [true, T]
 export type Fail<T> = [false, T]
 
-export type InferGood<T extends Sure<unknown, unknown, unknown, unknown>> = //
-  T extends Sure<unknown, infer CDefine, unknown, unknown> //
+export type InferGood<T extends Sure<unknown, unknown, any, unknown>> = //
+  T extends Sure<unknown, infer CDefine, any, unknown> //
     ? CDefine
     : never
 
-export type InferFail<T extends Sure<unknown, unknown, unknown, unknown>> = //
-  T extends Sure<infer CFailure, unknown, unknown, unknown> //
+export type InferFail<T extends Sure<unknown, unknown, any, unknown>> = //
+  T extends Sure<infer CFailure, unknown, any, unknown> //
     ? CFailure
     : never
 
-export type InferInput<T extends Sure<unknown, unknown, unknown, unknown>> = //
+export type InferInput<T extends Sure<unknown, unknown, any, unknown>> = //
   T extends Sure<unknown, unknown, infer CFrom, unknown> //
     ? CFrom
     : never
 
-export type InferMeta<T extends Sure<unknown, unknown, unknown, unknown>> = //
-  T extends Sure<unknown, unknown, unknown, infer CMeta> //
+export type InferMeta<T extends Sure<unknown, unknown, any, unknown>> = //
+  T extends Sure<unknown, unknown, any, infer CMeta> //
     ? CMeta
     : never

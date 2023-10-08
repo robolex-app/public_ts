@@ -30,6 +30,20 @@ const sureNonEmptyString = sure((value: string) =>
     : fail('empty string' as const)
 )
 
+/**
+Validator that can return multiple error types
+ */
+const sureMultipleErrors = sure(value => {
+  if (typeof value !== 'string') return fail('not a string' as const)
+
+  if (value.length < 3) return fail('too small' as const)
+
+  if (value.length > 10) return fail('too big' as const)
+
+  // The `string & {}` is used as an example, when the return type has to be more controlled
+  return good<string & {}>(value)
+})
+
 describe('core', () => {
   it('should return good value', () => {
     const [isNumber, unsure] = sureNumber(1)
@@ -99,5 +113,19 @@ describe('core', () => {
     assertEqual<'not a string', InferFail<typeof sureStringMeta>>(true)
     assertEqual<unknown, InferInput<typeof sureStringMeta>>(true)
     assertEqual<'my meta', InferMeta<typeof sureStringMeta>>(true)
+  })
+
+  it('should have strong types for validators with custom input', () => {
+    assertEqual<string, InferGood<typeof sureNonEmptyString>>(true)
+    assertEqual<'empty string', InferFail<typeof sureNonEmptyString>>(true)
+    assertEqual<string, InferInput<typeof sureNonEmptyString>>(true)
+    assertEqual<undefined, InferMeta<typeof sureNonEmptyString>>(true)
+  })
+
+  it('should have strong types for validators with multiple errors', () => {
+    assertEqual<string & {}, InferGood<typeof sureMultipleErrors>>(true)
+    assertEqual<'not a string' | 'too small' | 'too big', InferFail<typeof sureMultipleErrors>>(true)
+    assertEqual<unknown, InferInput<typeof sureMultipleErrors>>(true)
+    assertEqual<undefined, InferMeta<typeof sureMultipleErrors>>(true)
   })
 })
