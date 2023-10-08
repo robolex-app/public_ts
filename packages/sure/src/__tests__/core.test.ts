@@ -1,4 +1,4 @@
-import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure, Dictionary } from '../sure.js'
+import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure, Dictionary, PureSure } from '../sure.js'
 import { assertIs, assertEqual } from '../typeTestUtils.js'
 
 /**
@@ -18,7 +18,7 @@ const sureStringMeta = sure(
     typeof value === 'string' //
       ? good(value)
       : fail('not a string' as const),
-  'my meta' as const
+  { myMeta: 'my meta' }
 )
 
 /**
@@ -102,41 +102,59 @@ describe('core', () => {
   })
 
   it('type inference should work', () => {
-    assertEqual<typeof sureNumber, Sure<'not a number', number, unknown, Dictionary>>(true)
+    assertEqual<
+      typeof sureNumber,
+      PureSure<
+        //
+        'not a number',
+        number,
+        unknown
+      >
+    >(true)
 
     assertEqual<InferGood<typeof sureNumber>, number>(true)
     assertEqual<InferFail<typeof sureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof sureNumber>, unknown>(true)
-    assertEqual<InferMeta<typeof sureNumber>, Dictionary>(true)
   })
 
   it('should have strong types with meta', () => {
-    assertEqual<typeof sureStringMeta, Sure<'not a string', string, unknown, 'my meta'>>(true)
+    assertEqual<
+      typeof sureStringMeta,
+      Sure<
+        //
+        'not a string',
+        string,
+        unknown,
+        { myMeta: string }
+      >
+    >(true)
 
     assertEqual<InferGood<typeof sureStringMeta>, string>(true)
     assertEqual<InferFail<typeof sureStringMeta>, 'not a string'>(true)
     assertEqual<InferInput<typeof sureStringMeta>, unknown>(true)
-    assertEqual<InferMeta<typeof sureStringMeta>, 'my meta'>(true)
+    assertEqual<
+      InferMeta<typeof sureStringMeta>,
+      {
+        myMeta: string
+      }
+    >(true)
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, Dictionary>>(true)
+    assertEqual<typeof sureNonEmptyString, PureSure<'empty string', string, string>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferFail<typeof sureNonEmptyString>, 'empty string'>(true)
     assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
-    assertEqual<InferMeta<typeof sureNonEmptyString>, Dictionary>(true)
   })
 
   it('should have strong types for validators with multiple errors', () => {
-    assertEqual<
-      typeof sureMultipleErrors,
-      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, Dictionary>
-    >(true)
+    assertEqual<typeof sureMultipleErrors, PureSure<'not a string' | 'too small' | 'too big', string & {}, unknown>>(
+      true
+    )
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
     assertEqual<InferFail<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
     assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
-    assertEqual<InferMeta<typeof sureMultipleErrors>, Dictionary>(true)
   })
 })

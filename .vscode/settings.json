@@ -8,5 +8,11 @@
     "titleBar.activeBackground": "#70272F",
     "titleBar.activeForeground": "#FEFBFC"
   },
-  "jest.virtualFolders": [{ "name": "docs_robolex", "rootPath": "./apps/docs_robolex" }]
+  "jest.virtualFolders": [
+    {
+      "name": "docs_robolex",
+      "rootPath": "./apps/docs_robolex"
+    }
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
