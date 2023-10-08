@@ -19,6 +19,9 @@ module.exports = {
       'ts-jest',
       {
         useESM: true,
+
+        // This disable type errors during test run
+        diagnostics: false,
       },
     ],
   },
