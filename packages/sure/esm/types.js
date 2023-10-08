@@ -13,8 +13,6 @@ function isObject(x) {
     return typeof x === 'object' && x !== null;
 }
 export function object(schema) {
-    const metaEntries = Object.entries(schema).map(([key, struct]) => [key, struct.meta]);
-    const objectMeta = Object.fromEntries(metaEntries);
     const struct = sure(value => {
         if (!isObject(value)) {
             return fail({});
@@ -36,7 +34,7 @@ export function object(schema) {
             return fail(groupIssue);
         }
         return good(groupValue);
-    }, objectMeta);
+    }, schema);
     // @ts-expect-error
     return struct;
 }

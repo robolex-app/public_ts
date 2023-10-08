@@ -1,5 +1,5 @@
-import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../sure.js'
-import { assertIs, AssertEqual, assertEqual } from '../typeTestUtils.js'
+import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure, Dictionary } from '../sure.js'
+import { assertIs, assertEqual } from '../typeTestUtils.js'
 
 /**
 Validator for numbers without any meta.
@@ -102,12 +102,12 @@ describe('core', () => {
   })
 
   it('type inference should work', () => {
-    assertEqual<typeof sureNumber, Sure<'not a number', number, unknown, undefined>>(true)
+    assertEqual<typeof sureNumber, Sure<'not a number', number, unknown, Dictionary>>(true)
 
     assertEqual<InferGood<typeof sureNumber>, number>(true)
     assertEqual<InferFail<typeof sureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof sureNumber>, unknown>(true)
-    assertEqual<InferMeta<typeof sureNumber>, undefined>(true)
+    assertEqual<InferMeta<typeof sureNumber>, Dictionary>(true)
   })
 
   it('should have strong types with meta', () => {
@@ -120,23 +120,23 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, undefined>>(true)
+    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, Dictionary>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferFail<typeof sureNonEmptyString>, 'empty string'>(true)
     assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
-    assertEqual<InferMeta<typeof sureNonEmptyString>, undefined>(true)
+    assertEqual<InferMeta<typeof sureNonEmptyString>, Dictionary>(true)
   })
 
   it('should have strong types for validators with multiple errors', () => {
     assertEqual<
       typeof sureMultipleErrors,
-      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, undefined>
+      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, Dictionary>
     >(true)
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
     assertEqual<InferFail<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
     assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
-    assertEqual<InferMeta<typeof sureMultipleErrors>, undefined>(true)
+    assertEqual<InferMeta<typeof sureMultipleErrors>, Dictionary>(true)
   })
 })

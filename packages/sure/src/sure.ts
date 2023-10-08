@@ -9,10 +9,13 @@ export type Dictionary = Record<string, unknown>
          so you can base a numeric string on a string struct (if you want).
          By default the `unknown` struct is used. That is the only core struct
  */
-export type Sure<TFail = unknown, TGood = unknown, TInput = unknown, TMeta = unknown> = ((
-  value: TInput
-) => Good<TGood> | Fail<TFail>) &
-  TMeta
+export type Sure<
+  TFail = unknown,
+  TGood = unknown,
+  // Setting it to unknown creates errors with argument of function
+  TInput = any,
+  TMeta = unknown,
+> = ((value: TInput) => Good<TGood> | Fail<TFail>) & TMeta
 
 type myType<T> = ((a: string) => number) & T
 
@@ -43,7 +46,7 @@ export function sure<TFail, TGood, TInput, TMeta>(
   meta: TMeta
 ): Sure<TFail, TGood, TInput, TMeta>
 
-export function sure<TGood, TFail, TInput, TMeta>(
+export function sure<TGood, TFail, TInput, TMeta extends Dictionary>(
   insure: Sure<TFail, TGood, TInput>,
   meta?: TMeta
 ): Sure<TFail, TGood, TInput, TMeta> {
@@ -76,6 +79,12 @@ export type InferInput<T extends Sure> = //
     : never
 
 export type InferMeta<T extends Sure> = //
-  T extends Sure<unknown, unknown, any, infer CMeta> //
+  T extends Sure<
+    unknown,
+    unknown,
+    // Same issue as defined above
+    any,
+    infer CMeta
+  > //
     ? CMeta
-    : never
+    : unknown
