@@ -5,21 +5,31 @@ import type { Sure, InferGood, InferFail, Unsure, Dictionary, Pure } from './sur
 A common use-case is to first validate that a value is a string.
 And then validate other things about the string.
 
-This function will run the @see fromStruct validator first.
+This function will run the @see first validator first.
 If it returns a bad value, then the bad value is returned.
 
-If it returns a good value, then the new @see validate function will be run.
+If it returns a good value, then the new @see second function will be run.
  */
 
-export function after<TDefine, TFromFailures, TFromParsed, TFromInput, TFailure, TMeta extends {}>(
-  fromStruct: Pure<TFromFailures, TFromParsed, TFromInput>,
-  validate: Pure<TFailure, TDefine, TFromParsed>,
+export function after<
+  //
+  TFirstFail,
+  TFirstGood,
+  TFirstInput,
+  //
+  TSecondFail,
+  TSecondGood,
+  //
+  TMeta extends {},
+>(
+  first: Pure<TFirstFail, TFirstGood, TFirstInput>,
+  second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta?: TMeta
-): Sure<TFromFailures | TFailure, TDefine, TFromInput, TMeta> {
-  return sure((value: TFromInput) => {
-    const [good, out] = fromStruct(value)
+): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, TMeta> {
+  return sure((value: TFirstInput) => {
+    const [good, out] = first(value)
 
-    return good ? validate(out) : fail<TFromFailures | TFailure>(out)
+    return good ? second(out) : fail<TFirstFail | TSecondFail>(out)
   }, meta)
 }
 
@@ -37,7 +47,8 @@ export function object<
   TMeta extends Dictionary,
   TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
 >(
-  schema: TSchema
+  schema: TSchema,
+  optionals?: (keyof TSchema & string)[]
 ): Sure<
   { [K in keyof TSchema & string]?: InferFail<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
@@ -53,6 +64,9 @@ export function object<
     const groupValue = {}
 
     for (const [key, struct] of Object.entries(schema)) {
+      // TODO: Make different between `| undefined` and `?: somthing`
+      // check if key actually exists
+
       const [good, unsure] = struct(value[key])
 
       if (good) {

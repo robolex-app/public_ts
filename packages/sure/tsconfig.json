@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "noErrorTruncation": true,
+
     "rootDir": "src",
     "outDir": "esm",
     "declaration": false,

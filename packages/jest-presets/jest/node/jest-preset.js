@@ -33,6 +33,7 @@ module.exports = {
     '<rootDir>/test/__fixtures__',
     '<rootDir>/node_modules',
     '<rootDir>/dist',
+    '<rootDir>/esm',
   ],
   preset: 'ts-jest',
 

@@ -110,4 +110,4 @@ export type InferMeta<
     infer CMeta
   > //
     ? CMeta
-    : unknown
+    : {}
