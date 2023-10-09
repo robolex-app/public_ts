@@ -1,4 +1,4 @@
-import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure, Pure } from '../sure.js'
+import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../sure.js'
 import { assertIs, assertEqual } from '../typeTestUtils.js'
 
 /**
@@ -104,11 +104,12 @@ describe('core', () => {
   it('type inference should work', () => {
     assertEqual<
       typeof sureNumber,
-      Pure<
+      Sure<
         //
         'not a number',
         number,
-        unknown
+        unknown,
+        undefined
       >
     >(true)
 
@@ -141,7 +142,7 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Pure<'empty string', string, string>>(true)
+    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, undefined>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferFail<typeof sureNonEmptyString>, 'empty string'>(true)
@@ -150,7 +151,10 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with multiple errors', () => {
-    assertEqual<typeof sureMultipleErrors, Pure<'not a string' | 'too small' | 'too big', string & {}, unknown>>(true)
+    assertEqual<
+      typeof sureMultipleErrors,
+      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, undefined>
+    >(true)
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
     assertEqual<InferFail<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)

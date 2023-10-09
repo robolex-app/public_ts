@@ -11,22 +11,16 @@ export type Dictionary = {
          so you can base a numeric string on a string struct (if you want).
          By default the `unknown` struct is used. That is the only core struct
  */
-export type Sure<TFail, TGood, TInput, TMeta extends {}> = {
+export type Sure<TFail, TGood, TInput, TMeta> = {
   (value: TInput): Good<TGood> | Fail<TFail>
-} & TMeta
+} & { meta: TMeta }
 
 export type Pure<
   TFail = unknown,
   TGood = unknown,
   // More indepth about why any
   TInput = any,
-> = {
-  (value: TInput): Good<TGood> | Fail<TFail>
-} & {}
-
-type myType<T> = ((a: string) => number) & T
-
-type test = myType<unknown>
+> = (value: TInput) => Good<TGood> | Fail<TFail>
 
 /**
 Returns the exact function back.
@@ -45,11 +39,18 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-export function sure<TGood, TFail, TInput, TMeta extends {}>(
+export function sure<TGood, TFail, TInput>(insure: Pure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, undefined>
+
+export function sure<TGood, TFail, TInput, TMeta>(
+  insure: Pure<TFail, TGood, TInput>,
+  meta: TMeta
+): Sure<TFail, TGood, TInput, TMeta>
+
+export function sure<TGood, TFail, TInput, TMeta>(
   insure: Pure<TFail, TGood, TInput>,
   meta?: TMeta
-): Sure<TFail, TGood, TInput, TMeta> {
-  return Object.assign(insure, meta)
+): Sure<TFail, TGood, TInput, TMeta | undefined> {
+  return Object.assign(insure, { meta })
 }
 //
 export const fail = <TFail>(fail: TFail): Fail<TFail> => [false, fail]

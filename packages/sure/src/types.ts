@@ -19,13 +19,42 @@ export function after<
   //
   TSecondFail,
   TSecondGood,
+>(
+  first: Pure<TFirstFail, TFirstGood, TFirstInput>,
+  second: Pure<TSecondFail, TSecondGood, TFirstGood>
+): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, undefined>
+
+export function after<
   //
-  TMeta extends {},
+  TFirstFail,
+  TFirstGood,
+  TFirstInput,
+  //
+  TSecondFail,
+  TSecondGood,
+  //
+  TMeta,
+>(
+  first: Pure<TFirstFail, TFirstGood, TFirstInput>,
+  second: Pure<TSecondFail, TSecondGood, TFirstGood>,
+  meta: TMeta
+): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, TMeta>
+
+export function after<
+  //
+  TFirstFail,
+  TFirstGood,
+  TFirstInput,
+  //
+  TSecondFail,
+  TSecondGood,
+  //
+  TMeta,
 >(
   first: Pure<TFirstFail, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta?: TMeta
-): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, TMeta> {
+): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, TMeta | undefined> {
   return sure((value: TFirstInput) => {
     const [good, out] = first(value)
 

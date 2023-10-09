@@ -1,4 +1,4 @@
-import { good, sure, fail, Pure } from '../sure.js'
+import { good, sure, fail, Pure, Sure } from '../sure.js'
 import { assertEqual, assertIs } from '../typeTestUtils.js'
 import { after } from '../types.js'
 
@@ -23,11 +23,12 @@ describe('after', () => {
     // This is not good
     assertEqual<
       typeof something,
-      Pure<
+      Sure<
         //
         '---' | 'small',
         'big',
-        unknown
+        unknown,
+        undefined
       >
     >(true)
   })
