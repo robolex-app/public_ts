@@ -10,8 +10,8 @@
   },
   "jest.virtualFolders": [
     {
-      "name": "docs_robolex",
-      "rootPath": "./apps/docs_robolex"
+      "name": "sure",
+      "rootPath": "./packages/sure"
     }
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
