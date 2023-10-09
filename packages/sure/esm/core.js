@@ -3,7 +3,6 @@ export function sure(insure, meta) {
 }
 //
 // Fail causes errors when used in Jest tests
-export const fail = (fail) => [false, fail];
-export const evil = (fail) => [false, fail];
+export const fail = (val) => [false, val];
 //
-export const good = (good) => [true, good];
+export const good = (val) => [true, val];

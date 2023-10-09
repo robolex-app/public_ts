@@ -49,11 +49,9 @@ export function sure<TGood, TFail, TInput, TMeta>(
 }
 //
 // Fail causes errors when used in Jest tests
-export const fail = <TFail>(fail: TFail): Fail<TFail> => [false, fail]
-export const evil = <TFail>(fail: TFail): Fail<TFail> => [false, fail]
-
+export const fail = <TFail>(val: TFail): Fail<TFail> => [false, val]
 //
-export const good = <TGood>(good: TGood): Good<TGood> => [true, good]
+export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
 
 export type Unsure<TFail, TGood> = //
   Good<TGood> | Fail<TFail>
