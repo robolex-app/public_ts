@@ -1,4 +1,4 @@
-import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../core.js'
+import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../index.js'
 import { assertIs, assertEqual } from './typeTestUtils.js'
 
 /**

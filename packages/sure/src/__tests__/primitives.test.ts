@@ -1,4 +1,4 @@
-import { InferFail, InferGood, InferInput, Sure, good, sure, fail, InferMeta } from '../core.js'
+import { InferFail, InferGood, InferInput, Sure, good, sure, fail, InferMeta } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 export const nonEmptyString = sure(x => {

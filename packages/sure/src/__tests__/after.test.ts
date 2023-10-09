@@ -1,6 +1,5 @@
-import { good, sure, fail, Pure, Sure } from '../core.js'
+import { good, sure, fail, Sure, after } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
-import { after } from '../complex.js'
 
 const sureNumber = sure(v =>
   typeof v === 'number' //
