@@ -1,6 +1,6 @@
 {
-  "name": "@robotsx/sure",
-  "version": "0.0.7",
+  "name": "@robolex/sure",
+  "version": "0.0.8",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",

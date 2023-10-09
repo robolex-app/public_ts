@@ -1,10 +1,18 @@
-import { sure, good } from './sure.js';
-export function after(fromStruct, validate, meta) {
-    const structValue = sure((value) => {
-        const [good, out] = fromStruct(value);
-        return good ? validate(out) : fail(out);
+import { sure, good, fail } from './sure.js';
+/**
+A common use-case is to first validate that a value is a string.
+And then validate other things about the string.
+
+This function will run the @see first validator first.
+If it returns a bad value, then the bad value is returned.
+
+If it returns a good value, then the new @see second function will be run.
+ */
+export function after(first, second, meta) {
+    return sure((value) => {
+        const [good, out] = first(value);
+        return good ? second(out) : fail(out);
     }, meta);
-    return structValue;
 }
 /**
 Necessary because `typeof x` is not a type guard.
@@ -13,8 +21,6 @@ function isObject(x) {
     return typeof x === 'object' && x !== null;
 }
 export function object(schema) {
-    const metaEntries = Object.entries(schema).map(([key, struct]) => [key, struct.meta]);
-    const objectMeta = Object.fromEntries(metaEntries);
     const struct = sure(value => {
         if (!isObject(value)) {
             return fail({});
@@ -22,6 +28,8 @@ export function object(schema) {
         const groupIssue = {};
         const groupValue = {};
         for (const [key, struct] of Object.entries(schema)) {
+            // TODO: Make different between `| undefined` and `?: somthing`
+            // check if key actually exists
             const [good, unsure] = struct(value[key]);
             if (good) {
                 // @ts-expect-error
@@ -36,7 +44,7 @@ export function object(schema) {
             return fail(groupIssue);
         }
         return good(groupValue);
-    }, objectMeta);
+    }, schema);
     // @ts-expect-error
     return struct;
 }
