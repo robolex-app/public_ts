@@ -71,17 +71,16 @@ function isObject(x: unknown): x is Record<string, unknown> {
 
 export function object<
   //
-  TFailures,
-  TPropParsed,
-  TMeta,
-  TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
+  TPropFail,
+  TPropGood,
+  TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown, unknown>>,
 >(
   schema: TSchema
 ): Sure<
   { [K in keyof TSchema & string]?: InferFail<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   unknown,
-  { [K in keyof TSchema & string]: TMeta }
+  TSchema
 > {
   const struct = sure(value => {
     if (!isObject(value)) {
