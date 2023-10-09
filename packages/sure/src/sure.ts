@@ -45,14 +45,6 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-//
-// export function sure<TFail, TGood, TInput>(insure: PureSure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, {}>
-
-// export function sure<TFail, TGood, TInput, TMeta extends {}>(
-//   insure: PureSure<TFail, TGood, TInput>,
-//   meta: TMeta
-// ): Sure<TFail, TGood, TInput, TMeta>
-
 export function sure<TGood, TFail, TInput, TMeta extends {}>(
   insure: Pure<TFail, TGood, TInput>,
   meta?: TMeta
