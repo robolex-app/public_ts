@@ -1,4 +1,4 @@
-import { sure, good, fail } from './sure.js';
+import { sure, good, fail } from './core.js';
 export function after(first, second, meta) {
     return sure((value) => {
         const [good, out] = first(value);

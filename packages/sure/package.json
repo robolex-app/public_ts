@@ -8,7 +8,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.build.json",
     "prepublish": "npm run build",
     "clean": "pnpm run clean:remove-generated",
     "clean:remove-generated": "find ./src -type f -name '*.js' -delete && find ./src -type f -name '*.d.ts' -delete",

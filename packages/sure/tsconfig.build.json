@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  // exclude the test folder
+  "exclude": ["**/__tests__/**/*"]
+}

@@ -1,5 +1,5 @@
-import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../sure.js'
-import { assertIs, assertEqual } from '../typeTestUtils.js'
+import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../core.js'
+import { assertIs, assertEqual } from './typeTestUtils.js'
 
 /**
 Validator for numbers without any meta.

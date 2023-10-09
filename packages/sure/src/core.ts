@@ -15,12 +15,7 @@ export type Sure<TFail, TGood, TInput, TMeta> = {
   (value: TInput): Good<TGood> | Fail<TFail>
 } & { meta: TMeta }
 
-export type Pure<
-  TFail = unknown,
-  TGood = unknown,
-  // More indepth about why any
-  TInput = any,
-> = (value: TInput) => Good<TGood> | Fail<TFail>
+export type Pure<TFail, TGood, TInput> = (value: TInput) => Good<TGood> | Fail<TFail>
 
 /**
 Returns the exact function back.
@@ -63,25 +58,17 @@ export type Unsure<TFail, TGood> = //
 export type Good<T> = [true, T]
 export type Fail<T> = [false, T]
 
-export type DefSure = Sure<
-  unknown,
-  unknown,
-  // Input issue
-  any,
-  {}
->
-
-export type InferFail<T extends Pure> = //
+export type InferFail<T extends Pure<unknown, unknown, any>> = //
   T extends Pure<infer CFailure, unknown, any> //
     ? CFailure
     : never
 
-export type InferGood<T extends Pure> = //
+export type InferGood<T extends Pure<unknown, unknown, any>> = //
   T extends Pure<unknown, infer CDefine, any> //
     ? CDefine
     : never
 
-export type InferInput<T extends Pure> = //
+export type InferInput<T extends Pure<unknown, unknown, any>> = //
   T extends Pure<unknown, unknown, infer CFrom> //
     ? CFrom
     : never

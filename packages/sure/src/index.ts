@@ -1,2 +1,2 @@
-export * from './sure.js'
+export * from './core.js'
 export * from './types.js'
