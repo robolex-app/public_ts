@@ -34,7 +34,7 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-export function sure<TGood, TFail, TInput>(insure: Pure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, undefined>
+export function sure<TGood, TFail, TInput>(insure: Pure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, never>
 
 export function sure<TGood, TFail, TInput, TMeta>(
   insure: Pure<TFail, TGood, TInput>,
@@ -48,7 +48,10 @@ export function sure<TGood, TFail, TInput, TMeta>(
   return Object.assign(insure, { meta })
 }
 //
+// Fail causes errors when used in Jest tests
 export const fail = <TFail>(fail: TFail): Fail<TFail> => [false, fail]
+export const evil = <TFail>(fail: TFail): Fail<TFail> => [false, fail]
+
 //
 export const good = <TGood>(good: TGood): Good<TGood> => [true, good]
 

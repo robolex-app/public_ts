@@ -28,7 +28,7 @@ describe('after', () => {
         '---' | 'small',
         'big',
         unknown,
-        undefined
+        never
       >
     >(true)
   })

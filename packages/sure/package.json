@@ -11,7 +11,8 @@
     "build": "npm run clean && tsc --project tsconfig.build.json",
     "prepublish": "npm run build",
     "clean": "rm -rf ./esm",
-    "dev": "tsc --watch",
+    "dev": "tsc --watch --project tsconfig.build.json",
+    "tsc": "tsc --noEmit --watch",
     "lint": "eslint \"src/**/*.ts*\" --quiet",
     "lint:warn": "eslint \"src/**/*.ts*\"",
     "test": "jest"
