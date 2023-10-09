@@ -73,7 +73,7 @@ export function object<
   //
   TFailures,
   TPropParsed,
-  TMeta extends {},
+  TMeta,
   TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
 >(
   schema: TSchema
