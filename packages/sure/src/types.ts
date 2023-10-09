@@ -47,8 +47,7 @@ export function object<
   TMeta extends Dictionary,
   TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
 >(
-  schema: TSchema,
-  optionals?: (keyof TSchema & string)[]
+  schema: TSchema
 ): Sure<
   { [K in keyof TSchema & string]?: InferFail<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
