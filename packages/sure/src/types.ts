@@ -44,7 +44,7 @@ export function object<
   //
   TFailures,
   TPropParsed,
-  TMeta extends Dictionary,
+  TMeta extends {},
   TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
 >(
   schema: TSchema
