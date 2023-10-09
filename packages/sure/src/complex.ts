@@ -1,5 +1,5 @@
 import { sure, good, fail } from './core.js'
-import type { Sure, InferGood, InferFail, Unsure, Dictionary, Pure } from './core.js'
+import type { Sure, InferGood, InferFail, Pure } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
