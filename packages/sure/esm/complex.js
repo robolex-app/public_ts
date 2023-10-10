@@ -1,4 +1,4 @@
-import { sure, good, fail } from './sure.js';
+import { sure, good, fail } from './core.js';
 export function after(first, second, meta) {
     return sure((value) => {
         const [good, out] = first(value);
@@ -16,25 +16,25 @@ export function object(schema) {
         if (!isObject(value)) {
             return fail({});
         }
-        const groupIssue = {};
-        const groupValue = {};
-        for (const [key, struct] of Object.entries(schema)) {
+        const groupFail = {};
+        const groupGood = {};
+        for (const [key, sureFunction] of Object.entries(schema)) {
             // TODO: Make different between `| undefined` and `?: somthing`
             // check if key actually exists
-            const [good, unsure] = struct(value[key]);
+            const [good, unsure] = sureFunction(value[key]);
             if (good) {
                 // @ts-expect-error
-                groupValue[key] = unsure;
+                groupGood[key] = unsure;
             }
             else {
                 // @ts-expect-error
-                groupIssue[key] = unsure;
+                groupFail[key] = unsure;
             }
         }
-        if (Object.keys(groupIssue).length) {
-            return fail(groupIssue);
+        if (Object.keys(groupFail).length) {
+            return fail(groupFail);
         }
-        return good(groupValue);
+        return good(groupGood);
     }, schema);
     // @ts-expect-error
     return struct;

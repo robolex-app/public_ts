@@ -1,6 +1,6 @@
 {
   "name": "@robolex/sure",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
@@ -8,11 +8,11 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run clean && tsc --project tsconfig.build.json",
     "prepublish": "npm run build",
-    "clean": "pnpm run clean:remove-generated",
-    "clean:remove-generated": "find ./src -type f -name '*.js' -delete && find ./src -type f -name '*.d.ts' -delete",
-    "dev": "tsc --watch",
+    "clean": "rm -rf ./esm",
+    "dev": "tsc --watch --project tsconfig.build.json",
+    "tsc": "tsc --noEmit --watch",
     "lint": "eslint \"src/**/*.ts*\" --quiet",
     "lint:warn": "eslint \"src/**/*.ts*\"",
     "test": "jest"

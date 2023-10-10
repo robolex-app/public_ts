@@ -1,6 +1,5 @@
-import { good, sure, fail, Pure, Sure } from '../sure.js'
-import { assertEqual, assertIs } from '../typeTestUtils.js'
-import { after } from '../types.js'
+import { good, sure, fail, Sure, after } from '../index.js'
+import { assertEqual, assertIs } from './typeTestUtils.js'
 
 const sureNumber = sure(v =>
   typeof v === 'number' //
@@ -28,7 +27,7 @@ describe('after', () => {
         '---' | 'small',
         'big',
         unknown,
-        undefined
+        never
       >
     >(true)
   })

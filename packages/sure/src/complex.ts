@@ -1,5 +1,5 @@
-import { sure, good, fail } from './sure.js'
-import type { Sure, InferGood, InferFail, Unsure, Dictionary, Pure } from './sure.js'
+import { sure, good, fail } from './core.js'
+import type { Sure, InferGood, InferFail, Pure } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -22,7 +22,7 @@ export function after<
 >(
   first: Pure<TFirstFail, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>
-): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, undefined>
+): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, never>
 
 export function after<
   //
@@ -71,46 +71,45 @@ function isObject(x: unknown): x is Record<string, unknown> {
 
 export function object<
   //
-  TFailures,
-  TPropParsed,
-  TMeta,
-  TSchema extends Record<string, Sure<TFailures, TPropParsed, unknown, TMeta>>,
+  TPropFail,
+  TPropGood,
+  TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown, unknown>>,
 >(
   schema: TSchema
 ): Sure<
   { [K in keyof TSchema & string]?: InferFail<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   unknown,
-  { [K in keyof TSchema & string]: TMeta }
+  TSchema
 > {
   const struct = sure(value => {
     if (!isObject(value)) {
       return fail({})
     }
 
-    const groupIssue = {}
-    const groupValue = {}
+    const groupFail = {}
+    const groupGood = {}
 
-    for (const [key, struct] of Object.entries(schema)) {
+    for (const [key, sureFunction] of Object.entries(schema)) {
       // TODO: Make different between `| undefined` and `?: somthing`
       // check if key actually exists
 
-      const [good, unsure] = struct(value[key])
+      const [good, unsure] = sureFunction(value[key])
 
       if (good) {
         // @ts-expect-error
-        groupValue[key] = unsure
+        groupGood[key] = unsure
       } else {
         // @ts-expect-error
-        groupIssue[key] = unsure
+        groupFail[key] = unsure
       }
     }
 
-    if (Object.keys(groupIssue).length) {
-      return fail(groupIssue)
+    if (Object.keys(groupFail).length) {
+      return fail(groupFail)
     }
 
-    return good(groupValue)
+    return good(groupGood)
   }, schema)
 
   // @ts-expect-error

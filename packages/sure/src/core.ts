@@ -15,12 +15,7 @@ export type Sure<TFail, TGood, TInput, TMeta> = {
   (value: TInput): Good<TGood> | Fail<TFail>
 } & { meta: TMeta }
 
-export type Pure<
-  TFail = unknown,
-  TGood = unknown,
-  // More indepth about why any
-  TInput = any,
-> = (value: TInput) => Good<TGood> | Fail<TFail>
+export type Pure<TFail, TGood, TInput> = (value: TInput) => Good<TGood> | Fail<TFail>
 
 /**
 Returns the exact function back.
@@ -39,7 +34,7 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-export function sure<TGood, TFail, TInput>(insure: Pure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, undefined>
+export function sure<TGood, TFail, TInput>(insure: Pure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, never>
 
 export function sure<TGood, TFail, TInput, TMeta>(
   insure: Pure<TFail, TGood, TInput>,
@@ -53,9 +48,10 @@ export function sure<TGood, TFail, TInput, TMeta>(
   return Object.assign(insure, { meta })
 }
 //
-export const fail = <TFail>(fail: TFail): Fail<TFail> => [false, fail]
+// Fail causes errors when used in Jest tests
+export const fail = <TFail>(val: TFail): Fail<TFail> => [false, val]
 //
-export const good = <TGood>(good: TGood): Good<TGood> => [true, good]
+export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
 
 export type Unsure<TFail, TGood> = //
   Good<TGood> | Fail<TFail>
@@ -63,25 +59,17 @@ export type Unsure<TFail, TGood> = //
 export type Good<T> = [true, T]
 export type Fail<T> = [false, T]
 
-export type DefSure = Sure<
-  unknown,
-  unknown,
-  // Input issue
-  any,
-  {}
->
-
-export type InferFail<T extends Pure> = //
+export type InferFail<T extends Pure<unknown, unknown, any>> = //
   T extends Pure<infer CFailure, unknown, any> //
     ? CFailure
     : never
 
-export type InferGood<T extends Pure> = //
+export type InferGood<T extends Pure<unknown, unknown, any>> = //
   T extends Pure<unknown, infer CDefine, any> //
     ? CDefine
     : never
 
-export type InferInput<T extends Pure> = //
+export type InferInput<T extends Pure<unknown, unknown, any>> = //
   T extends Pure<unknown, unknown, infer CFrom> //
     ? CFrom
     : never
