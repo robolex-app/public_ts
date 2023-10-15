@@ -1,5 +1,5 @@
 import { sure, good, evil } from './core.js'
-import type { Sure, InferGood, InferFail, Pure } from './core.js'
+import type { Sure, InferGood, InferEvil, Pure } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -77,7 +77,7 @@ export function object<
 >(
   schema: TSchema
 ): Sure<
-  { [K in keyof TSchema & string]?: InferFail<TSchema[K]> },
+  { [K in keyof TSchema & string]?: InferEvil<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   unknown,
   TSchema

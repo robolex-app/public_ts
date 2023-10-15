@@ -1,4 +1,4 @@
-import { InferFail, InferGood, InferInput, Sure, good, sure, evil, InferMeta } from '../index.js'
+import { InferEvil, InferGood, InferInput, Sure, good, sure, evil, InferMeta } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 export const nonEmptyString = sure(x => {
@@ -14,7 +14,7 @@ describe('primitives', () => {
     assertEqual<typeof nonEmptyString, Sure<'not string', string, unknown, never>>(true)
 
     assertEqual<InferGood<typeof nonEmptyString>, string>(true)
-    assertEqual<InferFail<typeof nonEmptyString>, 'not string'>(true)
+    assertEqual<InferEvil<typeof nonEmptyString>, 'not string'>(true)
     assertEqual<InferInput<typeof nonEmptyString>, unknown>(true)
     assertEqual<InferMeta<typeof nonEmptyString>, never>(true)
   })

@@ -1,4 +1,4 @@
-import { sure, good, evil, InferFail, InferGood, InferInput, InferMeta, Sure } from '../index.js'
+import { sure, good, evil, InferEvil, InferGood, InferInput, InferMeta, Sure } from '../index.js'
 import { assertIs, assertEqual } from './typeTestUtils.js'
 
 /**
@@ -114,7 +114,7 @@ describe('core', () => {
     >(true)
 
     assertEqual<InferGood<typeof sureNumber>, number>(true)
-    assertEqual<InferFail<typeof sureNumber>, 'not a number'>(true)
+    assertEqual<InferEvil<typeof sureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof sureNumber>, unknown>(true)
   })
 
@@ -131,7 +131,7 @@ describe('core', () => {
     >(true)
 
     assertEqual<InferGood<typeof sureStringMeta>, string>(true)
-    assertEqual<InferFail<typeof sureStringMeta>, 'not a string'>(true)
+    assertEqual<InferEvil<typeof sureStringMeta>, 'not a string'>(true)
     assertEqual<InferInput<typeof sureStringMeta>, unknown>(true)
     assertEqual<
       InferMeta<typeof sureStringMeta>,
@@ -145,7 +145,7 @@ describe('core', () => {
     assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, never>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
-    assertEqual<InferFail<typeof sureNonEmptyString>, 'empty string'>(true)
+    assertEqual<InferEvil<typeof sureNonEmptyString>, 'empty string'>(true)
     assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
     // assertEqual<InferMeta<typeof sureNonEmptyString>, {}>(true)
   })
@@ -156,7 +156,7 @@ describe('core', () => {
     )
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
-    assertEqual<InferFail<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
+    assertEqual<InferEvil<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
     assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
   })
 })

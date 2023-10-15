@@ -12,10 +12,10 @@ export type Dictionary = {
          By default the `unknown` struct is used. That is the only core struct
  */
 export type Sure<TEvil, TGood, TInput, TMeta> = {
-  (value: TInput): Good<TGood> | Fail<TEvil>
+  (value: TInput): Good<TGood> | Evil<TEvil>
 } & { meta: TMeta }
 
-export type Pure<TEvil, TGood, TInput> = (value: TInput) => Good<TGood> | Fail<TEvil>
+export type Pure<TEvil, TGood, TInput> = (value: TInput) => Good<TGood> | Evil<TEvil>
 
 /**
 Returns the exact function back.
@@ -49,17 +49,17 @@ export function sure<TGood, TEvil, TInput, TMeta>(
 }
 //
 // Fail causes errors when used in Jest tests
-export const evil = <TEvil>(val: TEvil): Fail<TEvil> => [false, val]
+export const evil = <TEvil>(val: TEvil): Evil<TEvil> => [false, val]
 //
 export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
 
 export type Unsure<TEvil, TGood> = //
-  Good<TGood> | Fail<TEvil>
+  Good<TGood> | Evil<TEvil>
 
 export type Good<T> = [true, T]
-export type Fail<T> = [false, T]
+export type Evil<T> = [false, T]
 
-export type InferFail<T extends Pure<unknown, unknown, any>> = //
+export type InferEvil<T extends Pure<unknown, unknown, any>> = //
   T extends Pure<infer CFailure, unknown, any> //
     ? CFailure
     : never
