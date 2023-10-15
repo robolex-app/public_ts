@@ -1,4 +1,4 @@
-import { sure, good, fail, InferFail, InferGood, InferInput, InferMeta, Sure } from '../index.js'
+import { sure, good, evil, InferFail, InferGood, InferInput, InferMeta, Sure } from '../index.js'
 import { assertIs, assertEqual } from './typeTestUtils.js'
 
 /**
@@ -7,7 +7,7 @@ Validator for numbers without any meta.
 const sureNumber = sure(value =>
   typeof value === 'number' //
     ? good(value)
-    : fail('not a number' as const)
+    : evil('not a number' as const)
 )
 
 /**
@@ -17,7 +17,7 @@ const sureStringMeta = sure(
   value =>
     typeof value === 'string' //
       ? good(value)
-      : fail('not a string' as const),
+      : evil('not a string' as const),
   { myMeta: 'my meta' }
 )
 
@@ -27,18 +27,18 @@ Validator that expects the input to already be a string.
 const sureNonEmptyString = sure((value: string) =>
   value.length > 0 //
     ? good(value)
-    : fail('empty string' as const)
+    : evil('empty string' as const)
 )
 
 /**
 Validator that can return multiple error types
  */
 const sureMultipleErrors = sure(value => {
-  if (typeof value !== 'string') return fail('not a string' as const)
+  if (typeof value !== 'string') return evil('not a string' as const)
 
-  if (value.length < 3) return fail('too small' as const)
+  if (value.length < 3) return evil('too small' as const)
 
-  if (value.length > 10) return fail('too big' as const)
+  if (value.length > 10) return evil('too big' as const)
 
   // The `string & {}` is used as an example, when the return type has to be more controlled
   return good<string & {}>(value)

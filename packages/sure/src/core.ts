@@ -3,7 +3,7 @@ export type Dictionary = {
 }
 
 /**
-@typeparam TFail  - Each struct can returns some kinds of issues (not throwing)
+@typeparam TEvil  - Each struct can returns some kinds of issues (not throwing)
 @typeparam TGood  - The type which is guaranteed to be the output of the validator
 @typeparam TInput - The type of the input value.
 
@@ -11,11 +11,11 @@ export type Dictionary = {
          so you can base a numeric string on a string struct (if you want).
          By default the `unknown` struct is used. That is the only core struct
  */
-export type Sure<TFail, TGood, TInput, TMeta> = {
-  (value: TInput): Good<TGood> | Fail<TFail>
+export type Sure<TEvil, TGood, TInput, TMeta> = {
+  (value: TInput): Good<TGood> | Fail<TEvil>
 } & { meta: TMeta }
 
-export type Pure<TFail, TGood, TInput> = (value: TInput) => Good<TGood> | Fail<TFail>
+export type Pure<TEvil, TGood, TInput> = (value: TInput) => Good<TGood> | Fail<TEvil>
 
 /**
 Returns the exact function back.
@@ -34,27 +34,27 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-export function sure<TGood, TFail, TInput>(insure: Pure<TFail, TGood, TInput>): Sure<TFail, TGood, TInput, never>
+export function sure<TGood, TEvil, TInput>(insure: Pure<TEvil, TGood, TInput>): Sure<TEvil, TGood, TInput, never>
 
-export function sure<TGood, TFail, TInput, TMeta>(
-  insure: Pure<TFail, TGood, TInput>,
+export function sure<TGood, TEvil, TInput, TMeta>(
+  insure: Pure<TEvil, TGood, TInput>,
   meta: TMeta
-): Sure<TFail, TGood, TInput, TMeta>
+): Sure<TEvil, TGood, TInput, TMeta>
 
-export function sure<TGood, TFail, TInput, TMeta>(
-  insure: Pure<TFail, TGood, TInput>,
+export function sure<TGood, TEvil, TInput, TMeta>(
+  insure: Pure<TEvil, TGood, TInput>,
   meta?: TMeta
-): Sure<TFail, TGood, TInput, TMeta | undefined> {
+): Sure<TEvil, TGood, TInput, TMeta | undefined> {
   return Object.assign(insure, { meta })
 }
 //
 // Fail causes errors when used in Jest tests
-export const fail = <TFail>(val: TFail): Fail<TFail> => [false, val]
+export const evil = <TEvil>(val: TEvil): Fail<TEvil> => [false, val]
 //
 export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
 
-export type Unsure<TFail, TGood> = //
-  Good<TGood> | Fail<TFail>
+export type Unsure<TEvil, TGood> = //
+  Good<TGood> | Fail<TEvil>
 
 export type Good<T> = [true, T]
 export type Fail<T> = [false, T]

@@ -1,7 +1,7 @@
-import { good, sure, fail } from './core.js'
+import { good, sure, evil } from './core.js'
 
 export const rawString = sure(x => {
   return typeof x === 'string' //
     ? good(x)
-    : fail('not string' as const)
+    : evil('not string' as const)
 })
