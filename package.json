@@ -12,10 +12,11 @@
     "rm_node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules && rm -rf apps/*/node_modules"
   },
   "devDependencies": {
+    "jest": "29.7.0",
     "prettier": "3.0.3",
-    "typescript": "5.3.0-beta",
+    "syncpack": "11.2.1",
     "turbo": "1.10.15",
-    "syncpack": "11.2.1"
+    "typescript": "5.3.0-beta"
   },
   "packageManager": "pnpm@7.15.0"
 }
