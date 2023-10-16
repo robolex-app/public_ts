@@ -1,6 +1,11 @@
-import { good, sure, fail } from './core.js';
-export const rawString = sure(x => {
+import { good, sure, evil } from './core.js';
+export const string = sure(x => {
     return typeof x === 'string' //
         ? good(x)
-        : fail('not string');
+        : evil('not string');
+});
+export const number = sure(x => {
+    return typeof x === 'number' //
+        ? good(x)
+        : evil('not number');
 });

@@ -1,8 +1,8 @@
-import { sure, good, fail } from './core.js';
+import { sure, good, evil } from './core.js';
 export function after(first, second, meta) {
     return sure((value) => {
         const [good, out] = first(value);
-        return good ? second(out) : fail(out);
+        return good ? second(out) : evil(out);
     }, meta);
 }
 /**
@@ -14,7 +14,7 @@ function isObject(x) {
 export function object(schema) {
     const struct = sure(value => {
         if (!isObject(value)) {
-            return fail({});
+            return evil({});
         }
         const groupFail = {};
         const groupGood = {};
@@ -32,7 +32,7 @@ export function object(schema) {
             }
         }
         if (Object.keys(groupFail).length) {
-            return fail(groupFail);
+            return evil(groupFail);
         }
         return good(groupGood);
     }, schema);
