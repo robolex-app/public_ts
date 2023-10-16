@@ -1,5 +1,5 @@
-import { sure, good, fail } from './core.js'
-import type { Sure, InferGood, InferFail, Pure } from './core.js'
+import { sure, good, evil } from './core.js'
+import type { Sure, InferGood, InferEvil, Pure } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -13,20 +13,20 @@ If it returns a good value, then the new @see second function will be run.
 
 export function after<
   //
-  TFirstFail,
+  TFirsTEvil,
   TFirstGood,
   TFirstInput,
   //
   TSecondFail,
   TSecondGood,
 >(
-  first: Pure<TFirstFail, TFirstGood, TFirstInput>,
+  first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>
-): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, never>
+): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, never>
 
 export function after<
   //
-  TFirstFail,
+  TFirsTEvil,
   TFirstGood,
   TFirstInput,
   //
@@ -35,14 +35,14 @@ export function after<
   //
   TMeta,
 >(
-  first: Pure<TFirstFail, TFirstGood, TFirstInput>,
+  first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta: TMeta
-): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, TMeta>
+): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, TMeta>
 
 export function after<
   //
-  TFirstFail,
+  TFirsTEvil,
   TFirstGood,
   TFirstInput,
   //
@@ -51,14 +51,14 @@ export function after<
   //
   TMeta,
 >(
-  first: Pure<TFirstFail, TFirstGood, TFirstInput>,
+  first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta?: TMeta
-): Sure<TFirstFail | TSecondFail, TSecondGood, TFirstInput, TMeta | undefined> {
+): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, TMeta | undefined> {
   return sure((value: TFirstInput) => {
     const [good, out] = first(value)
 
-    return good ? second(out) : fail<TFirstFail | TSecondFail>(out)
+    return good ? second(out) : evil<TFirsTEvil | TSecondFail>(out)
   }, meta)
 }
 
@@ -77,14 +77,14 @@ export function object<
 >(
   schema: TSchema
 ): Sure<
-  { [K in keyof TSchema & string]?: InferFail<TSchema[K]> },
+  { [K in keyof TSchema & string]?: InferEvil<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   unknown,
   TSchema
 > {
   const struct = sure(value => {
     if (!isObject(value)) {
-      return fail({})
+      return evil({})
     }
 
     const groupFail = {}
@@ -106,7 +106,7 @@ export function object<
     }
 
     if (Object.keys(groupFail).length) {
-      return fail(groupFail)
+      return evil(groupFail)
     }
 
     return good(groupGood)

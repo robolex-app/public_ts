@@ -2,6 +2,8 @@
 module.exports = {
   roots: ['<rootDir>'],
 
+  testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
+
   /**
     https://kulshekhar.github.io/ts-jest/docs/guides/esm-support
     

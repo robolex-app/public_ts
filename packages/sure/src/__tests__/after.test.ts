@@ -1,10 +1,10 @@
-import { good, sure, fail, Sure, after } from '../index.js'
+import { good, sure, evil, Sure, after } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
 
 const sureNumber = sure(v =>
   typeof v === 'number' //
     ? good(v)
-    : fail('---' as const)
+    : evil('---' as const)
 )
 
 describe('after', () => {
@@ -16,7 +16,7 @@ describe('after', () => {
         return good('big' as const)
       }
 
-      return fail('small' as const)
+      return evil('small' as const)
     })
 
     // This is not good
