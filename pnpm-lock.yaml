@@ -24,6 +24,77 @@ importers:
         specifier: 5.3.0-beta
         version: 5.3.0-beta
 
+  internal_packages/eslint-config-custom:
+    dependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: 6.7.4
+        version: 6.7.4(@typescript-eslint/parser@6.7.4)(eslint@8.50.0)(typescript@5.3.0-beta)
+      '@typescript-eslint/parser':
+        specifier: 6.7.4
+        version: 6.7.4(eslint@8.50.0)(typescript@5.3.0-beta)
+      eslint:
+        specifier: 8.50.0
+        version: 8.50.0
+      eslint-config-next:
+        specifier: 13.5.4
+        version: 13.5.4(eslint@8.50.0)(typescript@5.3.0-beta)
+      eslint-config-prettier:
+        specifier: 9.0.0
+        version: 9.0.0(eslint@8.50.0)
+      eslint-config-turbo:
+        specifier: 1.10.15
+        version: 1.10.15(eslint@8.50.0)
+      eslint-plugin-prettier:
+        specifier: 5.0.0
+        version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.50.0)(prettier@3.0.3)
+      eslint-plugin-react:
+        specifier: 7.33.2
+        version: 7.33.2(eslint@8.50.0)
+      typescript:
+        specifier: 5.3.0-beta
+        version: 5.3.0-beta
+
+  internal_packages/eslint-config-custom-server:
+    dependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: 6.7.4
+        version: 6.7.4(@typescript-eslint/parser@6.7.4)(eslint@8.50.0)(typescript@5.3.0-beta)
+      '@typescript-eslint/parser':
+        specifier: 6.7.4
+        version: 6.7.4(eslint@8.50.0)(typescript@5.3.0-beta)
+      eslint:
+        specifier: 8.50.0
+        version: 8.50.0
+      eslint-config-next:
+        specifier: 13.5.4
+        version: 13.5.4(eslint@8.50.0)(typescript@5.3.0-beta)
+      eslint-config-prettier:
+        specifier: 9.0.0
+        version: 9.0.0(eslint@8.50.0)
+      eslint-config-turbo:
+        specifier: 1.10.15
+        version: 1.10.15(eslint@8.50.0)
+      eslint-plugin-prettier:
+        specifier: 5.0.0
+        version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.50.0)(prettier@3.0.3)
+      eslint-plugin-react:
+        specifier: 7.33.2
+        version: 7.33.2(eslint@8.50.0)
+      typescript:
+        specifier: 5.3.0-beta
+        version: 5.3.0-beta
+
+  internal_packages/jest-presets:
+    dependencies:
+      ts-jest:
+        specifier: 29.1.1
+        version: 29.1.1(@babel/core@7.23.0)(jest@29.7.0)(typescript@4.9.5)
+      ts-jest-resolver:
+        specifier: 2.0.1
+        version: 2.0.1
+
+  internal_packages/tsconfig: {}
+
   packages/dependent:
     devDependencies:
       '@types/jest':
@@ -34,88 +105,19 @@ importers:
         version: 8.50.0
       eslint-config-custom:
         specifier: workspace:*
-        version: link:../eslint-config-custom
+        version: link:../../internal_packages/eslint-config-custom
       jest:
         specifier: 29.7.0
         version: 29.7.0
       jest-presets:
         specifier: workspace:*
-        version: link:../jest-presets
+        version: link:../../internal_packages/jest-presets
       tsconfig:
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../../internal_packages/tsconfig
       typescript:
         specifier: 5.3.0-beta
         version: 5.3.0-beta
-
-  packages/eslint-config-custom:
-    dependencies:
-      '@typescript-eslint/eslint-plugin':
-        specifier: 6.7.4
-        version: 6.7.4(@typescript-eslint/parser@6.7.4)(eslint@8.50.0)(typescript@5.3.0-beta)
-      '@typescript-eslint/parser':
-        specifier: 6.7.4
-        version: 6.7.4(eslint@8.50.0)(typescript@5.3.0-beta)
-      eslint:
-        specifier: 8.50.0
-        version: 8.50.0
-      eslint-config-next:
-        specifier: 13.5.4
-        version: 13.5.4(eslint@8.50.0)(typescript@5.3.0-beta)
-      eslint-config-prettier:
-        specifier: 9.0.0
-        version: 9.0.0(eslint@8.50.0)
-      eslint-config-turbo:
-        specifier: 1.10.15
-        version: 1.10.15(eslint@8.50.0)
-      eslint-plugin-prettier:
-        specifier: 5.0.0
-        version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.50.0)(prettier@3.0.3)
-      eslint-plugin-react:
-        specifier: 7.33.2
-        version: 7.33.2(eslint@8.50.0)
-      typescript:
-        specifier: 5.3.0-beta
-        version: 5.3.0-beta
-
-  packages/eslint-config-custom-server:
-    dependencies:
-      '@typescript-eslint/eslint-plugin':
-        specifier: 6.7.4
-        version: 6.7.4(@typescript-eslint/parser@6.7.4)(eslint@8.50.0)(typescript@5.3.0-beta)
-      '@typescript-eslint/parser':
-        specifier: 6.7.4
-        version: 6.7.4(eslint@8.50.0)(typescript@5.3.0-beta)
-      eslint:
-        specifier: 8.50.0
-        version: 8.50.0
-      eslint-config-next:
-        specifier: 13.5.4
-        version: 13.5.4(eslint@8.50.0)(typescript@5.3.0-beta)
-      eslint-config-prettier:
-        specifier: 9.0.0
-        version: 9.0.0(eslint@8.50.0)
-      eslint-config-turbo:
-        specifier: 1.10.15
-        version: 1.10.15(eslint@8.50.0)
-      eslint-plugin-prettier:
-        specifier: 5.0.0
-        version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.50.0)(prettier@3.0.3)
-      eslint-plugin-react:
-        specifier: 7.33.2
-        version: 7.33.2(eslint@8.50.0)
-      typescript:
-        specifier: 5.3.0-beta
-        version: 5.3.0-beta
-
-  packages/jest-presets:
-    dependencies:
-      ts-jest:
-        specifier: 29.1.1
-        version: 29.1.1(@babel/core@7.23.0)(jest@29.7.0)(typescript@4.9.5)
-      ts-jest-resolver:
-        specifier: 2.0.1
-        version: 2.0.1
 
   packages/sure:
     devDependencies:
@@ -127,21 +129,19 @@ importers:
         version: 8.51.0
       eslint-config-custom:
         specifier: workspace:*
-        version: link:../eslint-config-custom
+        version: link:../../internal_packages/eslint-config-custom
       jest:
         specifier: 29.7.0
         version: 29.7.0
       jest-presets:
         specifier: workspace:*
-        version: link:../jest-presets
+        version: link:../../internal_packages/jest-presets
       tsconfig:
         specifier: workspace:*
-        version: link:../tsconfig
+        version: link:../../internal_packages/tsconfig
       typescript:
         specifier: 5.3.0-beta
         version: 5.3.0-beta
-
-  packages/tsconfig: {}
 
 packages:
 
