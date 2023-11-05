@@ -20,22 +20,30 @@ export function array<
     }
 
     let atLeastOneEvil = false
+    let evils = []
+    let goods = []
 
-    const arrayUnsure = value.map(elem => {
+    for (const elem of value) {
       const [good, unsure] = schema(elem)
 
-      if (!good) {
+      if (good) {
+        goods.push(unsure)
+        // This is necessary in order to maintain the same length
+        evils.push(undefined)
+      } else {
+        evils.push(unsure)
+
+        // Since the `evils` array can containe `undefined` values, it's more clear to
+        // have an imperative boolean to make the check
         atLeastOneEvil = true
       }
-
-      return unsure
-    })
-
-    if (atLeastOneEvil) {
-      return evil(arrayUnsure)
     }
 
-    return good(arrayUnsure)
+    if (atLeastOneEvil) {
+      return evil(evils)
+    }
+
+    return good(goods)
   }, schema)
 
   // @ts-expect-error Expected error

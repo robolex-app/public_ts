@@ -15,7 +15,8 @@
     "tsc": "tsc --noEmit --watch",
     "lint": "eslint \"src/**/*.ts*\" --quiet",
     "lint:warn": "eslint \"src/**/*.ts*\"",
-    "test": "jest"
+    "test": "jest",
+    "test:w": "jest --watch"
   },
   "jest": {
     "preset": "jest-presets/jest/node"
