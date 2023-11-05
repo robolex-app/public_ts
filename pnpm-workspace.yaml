@@ -1,2 +1,7 @@
 packages:
-  - "packages/*"
+  # This is the folder that contains the main, published packages
+  - 'packages/*'
+
+  # This one contains things like configuration packages, or other things, that might change
+  # and don't have a stable implementation
+  - 'internal_packages/*'

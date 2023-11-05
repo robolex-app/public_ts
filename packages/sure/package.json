@@ -1,6 +1,6 @@
 {
   "name": "@robolex/sure",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
@@ -15,7 +15,8 @@
     "tsc": "tsc --noEmit --watch",
     "lint": "eslint \"src/**/*.ts*\" --quiet",
     "lint:warn": "eslint \"src/**/*.ts*\"",
-    "test": "jest"
+    "test": "jest",
+    "test:w": "jest --watch"
   },
   "jest": {
     "preset": "jest-presets/jest/node"

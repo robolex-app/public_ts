@@ -1,10 +1,4 @@
 import { sure, good, evil } from './core.js';
-export function after(first, second, meta) {
-    return sure((value) => {
-        const [good, out] = first(value);
-        return good ? second(out) : evil(out);
-    }, meta);
-}
 /**
 Necessary because `typeof x` is not a type guard.
  */
