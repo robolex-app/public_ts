@@ -1,6 +1,6 @@
 {
   "name": "@robolex/sure",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
