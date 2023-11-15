@@ -65,7 +65,6 @@ export function and<
   >,
   MetaObj<{ first: typeof first; second: typeof second }>
 > {
-  // @ts-expect-error Should be fixed at the definition of sure, I think.
   return sure(
     // @ts-expect-error Should be fixed at the definition of sure, I think.
     (value: TFirstInput & TSecondInput) => {
@@ -75,7 +74,14 @@ export function and<
         return bad(unsureFirst)
       }
 
-      return second(value)
+      const [isGoodSecond, unsureSecond] = second(value)
+
+      if (!isGoodSecond) {
+        return bad(unsureSecond)
+      }
+
+      // TODO: Should we enforce that the outputs are objects?
+      return good({ ...unsureFirst, ...unsureSecond })
     },
     {
       first,

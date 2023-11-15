@@ -23,6 +23,9 @@ export type Sure<
 
 export type Pure<out TBad, out TGood, in TInput> = (value: TInput) => Good<TGood> | Bad<TBad>
 
+// TODO: Move TGood up front, and add defaults to Pure (the api is stable I think)
+export type Peasy<out TGood, out TBad = unknown, in TInput = any> = Pure<TBad, TGood, TInput>
+
 /**
 Returns the exact function back.
 But the types are inferred automatically for you.
@@ -53,6 +56,9 @@ export function sure<TGood, TBad, TInput, TMeta>(
 ): Sure<typeof insure, MetaObj<TMeta | undefined>> {
   return Object.assign(insure, { meta })
 }
+
+export function pure<TGood, TInput>(insure: Pure<never, TGood, TInput>): Sure<typeof insure, MetaNever>
+export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<typeof insure, MetaNever>
 
 export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<typeof insure, MetaNever> {
   return insure

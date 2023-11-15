@@ -1,5 +1,5 @@
 import { number, or, string } from '../index.js'
-import type { InferEvil as InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
+import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Pure, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 const simple = or(number, string)
@@ -16,8 +16,8 @@ assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,
   MetaObj<{
-    first: Sure<'not number', number, unknown, MetaObj<undefined>>
-    second: Sure<'not string', string, unknown, MetaObj<undefined>>
+    first: Sure<Pure<'not number', number, unknown>, MetaObj<undefined>>
+    second: Sure<Pure<'not string', string, unknown>, MetaObj<undefined>>
   }>
 >(true)
 //

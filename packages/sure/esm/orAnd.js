@@ -14,7 +14,6 @@ export function or(first, second) {
     });
 }
 export function and(first, second) {
-    // @ts-expect-error Should be fixed at the definition of sure, I think.
     return sure(
     // @ts-expect-error Should be fixed at the definition of sure, I think.
     (value) => {
@@ -22,7 +21,12 @@ export function and(first, second) {
         if (!isGoodFirst) {
             return bad(unsureFirst);
         }
-        return second(value);
+        const [isGoodSecond, unsureSecond] = second(value);
+        if (!isGoodSecond) {
+            return bad(unsureSecond);
+        }
+        // TODO: Should we enforce that the outputs are objects?
+        return good({ ...unsureFirst, ...unsureSecond });
     }, {
         first,
         second,

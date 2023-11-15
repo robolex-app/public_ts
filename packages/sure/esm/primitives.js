@@ -9,3 +9,4 @@ export const number = sure(x => {
         ? good(x)
         : bad('not number');
 });
+export const unknown = sure(x => good(x));

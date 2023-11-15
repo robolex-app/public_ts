@@ -1,5 +1,5 @@
 import { number, and, string, object } from '../index.js'
-import type { InferEvil as InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
+import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Pure, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 const option1 = object({
@@ -25,17 +25,32 @@ assertEqual<InferredInput, unknown>(true) // The input needs more tests
 assertEqual<
   InferredMeta,
   MetaObj<{
-    first: typeof option1
-    second: Sure<
-      {
-        age?: 'not number' | undefined
-      },
-      {
-        age: number
-      },
-      unknown,
+    first: Sure<
+      Pure<
+        {
+          name?: 'not string' | undefined
+        },
+        {
+          name: string
+        },
+        unknown
+      >,
       MetaObj<{
-        age: Sure<'not number', number, unknown, MetaObj<undefined>>
+        name: Sure<Pure<'not string', string, unknown>, MetaObj<undefined>>
+      }>
+    >
+    second: Sure<
+      Pure<
+        {
+          age?: 'not number' | undefined
+        },
+        {
+          age: number
+        },
+        unknown
+      >,
+      MetaObj<{
+        age: Sure<Pure<'not number', number, unknown>, MetaObj<undefined>>
       }>
     >
   }>

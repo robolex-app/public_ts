@@ -11,3 +11,5 @@ export const number = sure(x => {
     ? good(x)
     : bad('not number' as const)
 })
+
+export const unknown = sure(x => good(x))

@@ -87,28 +87,31 @@ assertEqual<typeof someObj, Sure<Pure<InferredEvil, InferredGood, InferredInput>
 describe('object', () => {
   it('should return good value', () => {
     const value = someObj({
-      name: 'John',
       age: 12,
       address: {
         country: 'USA',
       },
+      firstName: 'John',
+      lastName: 'Doe',
+      middleName: 'D.',
     })
 
     expect(value).toEqual([
       true,
       {
-        name: 'John',
         age: 12,
         address: {
           country: 'USA',
         },
+        firstName: 'John',
+        lastName: 'Doe',
+        middleName: 'D.',
       },
     ])
   })
 
   it('should return bad value', () => {
     const value = someObj({
-      name: 'John',
       age: 12,
       address: {
         country: 123,
@@ -121,6 +124,9 @@ describe('object', () => {
         address: {
           country: 'not string',
         },
+        firstName: 'not string (sure)',
+        lastName: 'not string (raw)',
+        middleName: 'not string (pure)',
       },
     ])
 
@@ -129,6 +135,9 @@ describe('object', () => {
         address: {
           country: 'not string',
         },
+        firstName: 'not string (sure)',
+        lastName: 'not string (raw)',
+        middleName: 'not string (pure)',
       })
     )
   })
