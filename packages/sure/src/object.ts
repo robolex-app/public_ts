@@ -21,7 +21,7 @@ export function object<
     { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
     unknown
   >,
-  TSchema
+  MetaObj<TSchema>
 > {
   const struct = sure(value => {
     if (!isObject(value)) {
