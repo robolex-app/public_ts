@@ -1,10 +1,10 @@
-import { Sure, InferEvil, InferGood, sure, evil, good } from './core.js'
+import { Sure, InferEvil, InferGood, sure, evil, good, MetaNever, MetaObj } from './core.js'
 
 export function array<
   //
   TPropFail,
   TPropGood,
-  TSchema extends Sure<TPropFail, TPropGood, unknown, unknown>,
+  TSchema extends Sure<TPropFail, TPropGood, unknown, MetaObj | MetaNever>,
 >(
   schema: TSchema
 ): Sure<

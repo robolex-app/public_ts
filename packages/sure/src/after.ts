@@ -1,4 +1,4 @@
-import { Pure, Sure, sure, evil } from './core.js'
+import { Pure, Sure, sure, evil, MetaObj } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -21,7 +21,7 @@ export function after<
 >(
   first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>
-): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, never>
+): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, MetaObj<undefined>>
 
 export function after<
   //
@@ -37,7 +37,7 @@ export function after<
   first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta: TMeta
-): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, TMeta>
+): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta>>
 
 export function after<
   //
@@ -53,7 +53,7 @@ export function after<
   first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta?: TMeta
-): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, TMeta | undefined> {
+): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta | undefined>> {
   return sure((value: TFirstInput) => {
     const [good, out] = first(value)
 

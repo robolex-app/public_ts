@@ -1,4 +1,4 @@
-import { good, sure, evil, Sure, after } from '../index.js'
+import { good, sure, evil, Sure, after, MetaObj } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
 
 const sureNumber = sure(v =>
@@ -27,7 +27,7 @@ describe('after', () => {
         '---' | 'small',
         'big',
         unknown,
-        never
+        MetaObj<undefined>
       >
     >(true)
   })

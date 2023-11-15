@@ -1,6 +1,6 @@
 {
   "name": "@robolex/sure",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
@@ -12,7 +12,8 @@
     "prepublish": "npm run build",
     "clean": "rm -rf ./esm",
     "dev": "tsc --watch --project tsconfig.build.json",
-    "tsc": "tsc --noEmit --watch",
+    "tsc": "tsc --noEmit",
+    "tsc:w": "tsc --noEmit --watch",
     "lint": "eslint \"src/**/*.ts*\" --quiet",
     "lint:warn": "eslint \"src/**/*.ts*\"",
     "test": "jest",

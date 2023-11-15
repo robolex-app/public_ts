@@ -1,5 +1,5 @@
 import { sure, good, evil } from './core.js'
-import type { Sure, InferGood, InferEvil, Pure } from './core.js'
+import type { Sure, InferGood, InferEvil, Pure, MetaNever, MetaObj } from './core.js'
 
 /**
 Necessary because `typeof x` is not a type guard.
@@ -12,7 +12,7 @@ export function object<
   //
   TPropFail,
   TPropGood,
-  TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown, unknown>>,
+  TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown, MetaObj | MetaNever>>,
 >(
   schema: TSchema
 ): Sure<
