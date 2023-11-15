@@ -52,10 +52,7 @@ export function sure<TGood, TEvil, TInput, TMeta>(
   return Object.assign(insure, { meta })
 }
 
-export function pure<TGood, TEvil, TInput>(
-  //
-  insure: Pure<TEvil, TGood, TInput>
-): Sure<TEvil, TGood, TInput, MetaNever> {
+export function pure<TGood, TEvil, TInput>(insure: Pure<TEvil, TGood, TInput>): Sure<TEvil, TGood, TInput, MetaNever> {
   return insure
 }
 
