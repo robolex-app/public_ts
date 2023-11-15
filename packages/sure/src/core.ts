@@ -3,6 +3,7 @@ export type Dictionary = {
 }
 
 export type MetaNever = { meta?: never }
+// TODO: change to undefined ? or remove?
 export type MetaObj<TMeta = unknown> = { meta: TMeta }
 
 /**
