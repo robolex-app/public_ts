@@ -1,4 +1,17 @@
-import { sure, good, evil, InferEvil, InferGood, InferInput, InferMeta, Sure, MetaObj, MetaNever } from '../index.js'
+import {
+  sure,
+  good,
+  evil,
+  InferEvil,
+  InferGood,
+  InferInput,
+  InferMeta,
+  Sure,
+  MetaObj,
+  MetaNever,
+  pure,
+  Pure,
+} from '../index.js'
 import { assertIs, assertEqual } from './typeTestUtils.js'
 
 /**
@@ -9,6 +22,18 @@ const sureNumber = sure(value =>
     ? good(value)
     : evil('not a number' as const)
 )
+
+const pureNumber = pure(value =>
+  typeof value === 'number' //
+    ? good(value)
+    : evil('not a number' as const)
+)
+
+const rawNumber = (value: unknown) => {
+  return typeof value === 'number' //
+    ? ([true, value] as const)
+    : ([false, 'not a number'] as const)
+}
 
 /**
 Validator for strings with meta.
@@ -45,8 +70,23 @@ const sureMultipleErrors = sure(value => {
 })
 
 describe('core', () => {
-  it('should return good value', () => {
+  it('should return good value (sure)', () => {
     const [isNumber, unsure] = sureNumber(1)
+
+    expect(isNumber).toBe(true)
+    expect(unsure).toBe(1)
+
+    assertIs<number | 'not a number'>(unsure)
+
+    if (isNumber) {
+      assertIs<number>(unsure)
+    } else {
+      assertIs<'not a number'>(unsure)
+    }
+  })
+
+  it('should return good value (pure)', () => {
+    const [isNumber, unsure] = pureNumber(1)
 
     expect(isNumber).toBe(true)
     expect(unsure).toBe(1)
@@ -101,7 +141,22 @@ describe('core', () => {
     }
   })
 
-  it('type inference should work', () => {
+  it('should have strong types (pure)', () => {
+    const [isNumber, unsure] = pureNumber(1)
+
+    assertIs<boolean>(isNumber)
+    assertIs<number | 'not a number'>(unsure)
+
+    if (isNumber) {
+      assertIs<true>(isNumber)
+      assertIs<number>(unsure)
+    } else {
+      assertIs<false>(isNumber)
+      assertIs<'not a number'>(unsure)
+    }
+  })
+
+  it('type inference should work (sure)', () => {
     assertEqual<
       typeof sureNumber,
       Sure<
@@ -109,6 +164,7 @@ describe('core', () => {
         'not a number',
         number,
         unknown,
+        //
         MetaObj<undefined>
       >
     >(true)
@@ -116,6 +172,26 @@ describe('core', () => {
     assertEqual<InferGood<typeof sureNumber>, number>(true)
     assertEqual<InferEvil<typeof sureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof sureNumber>, unknown>(true)
+    assertEqual<InferMeta<typeof sureNumber>, MetaObj<undefined>>(true)
+  })
+
+  it('type inference should work (pure)', () => {
+    assertEqual<
+      typeof pureNumber,
+      Sure<
+        //
+        'not a number',
+        number,
+        unknown,
+        //
+        MetaNever
+      >
+    >(true)
+
+    assertEqual<InferGood<typeof pureNumber>, number>(true)
+    assertEqual<InferEvil<typeof pureNumber>, 'not a number'>(true)
+    assertEqual<InferInput<typeof pureNumber>, unknown>(true)
+    assertEqual<InferMeta<typeof pureNumber>, MetaNever>(true)
   })
 
   it('should have strong types with meta', () => {
@@ -150,7 +226,7 @@ describe('core', () => {
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferEvil<typeof sureNonEmptyString>, 'empty string'>(true)
     assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
-    // assertEqual<InferMeta<typeof sureNonEmptyString>, {}>(true)
+    assertEqual<InferMeta<typeof sureNonEmptyString>, MetaObj<undefined>>(true)
   })
 
   it('should have strong types for validators with multiple errors', () => {
@@ -162,5 +238,6 @@ describe('core', () => {
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
     assertEqual<InferEvil<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
     assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
+    assertEqual<InferMeta<typeof sureMultipleErrors>, MetaObj<undefined>>(true)
   })
 })
