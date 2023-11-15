@@ -1,4 +1,4 @@
-import { sure, good, evil, InferEvil, InferGood, InferInput, InferMeta, Sure } from '../index.js'
+import { sure, good, evil, InferEvil, InferGood, InferInput, InferMeta, Sure, MetaObj, MetaNever } from '../index.js'
 import { assertIs, assertEqual } from './typeTestUtils.js'
 
 /**
@@ -109,7 +109,7 @@ describe('core', () => {
         'not a number',
         number,
         unknown,
-        never
+        MetaObj<undefined>
       >
     >(true)
 
@@ -126,9 +126,10 @@ describe('core', () => {
         'not a string',
         string,
         unknown,
-        { myMeta: string }
+        { meta: { myMeta: string } }
       >
     >(true)
+    type fasdf = InferGood<typeof sureStringMeta>
 
     assertEqual<InferGood<typeof sureStringMeta>, string>(true)
     assertEqual<InferEvil<typeof sureStringMeta>, 'not a string'>(true)
@@ -136,13 +137,15 @@ describe('core', () => {
     assertEqual<
       InferMeta<typeof sureStringMeta>,
       {
-        myMeta: string
+        meta: {
+          myMeta: string
+        }
       }
     >(true)
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, never>>(true)
+    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, MetaObj<undefined>>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferEvil<typeof sureNonEmptyString>, 'empty string'>(true)
@@ -151,9 +154,10 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with multiple errors', () => {
-    assertEqual<typeof sureMultipleErrors, Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, never>>(
-      true
-    )
+    assertEqual<
+      typeof sureMultipleErrors,
+      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, MetaObj<undefined>>
+    >(true)
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
     assertEqual<InferEvil<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
