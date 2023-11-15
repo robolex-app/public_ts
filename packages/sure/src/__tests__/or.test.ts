@@ -28,23 +28,38 @@ describe('or', () => {
     const value = simple(1)
 
     expect(value).toStrictEqual([true, 1])
+
+    // TypeChecks
+    if (value[0] === true) {
+      assertEqual<(typeof value)[1], number | string>(true)
+    }
   })
 
   it('should return good value', () => {
     const value = simple('1')
 
     expect(value).toStrictEqual([true, '1'])
+
+    // TypeChecks
+    if (value[0] === true) {
+      assertEqual<(typeof value)[1], number | string>(true)
+    }
   })
 
   it('should return evil value', () => {
     const value = simple(true)
 
-    expect(value).toStrictEqual([false, 'not number'])
+    expect(value).toStrictEqual([false, 'not string'])
+
+    // TypeChecks
+    if (value[0] === false) {
+      assertEqual<(typeof value)[1], 'not number' | 'not string'>(true)
+    }
   })
 
-  it('should return evil value', () => {
+  it('if first value bad, return second', () => {
     const value = simple({})
 
-    expect(value).toStrictEqual([false, 'not number'])
+    expect(value).toStrictEqual([false, 'not string'])
   })
 })
