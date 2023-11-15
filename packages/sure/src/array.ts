@@ -12,7 +12,7 @@ export function array<
   Array<InferEvil<TSchema> | undefined>,
   Array<InferGood<TSchema>>,
   unknown,
-  TSchema
+  MetaObj<TSchema>
 > {
   const struct = sure(value => {
     if (!Array.isArray(value)) {
