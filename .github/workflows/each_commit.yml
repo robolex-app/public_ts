@@ -25,4 +25,5 @@ jobs:
         env:
           CI: true
 
+      - run: pnpm -F @robolex/sure run tsc
       - run: pnpm -F @robolex/sure run test
