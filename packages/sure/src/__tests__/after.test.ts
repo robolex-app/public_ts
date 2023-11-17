@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { good, sure, bad, Sure, after, MetaObj, Pure, MetaNever } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
 

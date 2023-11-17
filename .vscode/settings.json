@@ -8,11 +8,7 @@
     "titleBar.activeBackground": "#70272F",
     "titleBar.activeForeground": "#FEFBFC"
   },
-  "jest.virtualFolders": [
-    {
-      "name": "sure",
-      "rootPath": "./packages/sure"
-    }
-  ],
+  "vitest.enable": true,
+
   "typescript.tsdk": "node_modules/typescript/lib"
 }
