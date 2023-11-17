@@ -57,14 +57,24 @@ describe('recursive', () => {
   it('should return good value', () => {
     const value = recurseSure({
       name: 'hello',
-      children: [],
+      children: [
+        {
+          name: 'world',
+          children: [],
+        },
+      ],
     })
 
     expect(value).toStrictEqual([
       true,
       {
         name: 'hello',
-        children: [],
+        children: [
+          {
+            name: 'world',
+            children: [],
+          },
+        ],
       },
     ])
   })

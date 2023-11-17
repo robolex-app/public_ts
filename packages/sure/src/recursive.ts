@@ -27,10 +27,10 @@ export function recurse<
   childrenPraser: (surer: Peasy<TGood>) => Peasy<TChildGood>
 ): Peasy<ReplaceSymbolWithObj<TGood, TChildGood>> {
   const rec = (value: unknown) => {
-    const [isGood, unsure] = baseObj(value)
+    const [isGoodObj, unsureObj] = baseObj(value)
 
-    if (!isGood) {
-      return bad(unsure)
+    if (!isGoodObj) {
+      return bad(unsureObj)
     }
 
     //
@@ -38,7 +38,7 @@ export function recurse<
     let newChildrenGood = {}
     let newChildrenBad = {}
 
-    for (const [key, elem] of Object.entries(unsure)) {
+    for (const [key, elem] of Object.entries(unsureObj)) {
       if (elem !== RecurseSymbol) continue
 
       const [isGood, unsure] = childrenPraser(rec)(
@@ -60,7 +60,7 @@ export function recurse<
       return bad(newChildrenBad)
     }
 
-    return good({ ...unsure, ...newChildrenGood })
+    return good({ ...unsureObj, ...newChildrenGood })
   }
 
   // @ts-expect-error
