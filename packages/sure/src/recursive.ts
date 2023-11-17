@@ -1,8 +1,6 @@
 import { bad, good, pure, sure } from './core.js'
 import type { Peasy } from './core.js'
 
-const recurseKey = 'recurse' as const
-
 export const RecurseSymbol = Symbol('recurse')
 
 export const recursiveElem = pure(() => good(RecurseSymbol))
@@ -40,10 +38,14 @@ export function recurse<
     let newChildrenGood = {}
     let newChildrenBad = {}
 
-    for (const [key, value] of Object.entries(unsure)) {
-      if (key !== recurseKey) continue
+    for (const [key, elem] of Object.entries(unsure)) {
+      if (elem !== RecurseSymbol) continue
 
-      const [isGood, unsure] = childrenPraser(rec)(value)
+      const [isGood, unsure] = childrenPraser(rec)(
+        // here we send the value from the original object
+        // Seems dangerous, maybe other implementation is better
+        value[key]
+      )
 
       if (!isGood) {
         // @ts-expect-error

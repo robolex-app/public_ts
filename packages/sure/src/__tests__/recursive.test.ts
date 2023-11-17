@@ -54,7 +54,7 @@ assertEqual<
 >(true)
 
 describe('recursive', () => {
-  it.skip('should return good value', () => {
+  it('should return good value', () => {
     const value = recurseSure({
       name: 'hello',
       children: [],
