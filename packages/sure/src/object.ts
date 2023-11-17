@@ -1,4 +1,4 @@
-import { sure, good, evil } from './core.js'
+import { sure, good, bad } from './core.js'
 import type { Sure, InferGood, InferEvil, Pure, MetaNever, MetaObj } from './core.js'
 
 /**
@@ -23,7 +23,7 @@ export function object<
 > {
   const struct = sure(value => {
     if (!isObject(value)) {
-      return evil({})
+      return bad({})
     }
 
     const groupFail = {}
@@ -45,7 +45,7 @@ export function object<
     }
 
     if (Object.keys(groupFail).length) {
-      return evil(groupFail)
+      return bad(groupFail)
     }
 
     return good(groupGood)

@@ -1,4 +1,4 @@
-import { Pure, Sure, sure, evil, MetaObj } from './core.js'
+import { Pure, Sure, sure, bad, MetaObj } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -12,20 +12,20 @@ If it returns a good value, then the new @see second function will be run.
 
 export function after<
   //
-  TFirsTEvil,
+  TFirsTBad,
   TFirstGood,
   TFirstInput,
   //
   TSecondFail,
   TSecondGood,
 >(
-  first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
+  first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>
-): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, MetaObj<undefined>>
+): Sure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput, MetaObj<undefined>>
 
 export function after<
   //
-  TFirsTEvil,
+  TFirsTBad,
   TFirstGood,
   TFirstInput,
   //
@@ -34,14 +34,14 @@ export function after<
   //
   TMeta,
 >(
-  first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
+  first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta: TMeta
-): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta>>
+): Sure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta>>
 
 export function after<
   //
-  TFirsTEvil,
+  TFirsTBad,
   TFirstGood,
   TFirstInput,
   //
@@ -50,13 +50,13 @@ export function after<
   //
   TMeta,
 >(
-  first: Pure<TFirsTEvil, TFirstGood, TFirstInput>,
+  first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta?: TMeta
-): Sure<TFirsTEvil | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta | undefined>> {
+): Sure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta | undefined>> {
   return sure((value: TFirstInput) => {
     const [good, out] = first(value)
 
-    return good ? second(out) : evil<TFirsTEvil | TSecondFail>(out)
+    return good ? second(out) : bad<TFirsTBad | TSecondFail>(out)
   }, meta)
 }

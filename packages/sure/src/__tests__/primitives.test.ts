@@ -1,10 +1,10 @@
-import { InferEvil, InferGood, InferInput, Sure, good, sure, evil, InferMeta, MetaObj } from '../index.js'
+import { InferEvil, InferGood, InferInput, Sure, good, sure, bad, InferMeta, MetaObj } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 export const nonEmptyString = sure(x => {
   return typeof x === 'string' //
     ? good(x)
-    : evil('not string' as const)
+    : bad('not string' as const)
 })
 
 describe('primitives', () => {

@@ -1,7 +1,7 @@
 import {
   sure,
   good,
-  evil,
+  bad,
   InferEvil,
   InferGood,
   InferInput,
@@ -20,13 +20,13 @@ Validator for numbers without any meta.
 const sureNumber = sure(value =>
   typeof value === 'number' //
     ? good(value)
-    : evil('not a number' as const)
+    : bad('not a number' as const)
 )
 
 const pureNumber = pure(value =>
   typeof value === 'number' //
     ? good(value)
-    : evil('not a number' as const)
+    : bad('not a number' as const)
 )
 
 const rawNumber = (value: unknown) => {
@@ -42,7 +42,7 @@ const sureStringMeta = sure(
   value =>
     typeof value === 'string' //
       ? good(value)
-      : evil('not a string' as const),
+      : bad('not a string' as const),
   { myMeta: 'my meta' }
 )
 
@@ -52,18 +52,18 @@ Validator that expects the input to already be a string.
 const sureNonEmptyString = sure((value: string) =>
   value.length > 0 //
     ? good(value)
-    : evil('empty string' as const)
+    : bad('empty string' as const)
 )
 
 /**
 Validator that can return multiple error types
  */
 const sureMultipleErrors = sure(value => {
-  if (typeof value !== 'string') return evil('not a string' as const)
+  if (typeof value !== 'string') return bad('not a string' as const)
 
-  if (value.length < 3) return evil('too small' as const)
+  if (value.length < 3) return bad('too small' as const)
 
-  if (value.length > 10) return evil('too big' as const)
+  if (value.length > 10) return bad('too big' as const)
 
   // The `string & {}` is used as an example, when the return type has to be more controlled
   return good<string & {}>(value)

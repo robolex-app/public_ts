@@ -1,4 +1,4 @@
-import { object, evil, number, string } from '../index.js'
+import { object, bad, number, string } from '../index.js'
 
 const someObj = object({
   name: string,
@@ -30,7 +30,7 @@ describe('object', () => {
     ])
   })
 
-  it('should return evil value', () => {
+  it('should return bad value', () => {
     const value = someObj({
       name: 'John',
       age: 12,
@@ -49,7 +49,7 @@ describe('object', () => {
     ])
 
     expect(value).toEqual(
-      evil({
+      bad({
         address: {
           country: 'not string',
         },

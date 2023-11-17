@@ -5,7 +5,6 @@ export function pure(insure) {
     return insure;
 }
 //
-// Fail causes errors when used in Jest tests
-export const evil = (val) => [false, val];
+export const bad = (val) => [false, val];
 //
 export const good = (val) => [true, val];
