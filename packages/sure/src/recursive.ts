@@ -1,5 +1,5 @@
 import { bad, good, pure, sure } from './core.js'
-import type { Peasy } from './core.js'
+import type { MetaObj, Peasy, Sure } from './core.js'
 
 export const RecurseSymbol = Symbol('recurse')
 
@@ -17,15 +17,27 @@ export function recurse<
   //
   // TKey extends keyof TGood,
   // TKey extends string,
-  TBad,
+  // TODO: TBad is very specific
+  TBad extends Record<string, unknown>,
   TGood extends Record<string, unknown>,
-  TPrr extends Peasy<TGood>,
+  TChildBad,
   TChildGood,
 >( //
-  baseObj: Peasy<TGood>, //
+  baseObj: Peasy<TGood, TBad>, //
   // key: TKey,
-  childrenPraser: (surer: Peasy<TGood>) => Peasy<TChildGood>
-): Peasy<ReplaceSymbolWithObj<TGood, TChildGood>> {
+  childParser: (surer: typeof baseObj) => Peasy<TChildGood, TChildBad>
+): Sure<
+  Peasy<
+    //
+    ReplaceSymbolWithObj<TGood, TChildGood>,
+    ReplaceSymbolWithObj<TBad, TChildBad>,
+    unknown
+  >,
+  MetaObj<{
+    baseObj: typeof baseObj
+    childParser: typeof childParser
+  }>
+> {
   const rec = (value: unknown) => {
     const [isGoodObj, unsureObj] = baseObj(value)
 
@@ -41,9 +53,11 @@ export function recurse<
     for (const [key, elem] of Object.entries(unsureObj)) {
       if (elem !== RecurseSymbol) continue
 
-      const [isGood, unsure] = childrenPraser(rec)(
+      // @ts-expect-error
+      const [isGood, unsure] = childParser(rec)(
         // here we send the value from the original object
         // Seems dangerous, maybe other implementation is better
+        // @ts-expect-error
         value[key]
       )
 
@@ -66,6 +80,6 @@ export function recurse<
   // @ts-expect-error
   return sure(rec, {
     baseObj,
-    childrenPraser,
+    childrenPraser: childParser,
   })
 }

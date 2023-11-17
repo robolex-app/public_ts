@@ -1,23 +1,27 @@
 import { bad, good, pure, sure } from './core.js';
-const recurseKey = 'recurse';
 export const RecurseSymbol = Symbol('recurse');
 export const recursiveElem = pure(() => good(RecurseSymbol));
 export function recurse(//
 baseObj, //
 // key: TKey,
-childrenPraser) {
+childParser) {
     const rec = (value) => {
-        const [isGood, unsure] = baseObj(value);
-        if (!isGood) {
-            return bad(unsure);
+        const [isGoodObj, unsureObj] = baseObj(value);
+        if (!isGoodObj) {
+            return bad(unsureObj);
         }
         //
         let newChildrenGood = {};
         let newChildrenBad = {};
-        for (const [key, value] of Object.entries(unsure)) {
-            if (key !== recurseKey)
+        for (const [key, elem] of Object.entries(unsureObj)) {
+            if (elem !== RecurseSymbol)
                 continue;
-            const [isGood, unsure] = childrenPraser(rec)(value);
+            // @ts-expect-error
+            const [isGood, unsure] = childParser(rec)(
+            // here we send the value from the original object
+            // Seems dangerous, maybe other implementation is better
+            // @ts-expect-error
+            value[key]);
             if (!isGood) {
                 // @ts-expect-error
                 newChildrenBad[key] = unsure;
@@ -30,11 +34,11 @@ childrenPraser) {
         if (Object.keys(newChildrenBad).length) {
             return bad(newChildrenBad);
         }
-        return good({ ...unsure, ...newChildrenGood });
+        return good({ ...unsureObj, ...newChildrenGood });
     };
     // @ts-expect-error
     return sure(rec, {
         baseObj,
-        childrenPraser,
+        childrenPraser: childParser,
     });
 }
