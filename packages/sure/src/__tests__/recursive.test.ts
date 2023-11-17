@@ -27,47 +27,37 @@ import type {
 } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
-const baseObj = object({
-  name: string,
-  children: recursiveElem,
-})
-
-const recurseSure = recurse(baseObj, recurseSure => {
-  return array(recurseSure)
-})
-
-// TypeChecks
-type InferredGood = InferGood<typeof recurseSure>
-type InferredBad = InferBad<typeof recurseSure>
-type InferredInput = InferInput<typeof recurseSure>
-type InferredMeta = InferMeta<typeof recurseSure>
-
-assertEqual<
-  InferredGood,
-  {
-    name: string
-    children: {
-      name: string
-      children: typeof RecurseSymbol
-    }[]
-  }
->(true)
-
 describe('recursive', () => {
-  it('should return good value', () => {
-    const value = recurseSure({
-      name: 'hello',
-      children: [
-        {
-          name: 'world',
-          children: [],
-        },
-      ],
+  describe('simple recursive array', () => {
+    const baseObj = object({
+      name: string,
+      children: recursiveElem,
     })
 
-    expect(value).toStrictEqual([
-      true,
+    const recurseSure = recurse(baseObj, recurseSure => {
+      return array(recurseSure)
+    })
+
+    // TypeChecks
+    type InferredGood = InferGood<typeof recurseSure>
+    type InferredBad = InferBad<typeof recurseSure>
+    type InferredInput = InferInput<typeof recurseSure>
+    type InferredMeta = InferMeta<typeof recurseSure>
+
+    assertEqual<
+      InferredGood,
       {
+        name: string
+        children: {
+          name: string
+          children: typeof RecurseSymbol
+        }[]
+      }
+    >(true)
+    //////
+
+    it('should return good value', () => {
+      const value = recurseSure({
         name: 'hello',
         children: [
           {
@@ -75,7 +65,20 @@ describe('recursive', () => {
             children: [],
           },
         ],
-      },
-    ])
+      })
+
+      expect(value).toStrictEqual([
+        true,
+        {
+          name: 'hello',
+          children: [
+            {
+              name: 'world',
+              children: [],
+            },
+          ],
+        },
+      ])
+    })
   })
 })
