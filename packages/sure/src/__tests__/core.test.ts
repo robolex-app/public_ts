@@ -158,15 +158,14 @@ describe('core', () => {
   })
 
   it('type inference should work (sure)', () => {
-    assertEqual<
-      typeof sureNumber,
+    assertIs<
       Sure<
         //
         Pure<'not a number', number, unknown>,
         //
         MetaObj<undefined>
       >
-    >(true)
+    >(sureNumber)
 
     assertEqual<InferGood<typeof sureNumber>, number>(true)
     assertEqual<InferBad<typeof sureNumber>, 'not a number'>(true)
@@ -175,15 +174,14 @@ describe('core', () => {
   })
 
   it('type inference should work (pure)', () => {
-    assertEqual<
-      typeof pureNumber,
+    assertIs<
       Sure<
         //
         Pure<'not a number', number, unknown>,
         //
         MetaNever
       >
-    >(true)
+    >(pureNumber)
 
     assertEqual<InferGood<typeof pureNumber>, number>(true)
     assertEqual<InferBad<typeof pureNumber>, 'not a number'>(true)

@@ -56,7 +56,16 @@ describe('recursive', () => {
     >(true)
     //////
 
-    assertEqual<InferredBad, unknown>(true)
+    assertEqual<
+      InferredBad,
+      {
+        name?: 'not string' | undefined
+        children?: {
+          name?: 'not string' | undefined
+          children?: typeof RecurseSymbol
+        }
+      }
+    >(true)
 
     it('should return good value', () => {
       const value = recurseSure({

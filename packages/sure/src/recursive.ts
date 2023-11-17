@@ -1,13 +1,17 @@
 import { bad, good, pure, sure } from './core.js'
-import type { MetaObj, Peasy, Sure } from './core.js'
+import type { MetaObj, Peasy, Pure, Sure } from './core.js'
 
 export const RecurseSymbol = Symbol('recurse')
 
-export const recursiveElem = pure(() => good(RecurseSymbol))
+export const recursiveElem: Pure<
+  // The `bad` type is used by the type system to replace the symbol
+  typeof RecurseSymbol,
+  typeof RecurseSymbol,
+  unknown
+> = pure(() => good(RecurseSymbol))
 
-// TODO: Add test for type and docs
-type ReplaceSymbolWithObj<Obj extends Record<string, unknown>, With> = {
-  [K in keyof Obj]: Obj[K] extends typeof RecurseSymbol //
+export type ReplaceSymbolWithObj<Obj extends Record<string, unknown>, With> = {
+  [K in keyof Obj]: typeof RecurseSymbol extends Obj[K] //
     ? With
     : Obj[K]
   //
