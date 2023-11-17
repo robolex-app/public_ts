@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, assert } from 'vitest'
 import {
   recurse,
   after,
@@ -13,6 +13,9 @@ import {
   sure,
   unknown,
   recursiveElem,
+  number,
+  tuple,
+  literal,
 } from '../index.js'
 import type {
   InferBad,
@@ -60,10 +63,15 @@ describe('recursive', () => {
       InferredBad,
       {
         name?: 'not string' | undefined
-        children?: {
-          name?: 'not string' | undefined
-          children?: typeof RecurseSymbol
-        }
+        children?:
+          | (
+              | {
+                  name?: 'not string' | undefined
+                  children?: typeof RecurseSymbol | undefined
+                }
+              | undefined
+            )[]
+          | undefined
       }
     >(true)
 
@@ -88,6 +96,158 @@ describe('recursive', () => {
               children: [],
             },
           ],
+        },
+      ])
+    })
+  })
+
+  describe('complex recursive object', () => {
+    const complexSure = object({
+      value: number,
+
+      left: recursiveElem,
+
+      right: recursiveElem,
+    })
+
+    const recurseComplexSure = recurse(
+      //
+      complexSure,
+      inner =>
+        //
+        or(
+          and(
+            inner,
+            object({
+              parent: number,
+            })
+          ),
+          literal('end')
+        )
+    )
+
+    type InferredGood = InferGood<typeof recurseComplexSure>
+    type InferredBad = InferBad<typeof recurseComplexSure>
+    type InferredInput = InferInput<typeof recurseComplexSure>
+    type InferredMeta = InferMeta<typeof recurseComplexSure>
+
+    assertEqual<InferredInput, unknown>(true)
+
+    assertEqual<
+      //
+      InferredGood,
+      {
+        value: number
+        left:
+          | ({
+              value: number
+              left: typeof RecurseSymbol
+              right: typeof RecurseSymbol
+            } & {
+              parent: number
+            })
+          | 'end'
+        right:
+          | ({
+              value: number
+              left: typeof RecurseSymbol
+              right: typeof RecurseSymbol
+            } & {
+              parent: number
+            })
+          | 'end'
+      }
+    >(true)
+
+    assertEqual<
+      InferredBad,
+      {
+        value?: 'not number' | undefined
+        left?:
+          | {
+              value?: 'not number' | undefined
+              left?: typeof RecurseSymbol | undefined
+              right?: typeof RecurseSymbol | undefined
+            }
+          | {
+              parent?: 'not number' | undefined
+            }
+          | `not literal ${string}`
+          | undefined
+        right?:
+          | {
+              value?: 'not number' | undefined
+              left?: typeof RecurseSymbol | undefined
+              right?: typeof RecurseSymbol | undefined
+            }
+          | {
+              parent?: 'not number' | undefined
+            }
+          | `not literal ${string}`
+          | undefined
+      }
+    >(true)
+
+    it('should work for complex things', () => {
+      const value = recurseComplexSure({
+        value: 4,
+
+        right: 'end',
+
+        left: {
+          value: 3,
+
+          parent: 8,
+
+          // @ts-expect-error, TODO: add several more levels?
+          left: 'end',
+          // @ts-expect-error, TODO: add several more levels?
+          right: 'end',
+        },
+      } satisfies InferredGood)
+
+      expect(value).toStrictEqual([
+        true,
+        {
+          value: 4,
+
+          right: 'end',
+
+          left: {
+            value: 3,
+
+            parent: 8,
+
+            left: 'end',
+            right: 'end',
+          },
+        },
+      ])
+    })
+    it('should fail for complex things (TODO: improve bad response)', () => {
+      const value = recurseComplexSure({
+        value: 4,
+
+        right: 'end',
+
+        left: {
+          value: 3,
+
+          // @ts-expect-error, TODO: add several more levels?
+          parent: '8',
+
+          // @ts-expect-error, TODO: add several more levels?
+          left: 'end',
+          // @ts-expect-error, TODO: add several more levels?
+          right: 'end',
+        },
+      } satisfies InferredGood)
+
+      expect(value).toStrictEqual([
+        false,
+        {
+          // TODO: improve bad response
+          left: 'not literal string (end)',
         },
       ])
     })

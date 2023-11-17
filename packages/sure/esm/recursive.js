@@ -20,7 +20,7 @@ childParser) {
             const [isGood, unsure] = childParser(rec)(
             // here we send the value from the original object
             // Seems dangerous, maybe other implementation is better
-            // @ts-expect-error
+            // @ts-expect-error TODO: fix
             value[key]);
             if (!isGood) {
                 // @ts-expect-error

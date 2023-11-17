@@ -76,12 +76,13 @@ export type Good<T> = [true, T]
 export type Bad<T> = [false, T]
 
 export type InferBad<
-  T extends Pure<
-    unknown,
-    unknown,
-    // Input issue
-    any
-  >,
+  T,
+  // extends Pure<
+  //   unknown,
+  //   unknown,
+  //   // Input issue
+  //   any
+  // >,
 > = //
   T extends Pure<
     infer CFailure,
@@ -94,12 +95,13 @@ export type InferBad<
     : never
 
 export type InferGood<
-  T extends Pure<
-    unknown,
-    unknown,
-    // Input issue
-    any
-  >,
+  T,
+  // extends Pure<
+  //   unknown,
+  //   unknown,
+  //   // Input issue
+  //   any
+  // >,
 > = //
   T extends Pure<
     unknown,

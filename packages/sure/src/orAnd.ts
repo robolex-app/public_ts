@@ -1,5 +1,12 @@
 import { bad, good, sure } from './core.js'
-import type { InferBad, InferGood, MetaNever, MetaObj, Pure, Sure } from './core.js'
+import type {
+  InferBad,
+  InferGood,
+  MetaNever,
+  MetaObj,
+  Pure,
+  Sure,
+} from './core.js'
 
 export function or<
   //
