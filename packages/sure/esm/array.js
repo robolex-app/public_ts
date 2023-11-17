@@ -1,28 +1,28 @@
-import { sure, evil, good } from './core.js';
+import { sure, bad, good } from './core.js';
 export function array(schema) {
     const struct = sure(value => {
         if (!Array.isArray(value)) {
-            return evil([]);
+            return bad([]);
         }
-        let atLeastOneEvil = false;
-        let evils = [];
+        let atLeastOneBad = false;
+        let bads = [];
         let goods = [];
         for (const elem of value) {
             const [good, unsure] = schema(elem);
             if (good) {
                 goods.push(unsure);
                 // This is necessary in order to maintain the same length
-                evils.push(undefined);
+                bads.push(undefined);
             }
             else {
-                evils.push(unsure);
-                // Since the `evils` array can containe `undefined` values, it's more clear to
+                bads.push(unsure);
+                // Since the `bads` array can containe `undefined` values, it's more clear to
                 // have an imperative boolean to make the check
-                atLeastOneEvil = true;
+                atLeastOneBad = true;
             }
         }
-        if (atLeastOneEvil) {
-            return evil(evils);
+        if (atLeastOneBad) {
+            return bad(bads);
         }
         return good(goods);
     }, schema);

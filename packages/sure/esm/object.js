@@ -1,4 +1,4 @@
-import { sure, good, evil } from './core.js';
+import { sure, good, bad } from './core.js';
 /**
 Necessary because `typeof x` is not a type guard.
  */
@@ -8,7 +8,7 @@ function isObject(x) {
 export function object(schema) {
     const struct = sure(value => {
         if (!isObject(value)) {
-            return evil({});
+            return bad({});
         }
         const groupFail = {};
         const groupGood = {};
@@ -26,7 +26,7 @@ export function object(schema) {
             }
         }
         if (Object.keys(groupFail).length) {
-            return evil(groupFail);
+            return bad(groupFail);
         }
         return good(groupGood);
     }, schema);

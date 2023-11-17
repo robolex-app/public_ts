@@ -6,7 +6,7 @@ export type MetaNever = { meta?: never }
 export type MetaObj<TMeta = unknown> = { meta: TMeta }
 
 /**
-@typeparam TEvil  - Each struct can returns some kinds of issues (not throwing)
+@typeparam TBad  - Each struct can returns some kinds of issues (not throwing)
 @typeparam TGood  - The type which is guaranteed to be the output of the validator
 @typeparam TInput - The type of the input value.
 
@@ -14,11 +14,11 @@ export type MetaObj<TMeta = unknown> = { meta: TMeta }
          so you can base a numeric string on a string struct (if you want).
          By default the `unknown` struct is used. That is the only core struct
  */
-export type Sure<TEvil, TGood, TInput, TMeta extends MetaNever | MetaObj> = {
-  (value: TInput): Good<TGood> | Evil<TEvil>
+export type Sure<TBad, TGood, TInput, TMeta extends MetaNever | MetaObj> = {
+  (value: TInput): Good<TGood> | Bad<TBad>
 } & TMeta
 
-export type Pure<TEvil, TGood, TInput> = Sure<TEvil, TGood, TInput, MetaNever>
+export type Pure<TBad, TGood, TInput> = Sure<TBad, TGood, TInput, MetaNever>
 /**
 Returns the exact function back.
 But the types are inferred automatically for you.
@@ -36,37 +36,36 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-export function sure<TGood, TEvil, TInput>(
-  insure: Pure<TEvil, TGood, TInput>
-): Sure<TEvil, TGood, TInput, MetaObj<undefined>>
+export function sure<TGood, TBad, TInput>(
+  insure: Pure<TBad, TGood, TInput>
+): Sure<TBad, TGood, TInput, MetaObj<undefined>>
 
-export function sure<TGood, TEvil, TInput, TMeta>(
-  insure: Pure<TEvil, TGood, TInput>,
+export function sure<TGood, TBad, TInput, TMeta>(
+  insure: Pure<TBad, TGood, TInput>,
   meta: TMeta
-): Sure<TEvil, TGood, TInput, MetaObj<TMeta>>
+): Sure<TBad, TGood, TInput, MetaObj<TMeta>>
 
-export function sure<TGood, TEvil, TInput, TMeta>(
-  insure: Pure<TEvil, TGood, TInput>,
+export function sure<TGood, TBad, TInput, TMeta>(
+  insure: Pure<TBad, TGood, TInput>,
   meta?: TMeta
-): Sure<TEvil, TGood, TInput, MetaObj<TMeta | undefined>> {
+): Sure<TBad, TGood, TInput, MetaObj<TMeta | undefined>> {
   return Object.assign(insure, { meta })
 }
 
-export function pure<TGood, TEvil, TInput>(insure: Pure<TEvil, TGood, TInput>): Sure<TEvil, TGood, TInput, MetaNever> {
+export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<TBad, TGood, TInput, MetaNever> {
   return insure
 }
 
 //
-// Fail causes errors when used in Jest tests
-export const evil = <TEvil>(val: TEvil): Evil<TEvil> => [false, val]
+export const bad = <TBad>(val: TBad): Bad<TBad> => [false, val]
 //
 export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
 
-export type Unsure<TEvil, TGood> = //
-  Good<TGood> | Evil<TEvil>
+export type Unsure<TBad, TGood> = //
+  Good<TGood> | Bad<TBad>
 
 export type Good<T> = [true, T]
-export type Evil<T> = [false, T]
+export type Bad<T> = [false, T]
 
 export type InferEvil<
   T extends Sure<
