@@ -21,7 +21,7 @@ export function after<
 >(
   first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>
-): Sure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput, MetaObj<undefined>>
+): Sure<Pure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput>, MetaObj<undefined>>
 
 export function after<
   //
@@ -37,7 +37,7 @@ export function after<
   first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta: TMeta
-): Sure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta>>
+): Sure<Pure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput>, MetaObj<TMeta>>
 
 export function after<
   //
@@ -53,7 +53,7 @@ export function after<
   first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>,
   meta?: TMeta
-): Sure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput, MetaObj<TMeta | undefined>> {
+): Sure<Pure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput>, MetaObj<TMeta | undefined>> {
   return sure((value: TFirstInput) => {
     const [good, out] = first(value)
 

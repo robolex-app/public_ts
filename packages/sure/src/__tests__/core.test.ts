@@ -2,7 +2,7 @@ import {
   sure,
   good,
   bad,
-  InferEvil,
+  InferBad,
   InferGood,
   InferInput,
   InferMeta,
@@ -161,16 +161,14 @@ describe('core', () => {
       typeof sureNumber,
       Sure<
         //
-        'not a number',
-        number,
-        unknown,
+        Pure<'not a number', number, unknown>,
         //
         MetaObj<undefined>
       >
     >(true)
 
     assertEqual<InferGood<typeof sureNumber>, number>(true)
-    assertEqual<InferEvil<typeof sureNumber>, 'not a number'>(true)
+    assertEqual<InferBad<typeof sureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof sureNumber>, unknown>(true)
     assertEqual<InferMeta<typeof sureNumber>, MetaObj<undefined>>(true)
   })
@@ -180,16 +178,14 @@ describe('core', () => {
       typeof pureNumber,
       Sure<
         //
-        'not a number',
-        number,
-        unknown,
+        Pure<'not a number', number, unknown>,
         //
         MetaNever
       >
     >(true)
 
     assertEqual<InferGood<typeof pureNumber>, number>(true)
-    assertEqual<InferEvil<typeof pureNumber>, 'not a number'>(true)
+    assertEqual<InferBad<typeof pureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof pureNumber>, unknown>(true)
     assertEqual<InferMeta<typeof pureNumber>, MetaNever>(true)
   })
@@ -199,16 +195,14 @@ describe('core', () => {
       typeof sureStringMeta,
       Sure<
         //
-        'not a string',
-        string,
-        unknown,
+        Pure<'not a string', string, unknown>,
         { meta: { myMeta: string } }
       >
     >(true)
     type fasdf = InferGood<typeof sureStringMeta>
 
     assertEqual<InferGood<typeof sureStringMeta>, string>(true)
-    assertEqual<InferEvil<typeof sureStringMeta>, 'not a string'>(true)
+    assertEqual<InferBad<typeof sureStringMeta>, 'not a string'>(true)
     assertEqual<InferInput<typeof sureStringMeta>, unknown>(true)
     assertEqual<
       InferMeta<typeof sureStringMeta>,
@@ -221,10 +215,10 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, MetaObj<undefined>>>(true)
+    assertEqual<typeof sureNonEmptyString, Sure<Pure<'empty string', string, string>, MetaObj<undefined>>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
-    assertEqual<InferEvil<typeof sureNonEmptyString>, 'empty string'>(true)
+    assertEqual<InferBad<typeof sureNonEmptyString>, 'empty string'>(true)
     assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferMeta<typeof sureNonEmptyString>, MetaObj<undefined>>(true)
   })
@@ -232,11 +226,11 @@ describe('core', () => {
   it('should have strong types for validators with multiple errors', () => {
     assertEqual<
       typeof sureMultipleErrors,
-      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, MetaObj<undefined>>
+      Sure<Pure<'not a string' | 'too small' | 'too big', string & {}, unknown>, MetaObj<undefined>>
     >(true)
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
-    assertEqual<InferEvil<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
+    assertEqual<InferBad<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
     assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
     assertEqual<InferMeta<typeof sureMultipleErrors>, MetaObj<undefined>>(true)
   })
