@@ -51,7 +51,7 @@ assertEqual<
         unknown
       >,
       MetaObj<{
-        age: Sure<Pure<'not number', number, unknown>, MetaObj<undefined>>
+        age: Sure<Pure<'not number', number, unknown>, MetaNever>
       }>
     >
   }>

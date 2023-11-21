@@ -61,7 +61,7 @@ assertEqual<
   InferredMeta,
   {
     meta: {
-      age: Sure<Pure<'not number', number, unknown>, MetaObj<undefined>>
+      age: Sure<Pure<'not number', number, unknown>, MetaNever>
       firstName: Sure<Pure<'not string (sure)', string, unknown>, MetaObj<undefined>>
       middleName: Sure<Pure<'not string (pure)', string, unknown>, MetaNever>
       lastName: (value: unknown) => [true, string] | [false, 'not string (raw)']

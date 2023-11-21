@@ -172,7 +172,14 @@ describe('recursive', () => {
           | {
               parent?: 'not number' | undefined
             }
-          | `not literal ${string}`
+          | `not literal string (${string})`
+          | `not literal number (${string})`
+          | `not literal bigint (${string})`
+          | `not literal boolean (${string})`
+          | `not literal symbol (${string})`
+          | `not literal undefined (${string})`
+          | `not literal object (${string})`
+          | `not literal function (${string})`
           | undefined
         right?:
           | {
@@ -183,7 +190,14 @@ describe('recursive', () => {
           | {
               parent?: 'not number' | undefined
             }
-          | `not literal ${string}`
+          | `not literal string (${string})`
+          | `not literal number (${string})`
+          | `not literal bigint (${string})`
+          | `not literal boolean (${string})`
+          | `not literal symbol (${string})`
+          | `not literal undefined (${string})`
+          | `not literal object (${string})`
+          | `not literal function (${string})`
           | undefined
       }
     >(true)

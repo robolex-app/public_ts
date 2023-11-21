@@ -1,5 +1,5 @@
 import { RecurseSymbol, ReplaceSymbolWithObj } from '../recursive.js'
-import { assertEqual, type AssertEqual } from './typeTestUtils.ts'
+import { assertEqual, type AssertEqual } from './typeTestUtils.js'
 
 type Obj = {
   a: number
