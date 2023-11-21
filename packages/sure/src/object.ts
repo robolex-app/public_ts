@@ -16,11 +16,9 @@ export function object<
 >(
   schema: TSchema
 ): Sure<
-  Pure<
-    { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
-    { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
-    unknown
-  >,
+  { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
+  { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
+  unknown,
   MetaObj<TSchema>
 > {
   const struct = sure(value => {

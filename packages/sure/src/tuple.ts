@@ -23,7 +23,8 @@ export type TupleInferBads<T> = T extends readonly [infer First, ...infer InferR
 type FinGoods = TupleInferGoods<TestType>
 type FinBads = TupleInferBads<TestType>
 
-export function tupleRest<Arr extends Sure<Peasy<unknown[]>, MetaNever | MetaObj>>(struct: Arr) {
+export function tupleRest<Arr extends Sure<unknown, unknown[], unknown>>(struct: Arr) {
+  // @ts-expect-error
   const val = sure(struct, {
     func: tupleRest,
 
@@ -37,7 +38,9 @@ export function tuple<Arr extends [Peasy<unknown>, ...Peasy<unknown>[]] | []>(
   arr: Arr
 ): Sure<
   //
-  Peasy<TupleInferGoods<Arr>, TupleInferBads<Arr>, unknown>,
+  TupleInferBads<Arr>,
+  TupleInferGoods<Arr>,
+  unknown,
   MetaObj<Arr>
 > {
   const struct = sure(value => {

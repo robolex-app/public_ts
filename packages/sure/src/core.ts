@@ -1,3 +1,5 @@
+import { T } from 'vitest/dist/reporters-5f784f42.js'
+
 export type Dictionary = {
   [key: string]: unknown
 }
@@ -17,14 +19,17 @@ export type MetaObj<TMeta = unknown> = { meta: TMeta }
  */
 export type Sure<
   //
-  TPure extends Pure<unknown, unknown, any>,
-  TMeta extends MetaNever | MetaObj,
-> = TPure & TMeta
+  TBad,
+  TGood,
+  TInput,
+  //
+  TMeta extends MetaNever | MetaObj = MetaNever | MetaObj,
+> = ((value: TInput) => Good<TGood> | Bad<TBad>) & TMeta
 
-export type Pure<out TBad, out TGood, in TInput> = (value: TInput) => Good<TGood> | Bad<TBad>
+export type Pure<TBad, TGood, TInput> = Sure<TBad, TGood, TInput, MetaNever>
 
 // TODO: Move TGood up front, and add defaults to Pure (the api is stable I think)
-export type Peasy<out TGood, out TBad = unknown, in TInput = any> = Pure<TBad, TGood, TInput>
+export type Peasy<TGood, TBad = unknown, TInput = any> = Pure<TBad, TGood, TInput>
 
 /**
 Returns the exact function back.
@@ -43,24 +48,29 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-export function sure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<typeof insure, MetaObj<undefined>>
+export function sure<TGood, TBad, TInput>(
+  insure: Pure<TBad, TGood, TInput>
+): Sure<TBad, TGood, TInput, MetaObj<undefined>>
 
 export function sure<TGood, TBad, TInput, TMeta>(
   insure: Pure<TBad, TGood, TInput>,
   meta: TMeta
-): Sure<typeof insure, MetaObj<TMeta>>
+): Sure<TGood, TBad, TInput, MetaObj<TMeta>>
 
 export function sure<TGood, TBad, TInput, TMeta>(
   insure: Pure<TBad, TGood, TInput>,
   meta?: TMeta
-): Sure<typeof insure, MetaObj<TMeta | undefined>> {
+): Sure<TGood, TBad, TInput, MetaObj<TMeta | undefined>> {
+  // @ts-expect-error
   return Object.assign(insure, { meta })
 }
 
-export function pure<TGood, TInput>(insure: Pure<never, TGood, TInput>): Sure<typeof insure, MetaNever>
-export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<typeof insure, MetaNever>
+export function pure<TGood, TInput>(insure: Pure<never, TGood, TInput>): Sure<never, TGood, TInput, MetaNever>
+export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<TBad, TGood, TInput, MetaNever>
 
-export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<typeof insure, MetaNever> {
+export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<TGood, TBad, TInput, MetaNever> {
+  // @ts-expect-error
+
   return insure
 }
 
@@ -132,7 +142,7 @@ export type InferInput<
       CFrom
     : never
 
-export type InferMeta<T extends Sure<Pure<unknown, unknown, any>, {}>> = //
-  T extends Sure<Pure<unknown, unknown, any>, infer CMeta> //
+export type InferMeta<T extends Sure<unknown, unknown, any, {}>> = //
+  T extends Sure<unknown, unknown, any, infer CMeta> //
     ? CMeta
     : {}

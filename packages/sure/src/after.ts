@@ -22,7 +22,9 @@ export function after<
   first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>
 ): Sure<
-  Pure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput>,
+  TSecondGood,
+  TFirsTBad | TSecondFail,
+  TFirstInput,
   MetaObj<{
     first: typeof first
     second: typeof second

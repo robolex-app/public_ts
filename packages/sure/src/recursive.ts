@@ -31,12 +31,10 @@ export function recurse<
   // key: TKey,
   childParser: (surer: typeof baseObj) => Peasy<TChildGood, TChildBad>
 ): Sure<
-  Peasy<
-    //
-    ReplaceSymbolWithObj<TGood, TChildGood>,
-    ReplaceSymbolWithObj<TBad, TChildBad>,
-    unknown
-  >,
+  //
+  ReplaceSymbolWithObj<TBad, TChildBad>,
+  ReplaceSymbolWithObj<TGood, TChildGood>,
+  unknown,
   MetaObj<{
     baseObj: typeof baseObj
     childParser: typeof childParser

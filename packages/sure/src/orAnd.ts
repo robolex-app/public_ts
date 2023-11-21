@@ -1,12 +1,5 @@
 import { bad, good, sure } from './core.js'
-import type {
-  InferBad,
-  InferGood,
-  MetaNever,
-  MetaObj,
-  Pure,
-  Sure,
-} from './core.js'
+import type { InferBad, InferGood, MetaNever, MetaObj, Pure, Sure } from './core.js'
 
 export function or<
   //
@@ -20,15 +13,13 @@ export function or<
   TSecondInput,
   TSecondMeta extends MetaNever | MetaObj,
 >(
-  first: Sure<Pure<TFirstBad, TFirstGood, TFirstInput>, TFirstMeta>,
-  second: Sure<Pure<TSecondBad, TSecondGood, TSecondInput>, TSecondMeta>
+  first: Sure<TFirstBad, TFirstGood, TFirstInput, TFirstMeta>,
+  second: Sure<TSecondBad, TSecondGood, TSecondInput, TSecondMeta>
 ): Sure<
-  Pure<
-    TFirstBad | TSecondBad,
-    TFirstGood | TSecondGood,
-    // Variance
-    TFirstInput & TSecondInput
-  >,
+  TFirstGood | TSecondGood,
+  TFirstBad | TSecondBad,
+  // Variance
+  TFirstInput & TSecondInput,
   MetaObj<{ first: typeof first; second: typeof second }>
 > {
   return sure(
@@ -61,15 +52,13 @@ export function and<
   TSecondInput,
   TSecondMeta extends MetaNever | MetaObj,
 >(
-  first: Sure<Pure<TFirstBad, TFirstGood, TFirstInput>, TFirstMeta>,
-  second: Sure<Pure<TSecondBad, TSecondGood, TSecondInput>, TSecondMeta>
+  first: Sure<TFirstBad, TFirstGood, TFirstInput, TFirstMeta>,
+  second: Sure<TSecondBad, TSecondGood, TSecondInput, TSecondMeta>
 ): Sure<
-  Pure<
-    TFirstBad | TSecondBad,
-    TFirstGood & TSecondGood,
-    // Variance
-    TFirstInput & TSecondInput
-  >,
+  TFirstGood & TSecondGood,
+  TFirstBad | TSecondBad,
+  // Variance
+  TFirstInput & TSecondInput,
   MetaObj<{ first: typeof first; second: typeof second }>
 > {
   return sure(
