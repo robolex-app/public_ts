@@ -11,7 +11,7 @@ const testValue = [number, string, number] as const
 
 type TestType = typeof testValue
 
-// TODO: add tests
+// TODO: add tests, also implement tuple spread
 export type TupleInferGoods<T> = T extends readonly [infer First, ...infer InferRest]
   ? [InferGood<First>, ...TupleInferGoods<InferRest>]
   : []
@@ -22,6 +22,16 @@ export type TupleInferBads<T> = T extends readonly [infer First, ...infer InferR
 
 type FinGoods = TupleInferGoods<TestType>
 type FinBads = TupleInferBads<TestType>
+
+export function tupleRest<Arr extends Sure<Peasy<unknown[]>, MetaNever | MetaObj>>(struct: Arr) {
+  const val = sure(struct, {
+    func: tupleRest,
+
+    initial: struct.meta,
+  })
+
+  return val
+}
 
 export function tuple<Arr extends [Peasy<unknown>, ...Peasy<unknown>[]] | []>(
   arr: Arr
