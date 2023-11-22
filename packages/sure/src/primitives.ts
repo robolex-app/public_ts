@@ -1,4 +1,4 @@
-import { good, sure, bad, Pure, Peasy, pure } from './core.js'
+import { good, sure, bad, pure } from './core.js'
 
 /**
  * Defined using the `sure` function

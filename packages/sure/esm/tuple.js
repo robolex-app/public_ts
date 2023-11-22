@@ -1,9 +1,11 @@
 import { bad, good, sure } from './core.js';
-// Remove this
-import { number, string } from './primitives.js';
-// type ExtractTuple <T extends Peasy<unknown>[]> =
-const someTuple = tuple([number, string, number]);
-const testValue = [number, string, number];
+export function tupleRest(struct) {
+    const val = sure(struct, {
+        func: tupleRest,
+        initial: struct.meta,
+    });
+    return val;
+}
 export function tuple(arr) {
     const struct = sure(value => {
         if (!Array.isArray(value)) {

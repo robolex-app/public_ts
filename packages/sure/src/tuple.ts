@@ -1,15 +1,4 @@
-import { InferBad, InferGood, MetaNever, MetaObj, Peasy, Sure, bad, good, sure } from './core.js'
-
-// Remove this
-import { number, string, unknown } from './primitives.js'
-
-// type ExtractTuple <T extends Peasy<unknown>[]> =
-
-const someTuple = tuple([number, string, number])
-
-const testValue = [number, string, number] as const
-
-type TestType = typeof testValue
+import { MetaNever, MetaObj, Peasy, Sure, bad, good, sure } from './core.js'
 
 // TODO: add tests, also implement tuple spread
 export type TupleInferGoods<T> = T extends readonly [infer First, ...infer InferRest]
@@ -23,9 +12,6 @@ export type TupleInferBads<T> = T extends readonly [infer First, ...infer InferR
     ? [Bad | undefined, ...TupleInferBads<InferRest>]
     : []
   : []
-
-type FinGoods = TupleInferGoods<TestType>
-type FinBads = TupleInferBads<TestType>
 
 export function tupleRest<Arr extends Sure<unknown, unknown[], unknown>>(struct: Arr) {
   const val = sure(struct, {

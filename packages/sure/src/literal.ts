@@ -1,4 +1,4 @@
-import { Peasy, Pure, bad, good, pure } from './core.js'
+import { bad, good, pure } from './core.js'
 
 // Copied from Zod
 export type Primitive =

@@ -2,6 +2,7 @@ export function sure(insure, meta) {
     return Object.assign(insure, { meta });
 }
 export function pure(insure) {
+    // @ts-expect-error
     return insure;
 }
 //
