@@ -13,18 +13,21 @@ type TestType = typeof testValue
 
 // TODO: add tests, also implement tuple spread
 export type TupleInferGoods<T> = T extends readonly [infer First, ...infer InferRest]
-  ? [InferGood<First>, ...TupleInferGoods<InferRest>]
+  ? First extends Sure<unknown, infer Good, any, MetaObj | MetaNever>
+    ? [Good, ...TupleInferGoods<InferRest>]
+    : []
   : []
 
 export type TupleInferBads<T> = T extends readonly [infer First, ...infer InferRest]
-  ? [InferBad<First> | undefined, ...TupleInferBads<InferRest>]
+  ? First extends Sure<infer Bad, unknown, any, MetaObj | MetaNever>
+    ? [Bad | undefined, ...TupleInferBads<InferRest>]
+    : []
   : []
 
 type FinGoods = TupleInferGoods<TestType>
 type FinBads = TupleInferBads<TestType>
 
 export function tupleRest<Arr extends Sure<unknown, unknown[], unknown>>(struct: Arr) {
-  // @ts-expect-error
   const val = sure(struct, {
     func: tupleRest,
 

@@ -16,8 +16,8 @@ export function or<
   first: Sure<TFirstBad, TFirstGood, TFirstInput, TFirstMeta>,
   second: Sure<TSecondBad, TSecondGood, TSecondInput, TSecondMeta>
 ): Sure<
-  TFirstGood | TSecondGood,
   TFirstBad | TSecondBad,
+  TFirstGood | TSecondGood,
   // Variance
   TFirstInput & TSecondInput,
   MetaObj<{ first: typeof first; second: typeof second }>
@@ -55,8 +55,8 @@ export function and<
   first: Sure<TFirstBad, TFirstGood, TFirstInput, TFirstMeta>,
   second: Sure<TSecondBad, TSecondGood, TSecondInput, TSecondMeta>
 ): Sure<
-  TFirstGood & TSecondGood,
   TFirstBad | TSecondBad,
+  TFirstGood & TSecondGood,
   // Variance
   TFirstInput & TSecondInput,
   MetaObj<{ first: typeof first; second: typeof second }>

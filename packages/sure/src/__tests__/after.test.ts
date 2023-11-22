@@ -24,7 +24,9 @@ describe('after', () => {
     assertEqual<
       typeof something,
       Sure<
-        Pure<'---' | 'small', 'big', unknown>,
+        '---' | 'small',
+        'big',
+        unknown,
         MetaObj<{
           first: Pure<'---', number, unknown>
           second: Pure<'small', 'big', number>

@@ -161,7 +161,9 @@ describe('core', () => {
     assertIs<
       Sure<
         //
-        Pure<'not a number', number, unknown>,
+        'not a number',
+        number,
+        unknown,
         //
         MetaObj<undefined>
       >
@@ -177,7 +179,9 @@ describe('core', () => {
     assertIs<
       Sure<
         //
-        Pure<'not a number', number, unknown>,
+        'not a number',
+        number,
+        unknown,
         //
         MetaNever
       >
@@ -194,7 +198,9 @@ describe('core', () => {
       typeof sureStringMeta,
       Sure<
         //
-        Pure<'not a string', string, unknown>,
+        'not a string',
+        string,
+        unknown,
         { meta: { myMeta: string } }
       >
     >(true)

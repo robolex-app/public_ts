@@ -9,8 +9,8 @@ export function array<
   schema: TSchema
 ): Sure<
   //
-  Array<InferGood<TSchema>>,
   Array<InferBad<TSchema> | undefined>,
+  Array<InferGood<TSchema>>,
   unknown,
   MetaObj<TSchema>
 > {

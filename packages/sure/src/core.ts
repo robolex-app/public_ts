@@ -24,7 +24,8 @@ export type Sure<
   TMeta extends MetaNever | MetaObj = MetaNever | MetaObj,
 > = ((value: TInput) => Good<TGood> | Bad<TBad>) & TMeta
 
-export type Pure<TBad, TGood, TInput> = Sure<TBad, TGood, TInput, MetaNever>
+// TODO: Figure if we need 2 types
+export type Pure<TBad, TGood, TInput> = Sure<TBad, TGood, TInput, MetaObj | MetaNever>
 
 // TODO: Move TGood up front, and add defaults to Pure (the api is stable I think)
 export type Peasy<TGood, TBad = unknown, TInput = any> = Pure<TBad, TGood, TInput>
@@ -53,13 +54,12 @@ export function sure<TGood, TBad, TInput>(
 export function sure<TGood, TBad, TInput, TMeta>(
   insure: Pure<TBad, TGood, TInput>,
   meta: TMeta
-): Sure<TGood, TBad, TInput, MetaObj<TMeta>>
+): Sure<TBad, TGood, TInput, MetaObj<TMeta>>
 
 export function sure<TGood, TBad, TInput, TMeta>(
   insure: Pure<TBad, TGood, TInput>,
   meta?: TMeta
-): Sure<TGood, TBad, TInput, MetaObj<TMeta | undefined>> {
-  // @ts-expect-error
+): Sure<TBad, TGood, TInput, MetaObj<TMeta | undefined>> {
   return Object.assign(insure, { meta })
 }
 
@@ -84,56 +84,60 @@ export type Good<T> = [true, T]
 export type Bad<T> = [false, T]
 
 export type InferBad<
-  T,
-  // extends Pure<
-  //   unknown,
-  //   unknown,
-  //   // Input issue
-  //   any
-  // >,
+  T extends Sure<
+    unknown,
+    unknown,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >,
 > = //
-  T extends Pure<
+  T extends Sure<
     infer CFailure,
     unknown,
     // Input issue
-    any
+    any,
+    MetaObj | MetaNever
   >
     ? //
       CFailure
     : never
 
 export type InferGood<
-  T,
-  // extends Pure<
-  //   unknown,
-  //   unknown,
-  //   // Input issue
-  //   any
-  // >,
+  T extends Sure<
+    unknown,
+    unknown,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >,
 > = //
-  T extends Pure<
+  T extends Sure<
     unknown,
     infer CDefine,
     // Input issue
-    any
+    any,
+    MetaObj | MetaNever
   >
     ? //
       CDefine
     : never
 
 export type InferInput<
-  T extends Pure<
+  T extends Sure<
     unknown,
     unknown,
     // Input issue
-    any
+    any,
+    MetaObj | MetaNever
   >,
 > = //
-  T extends Pure<
+  T extends Sure<
     unknown,
     unknown,
     // Input issue
-    infer CFrom
+    infer CFrom,
+    MetaObj | MetaNever
   >
     ? //
       //

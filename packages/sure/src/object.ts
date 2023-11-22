@@ -12,12 +12,12 @@ export function object<
   //
   TPropFail,
   TPropGood,
-  TSchema extends Record<string, Pure<TPropFail, TPropGood, unknown>>,
+  TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>,
 >(
   schema: TSchema
 ): Sure<
-  { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
+  { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   unknown,
   MetaObj<TSchema>
 > {
