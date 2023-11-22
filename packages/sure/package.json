@@ -12,13 +12,13 @@
     "prepublish": "npm run build",
     "clean": "rm -rf ./esm",
     "dev": "tsc --watch --project tsconfig.build.json",
-    "tsc": "tsc --noEmit",
-    "tsc:w": "tsc --noEmit --watch",
+    "tsc:ci": "tsc --noEmit",
+    "tsc": "tsc --noEmit --watch",
     "lint": "eslint \"src/**/*.ts*\" --quiet",
     "lint:warn": "eslint \"src/**/*.ts*\"",
-    "test": "vitest run",
+    "test:w": "vitest run",
     "test:ui": "vitest --ui",
-    "test:w": "vitest"
+    "test": "vitest"
   },
   "devDependencies": {
     "eslint": "8.51.0",

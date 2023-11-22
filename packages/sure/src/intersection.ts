@@ -3,12 +3,12 @@ import { MetaNever, MetaObj, Sure, sure, bad, good } from './core.js'
 export function intersection<
   //
   TFirstBad,
-  TFirstGood,
+  TFirstGood extends Record<string, unknown>,
   TFirstInput,
   TFirstMeta extends MetaNever | MetaObj,
   //
   TSecondBad,
-  TSecondGood,
+  TSecondGood extends Record<string, unknown>,
   TSecondInput,
   TSecondMeta extends MetaNever | MetaObj,
 >(
