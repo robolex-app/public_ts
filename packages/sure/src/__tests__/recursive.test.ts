@@ -37,6 +37,8 @@ describe('recursive', () => {
     type InferredInput = InferInput<typeof recurseSure>
     type InferredMeta = InferMeta<typeof recurseSure>
 
+    assertEqual<InferredInput, unknown>(true)
+
     assertEqual<
       InferredGood,
       {
@@ -63,6 +65,60 @@ describe('recursive', () => {
             )[]
           | undefined
       }
+    >(true)
+
+    assertEqual<
+      InferredMeta,
+      MetaObj<{
+        baseObj: Sure<
+          {
+            name?: 'not string' | undefined
+            children?: typeof RecurseSymbol | undefined
+          },
+          {
+            name: string
+            children: typeof RecurseSymbol
+          },
+          unknown
+        >
+        childParser: (
+          surer: Sure<
+            {
+              name?: 'not string' | undefined
+              children?: typeof RecurseSymbol | undefined
+            },
+            {
+              name: string
+              children: typeof RecurseSymbol
+            },
+            unknown
+          >
+        ) => Sure<
+          (
+            | {
+                name?: 'not string' | undefined
+                children?: typeof RecurseSymbol | undefined
+              }
+            | undefined
+          )[],
+          {
+            name: string
+            children: typeof RecurseSymbol
+          }[],
+          unknown
+        >
+      }>
+    >(true)
+
+    assertEqual<
+      typeof recurseSure,
+      Sure<
+        //
+        InferredBad,
+        InferredGood,
+        InferredInput,
+        InferredMeta
+      >
     >(true)
 
     it('should return good value', () => {
