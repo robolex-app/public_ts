@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { object, bad, number, string, good, pure, sure } from '../index.js'
-import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Pure, Sure } from '../index.js'
+import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 const someObj = object({
   age: number,
 
   // with inner sure
-  firstName: sure(value => (typeof value === 'string' ? good(value) : bad('not string (sure)' as const))),
+  firstName: pure(value => (typeof value === 'string' ? good(value) : bad('not string (sure)' as const))),
 
   // with inner pure
   middleName: pure(value => (typeof value === 'string' ? good(value) : bad('not string (pure)' as const))),
@@ -62,7 +62,7 @@ assertEqual<
   {
     meta: {
       age: Sure<'not number', number, unknown, MetaNever>
-      firstName: Sure<'not string (sure)', string, unknown, MetaObj<undefined>>
+      firstName: Sure<'not string (sure)', string, unknown, MetaNever>
       middleName: Sure<'not string (pure)', string, unknown, MetaNever>
       lastName: (value: unknown) => [true, string] | [false, 'not string (raw)']
       address: Sure<
@@ -74,7 +74,7 @@ assertEqual<
         },
         unknown,
         MetaObj<{
-          country: Sure<'not string', string, unknown, MetaObj<undefined>>
+          country: Sure<'not string', string, unknown, MetaNever>
         }>
       >
     }

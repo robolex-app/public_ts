@@ -1,4 +1,4 @@
-import { Sure, InferBad, InferGood, sure, bad, good, MetaNever, MetaObj, Pure } from './core.js'
+import { Sure, InferBad, InferGood, sure, bad, good, MetaNever, MetaObj } from './core.js'
 
 export function array<
   //

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { array, number } from '../index.js'
-import type { InferGood, InferBad, InferInput, InferMeta, Sure, MetaObj, Pure, MetaNever } from '../index.js'
+import type { InferGood, InferBad, InferInput, InferMeta, Sure, MetaObj, MetaNever } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 const someArray = array(number)

@@ -11,14 +11,13 @@ import {
   MetaObj,
   MetaNever,
   pure,
-  Pure,
 } from '../index.js'
 import { assertIs, assertEqual } from './typeTestUtils.js'
 
 /**
 Validator for numbers without any meta.
  */
-const sureNumber = sure(value =>
+const sureNumber = pure(value =>
   typeof value === 'number' //
     ? good(value)
     : bad('not a number' as const)
@@ -50,7 +49,7 @@ const sureStringMeta = sure(
 /**
 Validator that expects the input to already be a string.
  */
-const sureNonEmptyString = sure((value: string) =>
+const sureNonEmptyString = pure((value: string) =>
   value.length > 0 //
     ? good(value)
     : bad('empty string' as const)
@@ -59,7 +58,7 @@ const sureNonEmptyString = sure((value: string) =>
 /**
 Validator that can return multiple error types
  */
-const sureMultipleErrors = sure(value => {
+const sureMultipleErrors = pure(value => {
   if (typeof value !== 'string') return bad('not a string' as const)
 
   if (value.length < 3) return bad('too small' as const)
@@ -165,14 +164,14 @@ describe('core', () => {
         number,
         unknown,
         //
-        MetaObj<undefined>
+        MetaNever
       >
     >(sureNumber)
 
     assertEqual<InferGood<typeof sureNumber>, number>(true)
     assertEqual<InferBad<typeof sureNumber>, 'not a number'>(true)
     assertEqual<InferInput<typeof sureNumber>, unknown>(true)
-    assertEqual<InferMeta<typeof sureNumber>, MetaObj<undefined>>(true)
+    assertEqual<InferMeta<typeof sureNumber>, MetaNever>(true)
   })
 
   it('type inference should work (pure)', () => {
@@ -220,23 +219,23 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, MetaObj<undefined>>>(true)
+    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, MetaNever>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferBad<typeof sureNonEmptyString>, 'empty string'>(true)
     assertEqual<InferInput<typeof sureNonEmptyString>, string>(true)
-    assertEqual<InferMeta<typeof sureNonEmptyString>, MetaObj<undefined>>(true)
+    assertEqual<InferMeta<typeof sureNonEmptyString>, MetaNever>(true)
   })
 
   it('should have strong types for validators with multiple errors', () => {
     assertEqual<
       typeof sureMultipleErrors,
-      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, MetaObj<undefined>>
+      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, MetaNever>
     >(true)
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)
     assertEqual<InferBad<typeof sureMultipleErrors>, 'not a string' | 'too small' | 'too big'>(true)
     assertEqual<InferInput<typeof sureMultipleErrors>, unknown>(true)
-    assertEqual<InferMeta<typeof sureMultipleErrors>, MetaObj<undefined>>(true)
+    assertEqual<InferMeta<typeof sureMultipleErrors>, MetaNever>(true)
   })
 })

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { number, and, string, object } from '../index.js'
-import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Pure, Sure } from '../index.js'
+import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 const option1 = object({
@@ -35,7 +35,7 @@ assertEqual<
       },
       unknown,
       MetaObj<{
-        name: Sure<'not string', string, unknown, MetaObj<undefined>>
+        name: Sure<'not string', string, unknown, MetaNever>
       }>
     >
     second: Sure<

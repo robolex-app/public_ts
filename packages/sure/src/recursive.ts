@@ -1,9 +1,9 @@
 import { bad, good, pure, sure } from './core.js'
-import type { MetaObj, Peasy, Pure, Sure } from './core.js'
+import type { MetaObj, Peasy, Sure } from './core.js'
 
 export const RecurseSymbol = Symbol('recurse')
 
-export const recursiveElem: Pure<
+export const recursiveElem: Sure<
   // The `bad` type is used by the type system to replace the symbol
   typeof RecurseSymbol,
   typeof RecurseSymbol,
