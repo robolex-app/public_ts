@@ -1,4 +1,4 @@
-import { MetaNever, MetaObj, Peasy, Sure, bad, good, sure } from './core.js'
+import { MetaNever, MetaObj, Sure, bad, good, sure } from './core.js'
 
 // TODO: add tests, also implement tuple spread
 export type TupleInferGoods<T> = T extends readonly [infer First, ...infer InferRest]
@@ -23,7 +23,7 @@ export function tupleRest<Arr extends Sure<unknown, unknown[], unknown>>(struct:
   return val
 }
 
-export function tuple<Arr extends [Peasy<unknown>, ...Peasy<unknown>[]] | []>(
+export function tuple<Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]] | []>(
   arr: Arr
 ): Sure<
   //

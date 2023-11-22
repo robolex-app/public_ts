@@ -24,9 +24,6 @@ export type Sure<
   TMeta extends MetaNever | MetaObj = MetaNever | MetaObj,
 > = ((value: TInput) => Good<TGood> | Bad<TBad>) & TMeta
 
-// TODO: Move TGood up front, and add defaults to Pure (the api is stable I think)
-export type Peasy<TGood, TBad = unknown, TInput = any> = Sure<TBad, TGood, TInput>
-
 /**
 Returns the exact function back.
 But the types are inferred automatically for you.

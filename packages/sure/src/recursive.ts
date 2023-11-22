@@ -1,5 +1,5 @@
 import { bad, good, pure, sure } from './core.js'
-import type { MetaObj, Peasy, Sure } from './core.js'
+import type { MetaObj, Sure } from './core.js'
 
 export const RecurseSymbol = Symbol('recurse')
 
@@ -27,9 +27,9 @@ export function recurse<
   TChildBad,
   TChildGood,
 >( //
-  baseObj: Peasy<TGood, TBad>, //
+  baseObj: Sure<TBad, TGood, unknown>, //
   // key: TKey,
-  childParser: (surer: typeof baseObj) => Peasy<TChildGood, TChildBad>
+  childParser: (surer: typeof baseObj) => Sure<TChildBad, TChildGood, unknown>
 ): Sure<
   //
   ReplaceSymbolWithObj<TBad, TChildBad>,
