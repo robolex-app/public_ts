@@ -9,7 +9,6 @@ import {
   bad,
   InferMeta,
   MetaObj,
-  Pure,
   pure,
   MetaNever,
 } from '../index.js'

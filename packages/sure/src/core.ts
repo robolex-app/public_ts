@@ -24,11 +24,8 @@ export type Sure<
   TMeta extends MetaNever | MetaObj = MetaNever | MetaObj,
 > = ((value: TInput) => Good<TGood> | Bad<TBad>) & TMeta
 
-// TODO: Figure if we need 2 types
-export type Pure<TBad, TGood, TInput> = Sure<TBad, TGood, TInput, MetaObj | MetaNever>
-
 // TODO: Move TGood up front, and add defaults to Pure (the api is stable I think)
-export type Peasy<TGood, TBad = unknown, TInput = any> = Pure<TBad, TGood, TInput>
+export type Peasy<TGood, TBad = unknown, TInput = any> = Sure<TBad, TGood, TInput>
 
 /**
 Returns the exact function back.
@@ -41,25 +38,20 @@ and returns either:
 
 Check the `sure.ts` version to check the types
 
-Why "fail"? It has the same amount of letters as "good" so they look balanced.
-
 
 @example Check playground.ts to hover over variables
  */
 
 export function sure<TGood, TBad, TInput, TMeta>(
-  insure: Pure<TBad, TGood, TInput>,
+  insure: Sure<TBad, TGood, TInput>,
   meta: TMeta
 ): Sure<TBad, TGood, TInput, MetaObj<TMeta>> {
   return Object.assign(insure, { meta })
 }
 
-export function pure<TGood, TInput>(insure: Pure<never, TGood, TInput>): Sure<never, TGood, TInput, MetaNever>
-export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<TBad, TGood, TInput, MetaNever>
-
-export function pure<TGood, TBad, TInput>(insure: Pure<TBad, TGood, TInput>): Sure<TGood, TBad, TInput, MetaNever> {
-  // @ts-expect-error
-
+export function pure<TGood, TBad, TInput>(
+  insure: Sure<TBad, TGood, TInput, MetaNever>
+): Sure<TBad, TGood, TInput, MetaNever> {
   return insure
 }
 

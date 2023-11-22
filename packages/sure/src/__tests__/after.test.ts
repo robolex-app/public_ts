@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { good, sure, bad, Sure, after, MetaObj, Pure, MetaNever, pure } from '../index.js'
+import { good, sure, bad, Sure, after, MetaObj, MetaNever, pure } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
 
 const sureNumber = pure(v =>
@@ -28,8 +28,8 @@ describe('after', () => {
         'big',
         unknown,
         MetaObj<{
-          first: Pure<'---', number, unknown>
-          second: Pure<'small', 'big', number>
+          first: Sure<'---', number, unknown>
+          second: Sure<'small', 'big', number>
         }>
       >
     >(true)

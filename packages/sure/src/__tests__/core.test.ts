@@ -11,7 +11,6 @@ import {
   MetaObj,
   MetaNever,
   pure,
-  Pure,
 } from '../index.js'
 import { assertIs, assertEqual } from './typeTestUtils.js'
 

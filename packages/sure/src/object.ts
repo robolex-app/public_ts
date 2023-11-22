@@ -1,5 +1,5 @@
 import { sure, good, bad } from './core.js'
-import type { Sure, InferGood, InferBad, Pure, MetaNever, MetaObj } from './core.js'
+import type { Sure, InferGood, InferBad, MetaNever, MetaObj } from './core.js'
 
 /**
 Necessary because `typeof x` is not a type guard.
