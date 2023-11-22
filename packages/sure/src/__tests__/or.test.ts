@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
-import { number, or, string } from '../index.js'
+import { number, union, string } from '../index.js'
 import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
-const simple = or(number, string)
+const simple = union(number, string)
 
 // TypeChecks
 type InferredGood = InferGood<typeof simple>

@@ -2,12 +2,12 @@ import { describe, it, expect, assert } from 'vitest'
 import {
   recurse,
   after,
-  and,
+  intersection,
   array,
   bad,
   good,
   object,
-  or,
+  union,
   pure,
   string,
   sure,
@@ -105,8 +105,8 @@ describe('recursive', () => {
       complexSure,
       inner =>
         //
-        or(
-          and(
+        union(
+          intersection(
             inner,
             object({
               parent: number,

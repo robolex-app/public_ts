@@ -1,5 +1,5 @@
 import { bad, good, sure } from './core.js';
-export function or(first, second) {
+export function union(first, second) {
     return sure(
     // @ts-expect-error Should be fixed at the definition of sure, I think.
     (value) => {
@@ -13,7 +13,7 @@ export function or(first, second) {
         second,
     });
 }
-export function and(first, second) {
+export function intersection(first, second) {
     return sure(
     // @ts-expect-error Should be fixed at the definition of sure, I think.
     (value) => {

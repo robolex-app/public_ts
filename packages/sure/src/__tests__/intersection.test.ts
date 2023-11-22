@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { number, and, string, object } from '../index.js'
+import { number, intersection, string, object } from '../index.js'
 import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
@@ -7,7 +7,7 @@ const option1 = object({
   name: string,
 })
 
-const simple = and(
+const simple = intersection(
   option1,
   object({
     age: number,

@@ -1,7 +1,7 @@
 import { bad, good, sure } from './core.js'
 import type { InferBad, InferGood, MetaNever, MetaObj, Sure } from './core.js'
 
-export function or<
+export function union<
   //
   TFirstBad,
   TFirstGood,
@@ -40,7 +40,7 @@ export function or<
   )
 }
 
-export function and<
+export function intersection<
   //
   TFirstBad,
   TFirstGood,
