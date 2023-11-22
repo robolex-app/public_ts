@@ -23,7 +23,7 @@ const someObj = object({
 
 // TypeChecks
 type InferredGood = InferGood<typeof someObj>
-type InferredEvil = InferBad<typeof someObj>
+type InferredBad = InferBad<typeof someObj>
 type InferredInput = InferInput<typeof someObj>
 type InferredMeta = InferMeta<typeof someObj>
 
@@ -41,7 +41,7 @@ assertEqual<
 >(true)
 
 assertEqual<
-  InferredEvil,
+  InferredBad,
   {
     age?: 'not number' | undefined
     firstName?: 'not string (sure)' | undefined
@@ -81,7 +81,7 @@ assertEqual<
   }
 >(true)
 
-assertEqual<typeof someObj, Sure<InferredEvil, InferredGood, InferredInput, InferredMeta>>(true)
+assertEqual<typeof someObj, Sure<InferredBad, InferredGood, InferredInput, InferredMeta>>(true)
 
 describe('object', () => {
   it('should return good value', () => {

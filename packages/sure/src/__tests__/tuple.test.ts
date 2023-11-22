@@ -8,12 +8,12 @@ const someTuple = tuple([number, string, boolean])
 // Type Checks
 type InferredSure = typeof someTuple
 type InferredGood = InferGood<typeof someTuple>
-type InferredEvil = InferBad<typeof someTuple>
+type InferredBad = InferBad<typeof someTuple>
 type InferredInput = InferInput<typeof someTuple>
 type InferredMeta = InferMeta<typeof someTuple>
 
 assertEqual<InferredGood, [number, string, boolean]>(true)
-assertEqual<InferredEvil, ['not number' | undefined, 'not string' | undefined, 'not boolean' | undefined]>(true)
+assertEqual<InferredBad, ['not number' | undefined, 'not string' | undefined, 'not boolean' | undefined]>(true)
 assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,

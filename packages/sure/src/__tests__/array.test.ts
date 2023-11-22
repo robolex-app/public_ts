@@ -8,12 +8,12 @@ const someArray = array(number)
 // Type Checks
 type InferredSure = typeof someArray
 type InferredGood = InferGood<typeof someArray>
-type InferredEvil = InferBad<typeof someArray>
+type InferredBad = InferBad<typeof someArray>
 type InferredInput = InferInput<typeof someArray>
 type InferredMeta = InferMeta<typeof someArray>
 
 assertEqual<InferredGood, number[]>(true)
-assertEqual<InferredEvil, ('not number' | undefined)[]>(true)
+assertEqual<InferredBad, ('not number' | undefined)[]>(true)
 assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,

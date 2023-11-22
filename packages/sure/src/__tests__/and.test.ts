@@ -70,7 +70,7 @@ describe('and', () => {
     }
   })
 
-  it('should return evil value', () => {
+  it('should return bad value', () => {
     const value = simple({
       name: 1,
       age: 1,
@@ -92,7 +92,7 @@ describe('and', () => {
     }
   })
 
-  it('should return evil value', () => {
+  it('should return bad value', () => {
     const value = simple({
       name: '1',
       age: '1',

@@ -47,7 +47,7 @@ describe('or', () => {
     }
   })
 
-  it('should return evil value', () => {
+  it('should return bad value', () => {
     const value = simple(true)
 
     expect(value).toStrictEqual([false, 'not string'])
