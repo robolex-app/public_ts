@@ -20,7 +20,7 @@ assertEqual<
   {
     meta: [
       Sure<'not number', number, unknown, MetaNever>,
-      Sure<'not string', string, unknown, MetaObj<undefined>>,
+      Sure<'not string', string, unknown, MetaNever>,
       (x: unknown) => Good<boolean> | Bad<'not boolean'>,
     ]
   }

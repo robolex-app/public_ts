@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { good, sure, bad, Sure, after, MetaObj, Pure, MetaNever } from '../index.js'
+import { good, sure, bad, Sure, after, MetaObj, Pure, MetaNever, pure } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
 
-const sureNumber = sure(v =>
+const sureNumber = pure(v =>
   typeof v === 'number' //
     ? good(v)
     : bad('---' as const)

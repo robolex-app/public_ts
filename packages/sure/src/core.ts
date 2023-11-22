@@ -47,19 +47,10 @@ Why "fail"? It has the same amount of letters as "good" so they look balanced.
 @example Check playground.ts to hover over variables
  */
 
-export function sure<TGood, TBad, TInput>(
-  insure: Pure<TBad, TGood, TInput>
-): Sure<TBad, TGood, TInput, MetaObj<undefined>>
-
 export function sure<TGood, TBad, TInput, TMeta>(
   insure: Pure<TBad, TGood, TInput>,
   meta: TMeta
-): Sure<TBad, TGood, TInput, MetaObj<TMeta>>
-
-export function sure<TGood, TBad, TInput, TMeta>(
-  insure: Pure<TBad, TGood, TInput>,
-  meta?: TMeta
-): Sure<TBad, TGood, TInput, MetaObj<TMeta | undefined>> {
+): Sure<TBad, TGood, TInput, MetaObj<TMeta>> {
   return Object.assign(insure, { meta })
 }
 

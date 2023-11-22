@@ -5,7 +5,7 @@ import { good, sure, bad, pure } from './core.js'
  *
  * This adds a `{ meta: undefined }` to the passed function
  */
-export const string = sure(x => {
+export const string = pure(x => {
   return typeof x === 'string' //
     ? good(x)
     : bad('not string' as const)
