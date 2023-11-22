@@ -35,7 +35,7 @@ assertEqual<
       },
       unknown,
       MetaObj<{
-        name: Sure<'not string', string, unknown, MetaNever>
+        name: Sure<'not string', string, unknown, MetaObj<undefined>>
       }>
     >
     second: Sure<
