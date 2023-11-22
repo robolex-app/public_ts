@@ -7,7 +7,7 @@
 
   "customizations": {
     "vscode": {
-      "extensions": ["Orta.vscode-jest"]
+      "extensions": []
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@robolex/sure",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "exports": "./esm/index.js",
   "types": "./src/index.ts",
@@ -16,19 +16,15 @@
     "tsc:w": "tsc --noEmit --watch",
     "lint": "eslint \"src/**/*.ts*\" --quiet",
     "lint:warn": "eslint \"src/**/*.ts*\"",
-    "test": "jest",
-    "test:w": "jest --watch"
-  },
-  "jest": {
-    "preset": "jest-presets/jest/node"
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:w": "vitest"
   },
   "devDependencies": {
-    "@types/jest": "29.5.5",
     "eslint": "8.51.0",
     "eslint-config-custom": "workspace:*",
-    "jest": "29.7.0",
-    "jest-presets": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "5.3.0-beta"
+    "typescript": "5.3.0-beta",
+    "vitest": "^0.34.6"
   }
 }

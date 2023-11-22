@@ -4,18 +4,15 @@ export function array<
   //
   TPropFail,
   TPropGood,
-  TSchema extends Sure<Pure<TPropFail, TPropGood, unknown>, MetaObj | MetaNever>,
+  TSchema extends Sure<TPropFail, TPropGood, unknown, MetaObj | MetaNever>,
 >(
   schema: TSchema
 ): Sure<
   //
-  Pure<
-    //
-    Array<InferBad<TSchema> | undefined>,
-    Array<InferGood<TSchema>>,
-    unknown
-  >,
-  TSchema
+  Array<InferBad<TSchema> | undefined>,
+  Array<InferGood<TSchema>>,
+  unknown,
+  MetaObj<TSchema>
 > {
   const struct = sure(value => {
     if (!Array.isArray(value)) {

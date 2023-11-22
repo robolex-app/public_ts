@@ -21,42 +21,24 @@ export function after<
 >(
   first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
   second: Pure<TSecondFail, TSecondGood, TFirstGood>
-): Sure<Pure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput>, MetaObj<undefined>>
-
-export function after<
-  //
-  TFirsTBad,
-  TFirstGood,
-  TFirstInput,
-  //
-  TSecondFail,
+): Sure<
+  TFirsTBad | TSecondFail,
   TSecondGood,
-  //
-  TMeta,
->(
-  first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
-  second: Pure<TSecondFail, TSecondGood, TFirstGood>,
-  meta: TMeta
-): Sure<Pure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput>, MetaObj<TMeta>>
-
-export function after<
-  //
-  TFirsTBad,
-  TFirstGood,
   TFirstInput,
-  //
-  TSecondFail,
-  TSecondGood,
-  //
-  TMeta,
->(
-  first: Pure<TFirsTBad, TFirstGood, TFirstInput>,
-  second: Pure<TSecondFail, TSecondGood, TFirstGood>,
-  meta?: TMeta
-): Sure<Pure<TFirsTBad | TSecondFail, TSecondGood, TFirstInput>, MetaObj<TMeta | undefined>> {
-  return sure((value: TFirstInput) => {
-    const [good, out] = first(value)
+  MetaObj<{
+    first: typeof first
+    second: typeof second
+  }>
+> {
+  return sure(
+    (value: TFirstInput) => {
+      const [good, out] = first(value)
 
-    return good ? second(out) : bad<TFirsTBad | TSecondFail>(out)
-  }, meta)
+      return good ? second(out) : bad<TFirsTBad | TSecondFail>(out)
+    },
+    {
+      first,
+      second,
+    }
+  )
 }

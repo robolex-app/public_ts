@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import {
   sure,
   good,
@@ -157,15 +158,16 @@ describe('core', () => {
   })
 
   it('type inference should work (sure)', () => {
-    assertEqual<
-      typeof sureNumber,
+    assertIs<
       Sure<
         //
-        Pure<'not a number', number, unknown>,
+        'not a number',
+        number,
+        unknown,
         //
         MetaObj<undefined>
       >
-    >(true)
+    >(sureNumber)
 
     assertEqual<InferGood<typeof sureNumber>, number>(true)
     assertEqual<InferBad<typeof sureNumber>, 'not a number'>(true)
@@ -174,15 +176,16 @@ describe('core', () => {
   })
 
   it('type inference should work (pure)', () => {
-    assertEqual<
-      typeof pureNumber,
+    assertIs<
       Sure<
         //
-        Pure<'not a number', number, unknown>,
+        'not a number',
+        number,
+        unknown,
         //
         MetaNever
       >
-    >(true)
+    >(pureNumber)
 
     assertEqual<InferGood<typeof pureNumber>, number>(true)
     assertEqual<InferBad<typeof pureNumber>, 'not a number'>(true)
@@ -195,7 +198,9 @@ describe('core', () => {
       typeof sureStringMeta,
       Sure<
         //
-        Pure<'not a string', string, unknown>,
+        'not a string',
+        string,
+        unknown,
         { meta: { myMeta: string } }
       >
     >(true)
@@ -215,7 +220,7 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Sure<Pure<'empty string', string, string>, MetaObj<undefined>>>(true)
+    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, MetaObj<undefined>>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferBad<typeof sureNonEmptyString>, 'empty string'>(true)
@@ -226,7 +231,7 @@ describe('core', () => {
   it('should have strong types for validators with multiple errors', () => {
     assertEqual<
       typeof sureMultipleErrors,
-      Sure<Pure<'not a string' | 'too small' | 'too big', string & {}, unknown>, MetaObj<undefined>>
+      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, MetaObj<undefined>>
     >(true)
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)

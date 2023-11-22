@@ -1,6 +1,26 @@
-import { array, bad, number } from '../index.js'
+import { describe, it, expect } from 'vitest'
+import { array, number } from '../index.js'
+import type { InferGood, InferBad, InferInput, InferMeta, Sure, MetaObj, Pure, MetaNever } from '../index.js'
+import { assertEqual } from './typeTestUtils.js'
 
 const someArray = array(number)
+
+// Type Checks
+type InferredSure = typeof someArray
+type InferredGood = InferGood<typeof someArray>
+type InferredBad = InferBad<typeof someArray>
+type InferredInput = InferInput<typeof someArray>
+type InferredMeta = InferMeta<typeof someArray>
+
+assertEqual<InferredGood, number[]>(true)
+assertEqual<InferredBad, ('not number' | undefined)[]>(true)
+assertEqual<InferredInput, unknown>(true)
+assertEqual<
+  InferredMeta,
+  {
+    meta: Sure<'not number', number, unknown, MetaNever>
+  }
+>(true)
 
 describe('array', () => {
   it('should return good value', () => {
