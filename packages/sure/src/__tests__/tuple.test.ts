@@ -19,8 +19,8 @@ assertEqual<
   InferredMeta,
   {
     meta: [
-      Sure<Pure<'not number', number, unknown>, MetaNever>,
-      Sure<Pure<'not string', string, unknown>, MetaObj<undefined>>,
+      Sure<'not number', number, unknown, MetaNever>,
+      Sure<'not string', string, unknown, MetaObj<undefined>>,
       Pure<'not boolean', boolean, unknown>,
     ]
   }

@@ -12,7 +12,7 @@ describe('primitives', () => {
   it('should return good value', () => {
     nonEmptyString('1')
 
-    assertEqual<typeof nonEmptyString, Sure<Pure<'not string', string, unknown>, MetaObj<undefined>>>(true)
+    assertEqual<typeof nonEmptyString, Sure<'not string', string, unknown, MetaObj<undefined>>>(true)
 
     assertEqual<InferGood<typeof nonEmptyString>, string>(true)
     assertEqual<InferBad<typeof nonEmptyString>, 'not string'>(true)

@@ -214,7 +214,7 @@ describe('core', () => {
   })
 
   it('should have strong types for validators with custom input', () => {
-    assertEqual<typeof sureNonEmptyString, Sure<Pure<'empty string', string, string>, MetaObj<undefined>>>(true)
+    assertEqual<typeof sureNonEmptyString, Sure<'empty string', string, string, MetaObj<undefined>>>(true)
 
     assertEqual<InferGood<typeof sureNonEmptyString>, string>(true)
     assertEqual<InferBad<typeof sureNonEmptyString>, 'empty string'>(true)
@@ -225,7 +225,7 @@ describe('core', () => {
   it('should have strong types for validators with multiple errors', () => {
     assertEqual<
       typeof sureMultipleErrors,
-      Sure<Pure<'not a string' | 'too small' | 'too big', string & {}, unknown>, MetaObj<undefined>>
+      Sure<'not a string' | 'too small' | 'too big', string & {}, unknown, MetaObj<undefined>>
     >(true)
 
     assertEqual<InferGood<typeof sureMultipleErrors>, string & {}>(true)

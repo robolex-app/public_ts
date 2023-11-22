@@ -18,7 +18,7 @@ assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,
   {
-    meta: Sure<Pure<'not number', number, unknown>, MetaNever>
+    meta: Sure<'not number', number, unknown, MetaNever>
   }
 >(true)
 

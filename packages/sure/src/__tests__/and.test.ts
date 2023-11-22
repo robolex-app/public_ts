@@ -27,31 +27,27 @@ assertEqual<
   InferredMeta,
   MetaObj<{
     first: Sure<
-      Pure<
-        {
-          name?: 'not string' | undefined
-        },
-        {
-          name: string
-        },
-        unknown
-      >,
+      {
+        name?: 'not string' | undefined
+      },
+      {
+        name: string
+      },
+      unknown,
       MetaObj<{
-        name: Sure<Pure<'not string', string, unknown>, MetaObj<undefined>>
+        name: Sure<'not string', string, unknown, MetaObj<undefined>>
       }>
     >
     second: Sure<
-      Pure<
-        {
-          age?: 'not number' | undefined
-        },
-        {
-          age: number
-        },
-        unknown
-      >,
+      {
+        age?: 'not number' | undefined
+      },
+      {
+        age: number
+      },
+      unknown,
       MetaObj<{
-        age: Sure<Pure<'not number', number, unknown>, MetaNever>
+        age: Sure<'not number', number, unknown, MetaNever>
       }>
     >
   }>

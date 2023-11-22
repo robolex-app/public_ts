@@ -61,29 +61,27 @@ assertEqual<
   InferredMeta,
   {
     meta: {
-      age: Sure<Pure<'not number', number, unknown>, MetaNever>
-      firstName: Sure<Pure<'not string (sure)', string, unknown>, MetaObj<undefined>>
-      middleName: Sure<Pure<'not string (pure)', string, unknown>, MetaNever>
+      age: Sure<'not number', number, unknown, MetaNever>
+      firstName: Sure<'not string (sure)', string, unknown, MetaObj<undefined>>
+      middleName: Sure<'not string (pure)', string, unknown, MetaNever>
       lastName: (value: unknown) => [true, string] | [false, 'not string (raw)']
       address: Sure<
-        Pure<
-          {
-            country?: 'not string' | undefined
-          },
-          {
-            country: string
-          },
-          unknown
-        >,
+        {
+          country?: 'not string' | undefined
+        },
+        {
+          country: string
+        },
+        unknown,
         MetaObj<{
-          country: Sure<Pure<'not string', string, unknown>, MetaObj<undefined>>
+          country: Sure<'not string', string, unknown, MetaObj<undefined>>
         }>
       >
     }
   }
 >(true)
 
-assertEqual<typeof someObj, Sure<Pure<InferredEvil, InferredGood, InferredInput>, InferredMeta>>(true)
+assertEqual<typeof someObj, Sure<InferredEvil, InferredGood, InferredInput, InferredMeta>>(true)
 
 describe('object', () => {
   it('should return good value', () => {
