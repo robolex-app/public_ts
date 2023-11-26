@@ -1,9 +1,13 @@
 {
   "name": "@robolex/sure",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "type": "module",
-  "exports": "./esm/index.js",
-  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "types": "./src/index.ts"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
