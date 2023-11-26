@@ -1,14 +1,14 @@
-import { good, bad, pure } from './core.js';
+import { good, sure, bad, pure } from './core.js';
 /**
  * Defined using the `sure` function
  *
  * This adds a `{ meta: undefined }` to the passed function
  */
-export const string = pure(x => {
+export const string = sure(x => {
     return typeof x === 'string' //
         ? good(x)
         : bad('not string');
-});
+}, undefined);
 /**
  * Defined using the `pure` function
  *

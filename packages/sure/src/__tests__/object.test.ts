@@ -74,7 +74,7 @@ assertEqual<
         },
         unknown,
         MetaObj<{
-          country: Sure<'not string', string, unknown, MetaNever>
+          country: Sure<'not string', string, unknown, MetaObj<undefined>>
         }>
       >
     }
