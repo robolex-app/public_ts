@@ -22,5 +22,5 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F @robolex/sure run build
-      - run: pnpm -F @robolex/sure run tsc
-      - run: pnpm -F @robolex/sure run test
+      - run: pnpm -F @robolex/sure run tsc:ci
+      - run: pnpm -F @robolex/sure run test:ci
