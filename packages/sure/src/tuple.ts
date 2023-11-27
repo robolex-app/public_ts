@@ -41,7 +41,10 @@ export function tuple<Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown,
     let bads = []
     let goods = []
 
-    for (const [i, elem] of arr.entries()) {
+    for (let i = 0; i < arr.length; i++) {
+      // @ts-expect-error
+      const elem: Sure<unknown, unknown, any> = arr[i]
+
       const [good, unsure] = elem(value[i])
 
       if (good) {

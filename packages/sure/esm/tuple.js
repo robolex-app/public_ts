@@ -14,7 +14,9 @@ export function tuple(arr) {
         let atLeastOneBad = false;
         let bads = [];
         let goods = [];
-        for (const [i, elem] of arr.entries()) {
+        for (let i = 0; i < arr.length; i++) {
+            // @ts-expect-error
+            const elem = arr[i];
             const [good, unsure] = elem(value[i]);
             if (good) {
                 goods.push(unsure);
