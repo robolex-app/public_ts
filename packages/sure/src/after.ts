@@ -1,4 +1,4 @@
-import { Sure, sure, bad, MetaObj } from './core.js'
+import { Sure, sure, bad, MetaObj, InferBad, InferGood, InferGoodRaw, InferBadRaw, InferInput } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -35,6 +35,31 @@ export function after<
       const [good, out] = first(value)
 
       return good ? second(out) : bad<TFirsTBad | TSecondFail>(out)
+    },
+    {
+      first,
+      second,
+    }
+  )
+}
+
+export function afterBetter<TFirst extends Sure<unknown, unknown, any>, TSecond extends Sure<unknown, unknown, any>>(
+  first: TFirst,
+  second: TSecond
+): Sure<
+  InferBadRaw<TFirst> | InferBadRaw<TSecond>,
+  InferGoodRaw<TSecond>,
+  InferInput<TFirst>,
+  MetaObj<{
+    first: typeof first
+    second: typeof second
+  }>
+> {
+  return sure(
+    value => {
+      const [good, out] = first(value)
+
+      return good ? second(out) : bad(out)
     },
     {
       first,
