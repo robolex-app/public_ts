@@ -4,5 +4,8 @@ export const literal = (value) => {
         ? good(
         // @ts-expect-error We do an explicit check above
         val)
-        : bad(`not literal ${typeof value} (${String(value)})`));
+        : bad(`not literal ${typeof value} (${String(value)})`)
+    // TODO: add meta with `value`
+    );
 };
+export const is = literal;

@@ -4,7 +4,7 @@ import {
   sure,
   bad,
   Sure,
-  afterBetter as after,
+  after,
   MetaObj,
   MetaNever,
   pure,
