@@ -1,14 +1,4 @@
-import { bad, good, pure } from './core.js'
-
-// Copied from Zod
-export type Primitive =
-  | string //
-  | number
-  | symbol
-  | bigint
-  | boolean
-  | null
-  | undefined
+import { Primitive, bad, good, pure } from './core.js'
 
 export const literal = <
   // so that `as const` is not needed

@@ -18,7 +18,7 @@ import { assertEqual, assertIs } from './typeTestUtils.js'
 const sureNumber = (value: unknown) =>
   typeof value === 'number' //
     ? good(value)
-    : bad('not number' as const)
+    : bad('not number')
 
 const positiveNum = (value: number) => {
   if (value > 0) {

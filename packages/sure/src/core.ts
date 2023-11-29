@@ -1,3 +1,14 @@
+// Copied from Zod
+// TODO: review all the types
+export type Primitive =
+  | string //
+  | number
+  | symbol
+  | bigint
+  | boolean
+  | null
+  | undefined
+
 export type Dictionary = {
   [key: string]: unknown
 }
@@ -53,7 +64,12 @@ export function pure<TGood, TBad, TInput>(
 }
 
 //
-export const bad = <TBad>(val: TBad): Bad<TBad> => [false, val]
+export function bad<TBad extends Primitive>(val: TBad): Bad<TBad>
+export function bad<TBad extends object>(val: TBad): Bad<TBad>
+// So that `as const` is not needed for literals
+export function bad<TBad>(val: TBad): Bad<TBad> {
+  return [false, val]
+}
 //
 export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
 
