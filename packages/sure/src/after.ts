@@ -55,6 +55,7 @@ export function afterBetter<TFirst extends Sure<unknown, unknown, any>, TSecond 
     second: typeof second
   }>
 > {
+  // @ts-expect-error TODO: check
   return sure(
     value => {
       const [good, out] = first(value)

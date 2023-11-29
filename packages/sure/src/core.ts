@@ -65,7 +65,7 @@ export function pure<TGood, TBad, TInput>(
 
 //
 export function bad<TBad extends Primitive>(val: TBad): Bad<TBad>
-export function bad<TBad extends object>(val: TBad): Bad<TBad>
+export function bad<TBad>(val: TBad): Bad<TBad>
 // So that `as const` is not needed for literals
 export function bad<TBad>(val: TBad): Bad<TBad> {
   return [false, val]

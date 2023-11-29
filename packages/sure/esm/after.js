@@ -17,3 +17,13 @@ export function after(first, second) {
         second,
     });
 }
+export function afterBetter(first, second) {
+    // @ts-expect-error TODO: check
+    return sure(value => {
+        const [good, out] = first(value);
+        return good ? second(out) : bad(out);
+    }, {
+        first,
+        second,
+    });
+}
