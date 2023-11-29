@@ -100,6 +100,21 @@ describe('core', () => {
     }
   })
 
+  it('should work with raw function', () => {
+    const [isNumber, unsure] = rawNumber(1)
+
+    expect(isNumber).toBe(true)
+    expect(unsure).toBe(1)
+
+    assertIs<number | 'not a number'>(unsure)
+
+    if (isNumber) {
+      assertIs<number>(unsure)
+    } else {
+      assertIs<'not a number'>(unsure)
+    }
+  })
+
   it('should return bad value', () => {
     const [isNumber, unsure] = sureNumber('1')
 

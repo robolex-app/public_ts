@@ -17,9 +17,9 @@ export type MetaObj<TMeta = unknown> = { meta: TMeta }
  */
 export type Sure<
   //
-  TBad,
-  TGood,
-  TInput,
+  TBad extends unknown | readonly unknown[] = unknown,
+  TGood extends unknown | readonly unknown[] = unknown,
+  TInput = unknown,
   //
   TMeta extends MetaNever | MetaObj = MetaNever | MetaObj,
 > = ((value: TInput) => Good<TGood> | Bad<TBad>) & TMeta
@@ -60,8 +60,8 @@ export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
 export type Unsure<TBad, TGood> = //
   Good<TGood> | Bad<TBad>
 
-export type Good<T> = [true, T]
-export type Bad<T> = [false, T]
+export type Good<T> = readonly [true, T]
+export type Bad<T> = readonly [false, T]
 
 export type InferBad<
   T extends Sure<
@@ -83,6 +83,22 @@ export type InferBad<
       CFailure
     : never
 
+export type InferBadRaw<
+  // Add the Sure constraint
+  T extends Sure<
+    unknown,
+    unknown,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >,
+> = //
+  T extends (...args: any) => infer COutput //
+    ? COutput extends readonly [false, infer CGood] //
+      ? CGood
+      : never
+    : never
+
 export type InferGood<
   T extends Sure<
     unknown,
@@ -101,6 +117,22 @@ export type InferGood<
   >
     ? //
       CDefine
+    : never
+
+export type InferGoodRaw<
+  // Add the Sure constraint
+  T extends Sure<
+    unknown,
+    unknown,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >,
+> = //
+  T extends (...args: any) => infer COutput //
+    ? COutput extends readonly [true, infer CGood] //
+      ? CGood
+      : never
     : never
 
 export type InferInput<
