@@ -1,5 +1,5 @@
 import { as } from 'vitest/dist/reporters-5f784f42.js'
-import { InferBadRaw, InferGoodRaw, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../../core.js'
+import { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../../core.js'
 import { assertEqual } from '../typeTestUtils.js'
 
 {
@@ -14,8 +14,8 @@ import { assertEqual } from '../typeTestUtils.js'
   // Satisfies shoudl work
   const satisfied = rawNumber satisfies Sure
 
-  type InferredGood = InferGoodRaw<typeof satisfied>
-  type InferredBad = InferBadRaw<typeof satisfied>
+  type InferredGood = InferGood<typeof satisfied>
+  type InferredBad = InferBad<typeof satisfied>
   type InferredInput = InferInput<typeof satisfied>
   type InferredMeta = InferMeta<typeof satisfied>
 
@@ -41,8 +41,8 @@ import { assertEqual } from '../typeTestUtils.js'
   // Satisfies shoudl work
   const satisfied = twoBads satisfies Sure
 
-  type InferredGood = InferGoodRaw<typeof satisfied>
-  type InferredBad = InferBadRaw<typeof satisfied>
+  type InferredGood = InferGood<typeof satisfied>
+  type InferredBad = InferBad<typeof satisfied>
   type InferredInput = InferInput<typeof satisfied>
   type InferredMeta = InferMeta<typeof satisfied>
 
@@ -66,8 +66,8 @@ import { assertEqual } from '../typeTestUtils.js'
     return [true, value] as const
   }
 
-  type InferredGood = InferGoodRaw<typeof twoBads>
-  type InferredBad = InferBadRaw<typeof twoBads>
+  type InferredGood = InferGood<typeof twoBads>
+  type InferredBad = InferBad<typeof twoBads>
   type InferredInput = InferInput<typeof twoBads>
   type InferredMeta = InferMeta<typeof twoBads>
 
@@ -95,11 +95,11 @@ import { assertEqual } from '../typeTestUtils.js'
   }
 
   // badFunc doesn't satisfy Sure constraint
-  type InferredGood = InferGoodRaw<
+  type InferredGood = InferGood<
     // @ts-expect-error
     typeof badFunc
   >
-  type InferredBad = InferBadRaw<
+  type InferredBad = InferBad<
     // @ts-expect-error
     typeof badFunc
   >
@@ -129,8 +129,8 @@ import { assertEqual } from '../typeTestUtils.js'
   }
 
   // badFunc doesn't satisfy Sure constraint
-  type InferredGood = InferGoodRaw<typeof badFunc>
-  type InferredBad = InferBadRaw<typeof badFunc>
+  type InferredGood = InferGood<typeof badFunc>
+  type InferredBad = InferBad<typeof badFunc>
   type InferredInput = InferInput<typeof badFunc>
   type InferredMeta = InferMeta<typeof badFunc>
 
@@ -168,8 +168,8 @@ import { assertEqual } from '../typeTestUtils.js'
     return [true, out] as const
   }
 
-  type InferredGood = InferGoodRaw<typeof positive>
-  type InferredBad = InferBadRaw<typeof positive>
+  type InferredGood = InferGood<typeof positive>
+  type InferredBad = InferBad<typeof positive>
   type InferredInput = InferInput<typeof positive>
   type InferredMeta = InferMeta<typeof positive>
 
@@ -197,8 +197,8 @@ import { assertEqual } from '../typeTestUtils.js'
     return positiveNum(value)
   }
 
-  type InferredGood = InferGoodRaw<typeof positive>
-  type InferredBad = InferBadRaw<typeof positive>
+  type InferredGood = InferGood<typeof positive>
+  type InferredBad = InferBad<typeof positive>
   type InferredInput = InferInput<typeof positive>
   type InferredMeta = InferMeta<typeof positive>
 

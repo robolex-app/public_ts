@@ -80,26 +80,6 @@ export type Good<T> = readonly [true, T]
 export type Bad<T> = readonly [false, T]
 
 export type InferBad<
-  T extends Sure<
-    unknown,
-    unknown,
-    // Input issue
-    any,
-    MetaObj | MetaNever
-  >,
-> = //
-  T extends Sure<
-    infer CFailure,
-    unknown,
-    // Input issue
-    any,
-    MetaObj | MetaNever
-  >
-    ? //
-      CFailure
-    : never
-
-export type InferBadRaw<
   // Add the Sure constraint
   T extends Sure<
     unknown,
@@ -116,26 +96,6 @@ export type InferBadRaw<
     : never
 
 export type InferGood<
-  T extends Sure<
-    unknown,
-    unknown,
-    // Input issue
-    any,
-    MetaObj | MetaNever
-  >,
-> = //
-  T extends Sure<
-    unknown,
-    infer CDefine,
-    // Input issue
-    any,
-    MetaObj | MetaNever
-  >
-    ? //
-      CDefine
-    : never
-
-export type InferGoodRaw<
   // Add the Sure constraint
   T extends Sure<
     unknown,

@@ -1,5 +1,45 @@
-import { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../../core.js'
+import { InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../../core.js'
 import { assertEqual } from '../typeTestUtils.js'
+
+type InferBad_initial<
+  T extends Sure<
+    unknown,
+    unknown,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >,
+> = //
+  T extends Sure<
+    infer CFailure,
+    unknown,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >
+    ? //
+      CFailure
+    : never
+
+type InferGood_initial<
+  T extends Sure<
+    unknown,
+    unknown,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >,
+> = //
+  T extends Sure<
+    unknown,
+    infer CDefine,
+    // Input issue
+    any,
+    MetaObj | MetaNever
+  >
+    ? //
+      CDefine
+    : never
 
 const rawNumber = (value: unknown) => {
   return typeof value === 'number' //
@@ -10,8 +50,8 @@ const rawNumber = (value: unknown) => {
 // Satisfies shoudl work
 const satisfied = rawNumber satisfies Sure
 
-type InferredGood = InferGood<typeof satisfied>
-type InferredBad = InferBad<typeof satisfied>
+type InferredGood = InferGood_initial<typeof satisfied>
+type InferredBad = InferBad_initial<typeof satisfied>
 type InferredInput = InferInput<typeof satisfied>
 type InferredMeta = InferMeta<typeof satisfied>
 

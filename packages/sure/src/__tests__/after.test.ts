@@ -1,18 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-  good,
-  sure,
-  bad,
-  Sure,
-  after,
-  MetaObj,
-  MetaNever,
-  pure,
-  InferGoodRaw,
-  InferBadRaw,
-  InferInput,
-  InferMeta,
-} from '../index.js'
+import { good, bad, after, MetaObj, MetaNever, InferGood, InferBad, InferInput, InferMeta } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
 
 const sureNumber = (value: unknown) =>
@@ -31,8 +18,8 @@ const positiveNum = (value: number) => {
 const combined = after(sureNumber, positiveNum)
 
 {
-  type InferredGood = InferGoodRaw<typeof positiveNum>
-  type InferredBad = InferBadRaw<typeof positiveNum>
+  type InferredGood = InferGood<typeof positiveNum>
+  type InferredBad = InferBad<typeof positiveNum>
   type InferredInput = InferInput<typeof positiveNum>
   type InferredMeta = InferMeta<typeof positiveNum>
 
@@ -47,8 +34,8 @@ const combined = after(sureNumber, positiveNum)
 {
   type InferredSure = typeof combined
 
-  type InferredGood = InferGoodRaw<typeof combined>
-  type InferredBad = InferBadRaw<typeof combined>
+  type InferredGood = InferGood<typeof combined>
+  type InferredBad = InferBad<typeof combined>
   type InferredInput = InferInput<typeof combined>
   type InferredMeta = InferMeta<typeof combined>
 

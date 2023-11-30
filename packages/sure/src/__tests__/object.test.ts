@@ -46,7 +46,7 @@ assertEqual<
     age?: 'not number' | undefined
     firstName?: 'not string (sure)' | undefined
     middleName?: 'not string (pure)' | undefined
-    lastName?: string | undefined
+    lastName?: 'not string (raw)' | undefined
     address?:
       | {
           country?: 'not string' | undefined

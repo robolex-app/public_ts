@@ -1,4 +1,4 @@
-import { InferBadRaw, InferGoodRaw, InferInput, InferMeta, MetaObj, after, bad, good } from '../../index.js'
+import { InferBad, InferGood, InferInput, InferMeta, MetaObj, after, bad, good } from '../../index.js'
 import { assertEqual } from '../typeTestUtils.js'
 
 const coerceNumber = (input: string | number) => {
@@ -29,8 +29,8 @@ const positive = (input: number) => {
 
 const combined = after(coerceNumber, positive)
 
-type InferredGood = InferGoodRaw<typeof combined>
-type InferredBad = InferBadRaw<typeof combined>
+type InferredGood = InferGood<typeof combined>
+type InferredBad = InferBad<typeof combined>
 type InferredInput = InferInput<typeof combined>
 type InferredMeta = InferMeta<typeof combined>
 
