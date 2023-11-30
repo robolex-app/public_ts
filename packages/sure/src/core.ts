@@ -63,15 +63,18 @@ export function pure<TGood, TBad, TInput>(
   return insure
 }
 
-//
+// So that `as const` is not needed for literals
 export function bad<TBad extends Primitive>(val: TBad): Bad<TBad>
 export function bad<TBad>(val: TBad): Bad<TBad>
-// So that `as const` is not needed for literals
 export function bad<TBad>(val: TBad): Bad<TBad> {
   return [false, val]
 }
 //
-export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
+export function good<TGood extends Primitive>(val: TGood): Good<TGood>
+export function good<TGood>(val: TGood): Good<TGood>
+export function good<TGood>(val: TGood): Good<TGood> {
+  return [true, val]
+}
 
 export type Unsure<TBad, TGood> = //
   Good<TGood> | Bad<TBad>

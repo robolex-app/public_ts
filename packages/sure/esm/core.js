@@ -18,9 +18,9 @@ export function sure(insure, meta) {
 export function pure(insure) {
     return insure;
 }
-// So that `as const` is not needed for literals
 export function bad(val) {
     return [false, val];
 }
-//
-export const good = (val) => [true, val];
+export function good(val) {
+    return [true, val];
+}
