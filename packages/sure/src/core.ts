@@ -28,8 +28,8 @@ export type MetaObj<TMeta = unknown> = { meta: TMeta }
  */
 export type Sure<
   //
-  TBad extends unknown | readonly unknown[] = unknown,
-  TGood extends unknown | readonly unknown[] = unknown,
+  TBad = unknown,
+  TGood = unknown,
   TInput = unknown,
   //
   TMeta extends MetaNever | MetaObj = MetaNever | MetaObj,
