@@ -1,14 +1,4 @@
-import { bad, good, pure } from './core.js'
-
-// Copied from Zod
-export type Primitive =
-  | string //
-  | number
-  | symbol
-  | bigint
-  | boolean
-  | null
-  | undefined
+import { Primitive, bad, good, pure } from './core.js'
 
 export const literal = <
   // so that `as const` is not needed
@@ -16,12 +6,17 @@ export const literal = <
 >(
   value: T
 ) => {
-  return pure(val =>
-    val === value //
-      ? good<T>(
-          // @ts-expect-error We do an explicit check above
-          val
-        )
-      : bad(`not literal ${typeof value} (${String(value)})` as const)
+  return pure(
+    val =>
+      val === value //
+        ? good<T>(
+            // @ts-expect-error We do an explicit check above
+            val
+          )
+        : bad(`not literal ${typeof value} (${String(value)})` as const)
+
+    // TODO: add meta with `value`
   )
 }
+
+export const is = literal

@@ -1,4 +1,4 @@
-import { Sure, sure, bad, MetaObj } from './core.js'
+import { Sure, sure, bad, MetaObj, InferBad, InferGood, InferInput } from './core.js'
 
 /**
 A common use-case is to first validate that a value is a string.
@@ -10,31 +10,24 @@ If it returns a bad value, then the bad value is returned.
 If it returns a good value, then the new @see second function will be run.
  */
 
-export function after<
-  //
-  TFirsTBad,
-  TFirstGood,
-  TFirstInput,
-  //
-  TSecondFail,
-  TSecondGood,
->(
-  first: Sure<TFirsTBad, TFirstGood, TFirstInput>,
-  second: Sure<TSecondFail, TSecondGood, TFirstGood>
+export function after<TFirst extends Sure<unknown, unknown, any>, TSecond extends Sure<unknown, unknown, any>>(
+  first: TFirst,
+  second: TSecond
 ): Sure<
-  TFirsTBad | TSecondFail,
-  TSecondGood,
-  TFirstInput,
+  InferBad<TFirst> | InferBad<TSecond>,
+  InferGood<TSecond>,
+  InferInput<TFirst>,
   MetaObj<{
     first: typeof first
     second: typeof second
   }>
 > {
+  // @ts-expect-error TODO: check
   return sure(
-    (value: TFirstInput) => {
+    value => {
       const [good, out] = first(value)
 
-      return good ? second(out) : bad<TFirsTBad | TSecondFail>(out)
+      return good ? second(out) : bad(out)
     },
     {
       first,

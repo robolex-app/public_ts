@@ -9,7 +9,8 @@ If it returns a bad value, then the bad value is returned.
 If it returns a good value, then the new @see second function will be run.
  */
 export function after(first, second) {
-    return sure((value) => {
+    // @ts-expect-error TODO: check
+    return sure(value => {
         const [good, out] = first(value);
         return good ? second(out) : bad(out);
     }, {

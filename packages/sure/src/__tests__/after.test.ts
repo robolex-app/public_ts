@@ -1,37 +1,73 @@
 import { describe, it, expect } from 'vitest'
-import { good, sure, bad, Sure, after, MetaObj, MetaNever, pure } from '../index.js'
+import { good, bad, after, MetaObj, MetaNever, InferGood, InferBad, InferInput, InferMeta } from '../index.js'
 import { assertEqual, assertIs } from './typeTestUtils.js'
 
-const sureNumber = pure(v =>
-  typeof v === 'number' //
-    ? good(v)
-    : bad('---' as const)
-)
+const sureNumber = (value: unknown) =>
+  typeof value === 'number' //
+    ? good(value)
+    : bad('not number')
+
+const positiveNum = (value: number) => {
+  if (value > 0) {
+    return [true, value] as const
+  }
+
+  return [false, 'not positive'] as const
+}
+
+const combined = after(sureNumber, positiveNum)
+
+{
+  type InferredGood = InferGood<typeof positiveNum>
+  type InferredBad = InferBad<typeof positiveNum>
+  type InferredInput = InferInput<typeof positiveNum>
+  type InferredMeta = InferMeta<typeof positiveNum>
+
+  assertEqual<InferredGood, number>(true)
+  assertEqual<InferredBad, 'not positive'>(true)
+  assertEqual<InferredInput, number>(true)
+
+  // TODO: Not liking this, should it by MetaNever by default?
+  assertEqual<InferredMeta, MetaNever | MetaObj>(true)
+}
+
+{
+  type InferredSure = typeof combined
+
+  type InferredGood = InferGood<typeof combined>
+  type InferredBad = InferBad<typeof combined>
+  type InferredInput = InferInput<typeof combined>
+  type InferredMeta = InferMeta<typeof combined>
+
+  assertEqual<InferredGood, number>(true)
+  assertEqual<InferredBad, 'not positive' | 'not number'>(true)
+  assertEqual<InferredInput, unknown>(true)
+  assertEqual<
+    InferredMeta,
+    MetaObj<{
+      first: typeof sureNumber
+      second: typeof positiveNum
+    }>
+  >(true)
+}
 
 describe('after', () => {
-  it('should return good value', () => {
-    const something = after(sureNumber, val => {
-      assertIs<number>(val)
+  it('should correctly run', () => {
+    const [ok, out] = combined(1)
 
-      if (val > 10) {
-        return good('big' as const)
+    expect(ok).toBe(true)
+    expect(out).toBe(1)
+
+    {
+      // DX checks
+      assertIs<boolean>(ok)
+      assertIs<number | 'not number' | 'not positive'>(out)
+
+      if (ok) {
+        assertIs<number>(out)
+      } else {
+        assertIs<'not number' | 'not positive'>(out)
       }
-
-      return bad('small' as const)
-    })
-
-    // This is not good
-    assertEqual<
-      typeof something,
-      Sure<
-        '---' | 'small',
-        'big',
-        unknown,
-        MetaObj<{
-          first: Sure<'---', number, unknown>
-          second: Sure<'small', 'big', number>
-        }>
-      >
-    >(true)
+    }
   })
 })

@@ -18,7 +18,9 @@ export function sure(insure, meta) {
 export function pure(insure) {
     return insure;
 }
-//
-export const bad = (val) => [false, val];
-//
-export const good = (val) => [true, val];
+export function bad(val) {
+    return [false, val];
+}
+export function good(val) {
+    return [true, val];
+}

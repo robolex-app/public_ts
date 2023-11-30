@@ -1,3 +1,14 @@
+// Copied from Zod
+// TODO: review all the types
+export type Primitive =
+  | string //
+  | number
+  | symbol
+  | bigint
+  | boolean
+  | null
+  | undefined
+
 export type Dictionary = {
   [key: string]: unknown
 }
@@ -17,9 +28,9 @@ export type MetaObj<TMeta = unknown> = { meta: TMeta }
  */
 export type Sure<
   //
-  TBad,
-  TGood,
-  TInput,
+  TBad = unknown,
+  TGood = unknown,
+  TInput = unknown,
   //
   TMeta extends MetaNever | MetaObj = MetaNever | MetaObj,
 > = ((value: TInput) => Good<TGood> | Bad<TBad>) & TMeta
@@ -52,18 +63,27 @@ export function pure<TGood, TBad, TInput>(
   return insure
 }
 
+// So that `as const` is not needed for literals
+export function bad<TBad extends Primitive>(val: TBad): Bad<TBad>
+export function bad<TBad>(val: TBad): Bad<TBad>
+export function bad<TBad>(val: TBad): Bad<TBad> {
+  return [false, val]
+}
 //
-export const bad = <TBad>(val: TBad): Bad<TBad> => [false, val]
-//
-export const good = <TGood>(val: TGood): Good<TGood> => [true, val]
+export function good<TGood extends Primitive>(val: TGood): Good<TGood>
+export function good<TGood>(val: TGood): Good<TGood>
+export function good<TGood>(val: TGood): Good<TGood> {
+  return [true, val]
+}
 
 export type Unsure<TBad, TGood> = //
   Good<TGood> | Bad<TBad>
 
-export type Good<T> = [true, T]
-export type Bad<T> = [false, T]
+export type Good<T> = readonly [true, T]
+export type Bad<T> = readonly [false, T]
 
 export type InferBad<
+  // Add the Sure constraint
   T extends Sure<
     unknown,
     unknown,
@@ -72,18 +92,14 @@ export type InferBad<
     MetaObj | MetaNever
   >,
 > = //
-  T extends Sure<
-    infer CFailure,
-    unknown,
-    // Input issue
-    any,
-    MetaObj | MetaNever
-  >
-    ? //
-      CFailure
+  T extends (...args: any) => infer COutput //
+    ? COutput extends readonly [false, infer CGood] //
+      ? CGood
+      : never
     : never
 
 export type InferGood<
+  // Add the Sure constraint
   T extends Sure<
     unknown,
     unknown,
@@ -92,15 +108,10 @@ export type InferGood<
     MetaObj | MetaNever
   >,
 > = //
-  T extends Sure<
-    unknown,
-    infer CDefine,
-    // Input issue
-    any,
-    MetaObj | MetaNever
-  >
-    ? //
-      CDefine
+  T extends (...args: any) => infer COutput //
+    ? COutput extends readonly [true, infer CGood] //
+      ? CGood
+      : never
     : never
 
 export type InferInput<

@@ -46,7 +46,7 @@ assertEqual<
     age?: 'not number' | undefined
     firstName?: 'not string (sure)' | undefined
     middleName?: 'not string (pure)' | undefined
-    lastName?: string | undefined
+    lastName?: 'not string (raw)' | undefined
     address?:
       | {
           country?: 'not string' | undefined
@@ -64,7 +64,7 @@ assertEqual<
       age: Sure<'not number', number, unknown, MetaNever>
       firstName: Sure<'not string (sure)', string, unknown, MetaNever>
       middleName: Sure<'not string (pure)', string, unknown, MetaNever>
-      lastName: (value: unknown) => [true, string] | [false, 'not string (raw)']
+      lastName: (value: unknown) => readonly [true, string] | readonly [false, 'not string (raw)']
       address: Sure<
         {
           country?: 'not string' | undefined
