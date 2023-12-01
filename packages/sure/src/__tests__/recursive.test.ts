@@ -54,16 +54,11 @@ describe('recursive', () => {
     assertEqual<
       InferredBad,
       {
-        name?: 'not string' | undefined
-        children?:
-          | (
-              | {
-                  name?: 'not string' | undefined
-                  children?: typeof RecurseSymbol | undefined
-                }
-              | undefined
-            )[]
-          | undefined
+        name?: 'not string'
+        children?: {
+          name?: 'not string'
+          children?: typeof RecurseSymbol
+        }[]
       }
     >(true)
 
@@ -72,8 +67,8 @@ describe('recursive', () => {
       MetaObj<{
         baseObj: Sure<
           {
-            name?: 'not string' | undefined
-            children?: typeof RecurseSymbol | undefined
+            name?: 'not string'
+            children?: typeof RecurseSymbol
           },
           {
             name: string
@@ -84,8 +79,8 @@ describe('recursive', () => {
         childParser: (
           surer: Sure<
             {
-              name?: 'not string' | undefined
-              children?: typeof RecurseSymbol | undefined
+              name?: 'not string'
+              children?: typeof RecurseSymbol
             },
             {
               name: string
@@ -94,13 +89,10 @@ describe('recursive', () => {
             unknown
           >
         ) => Sure<
-          (
-            | {
-                name?: 'not string' | undefined
-                children?: typeof RecurseSymbol | undefined
-              }
-            | undefined
-          )[],
+          {
+            name?: 'not string'
+            children?: typeof RecurseSymbol
+          }[],
           {
             name: string
             children: typeof RecurseSymbol
@@ -208,15 +200,15 @@ describe('recursive', () => {
     assertEqual<
       InferredBad,
       {
-        value?: 'not number' | undefined
+        value?: 'not number'
         left?:
           | {
-              value?: 'not number' | undefined
-              left?: typeof RecurseSymbol | undefined
-              right?: typeof RecurseSymbol | undefined
+              value?: 'not number'
+              left?: typeof RecurseSymbol
+              right?: typeof RecurseSymbol
             }
           | {
-              parent?: 'not number' | undefined
+              parent?: 'not number'
             }
           | `not literal string (${string})`
           | `not literal number (${string})`
@@ -226,15 +218,15 @@ describe('recursive', () => {
           | `not literal undefined (${string})`
           | `not literal object (${string})`
           | `not literal function (${string})`
-          | undefined
+
         right?:
           | {
-              value?: 'not number' | undefined
-              left?: typeof RecurseSymbol | undefined
-              right?: typeof RecurseSymbol | undefined
+              value?: 'not number'
+              left?: typeof RecurseSymbol
+              right?: typeof RecurseSymbol
             }
           | {
-              parent?: 'not number' | undefined
+              parent?: 'not number'
             }
           | `not literal string (${string})`
           | `not literal number (${string})`
@@ -244,7 +236,6 @@ describe('recursive', () => {
           | `not literal undefined (${string})`
           | `not literal object (${string})`
           | `not literal function (${string})`
-          | undefined
       }
     >(true)
 

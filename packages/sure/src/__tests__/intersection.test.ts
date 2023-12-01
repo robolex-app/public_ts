@@ -21,14 +21,14 @@ type InferredInput = InferInput<typeof simple>
 type InferredMeta = InferMeta<typeof simple>
 
 assertEqual<InferredGood, { name: string } & { age: number }>(true)
-assertEqual<InferredBad, { name?: 'not string' | undefined } | { age?: 'not number' | undefined }>(true)
+assertEqual<InferredBad, { name?: 'not string' } | { age?: 'not number' }>(true)
 assertEqual<InferredInput, unknown>(true) // The input needs more tests
 assertEqual<
   InferredMeta,
   MetaObj<{
     first: Sure<
       {
-        name?: 'not string' | undefined
+        name?: 'not string'
       },
       {
         name: string
@@ -40,7 +40,7 @@ assertEqual<
     >
     second: Sure<
       {
-        age?: 'not number' | undefined
+        age?: 'not number'
       },
       {
         age: number
@@ -83,10 +83,10 @@ describe('and', () => {
       assertEqual<
         (typeof value)[1],
         | {
-            name?: 'not string' | undefined
+            name?: 'not string'
           }
         | {
-            age?: 'not number' | undefined
+            age?: 'not number'
           }
       >(true)
     }

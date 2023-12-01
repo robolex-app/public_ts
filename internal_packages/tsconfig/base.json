@@ -28,11 +28,12 @@
     "skipLibCheck": true,
 
     "strict": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "strictNullChecks": true,
     // Differentiate between undefined and optional
     // But MUI doesn't work with it for the `sx` property, lots of issues
     // https://github.com/mui/material-ui/issues/28745
-    // "exactOptionalPropertyTypes": true
+    "exactOptionalPropertyTypes": true
   },
   "exclude": ["node_modules"]
 }
