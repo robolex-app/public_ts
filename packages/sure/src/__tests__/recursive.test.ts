@@ -55,10 +55,13 @@ describe('recursive', () => {
       InferredBad,
       {
         name?: 'not string'
-        children?: {
-          name?: 'not string'
-          children?: typeof RecurseSymbol
-        }[]
+        children?: (
+          | {
+              name?: 'not string'
+              children?: typeof RecurseSymbol
+            }
+          | undefined
+        )[]
       }
     >(true)
 
@@ -89,10 +92,13 @@ describe('recursive', () => {
             unknown
           >
         ) => Sure<
-          {
-            name?: 'not string'
-            children?: typeof RecurseSymbol
-          }[],
+          (
+            | {
+                name?: 'not string'
+                children?: typeof RecurseSymbol
+              }
+            | undefined
+          )[],
           {
             name: string
             children: typeof RecurseSymbol

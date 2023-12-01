@@ -13,7 +13,7 @@ type InferredInput = InferInput<typeof someTuple>
 type InferredMeta = InferMeta<typeof someTuple>
 
 assertEqual<InferredGood, [number, string, boolean]>(true)
-assertEqual<InferredBad, ['not number', 'not string', 'not boolean']>(true)
+assertEqual<InferredBad, ['not number' | undefined, 'not string' | undefined, 'not boolean' | undefined]>(true)
 assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,

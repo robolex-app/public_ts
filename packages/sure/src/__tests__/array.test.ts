@@ -13,7 +13,7 @@ type InferredInput = InferInput<typeof someArray>
 type InferredMeta = InferMeta<typeof someArray>
 
 assertEqual<InferredGood, number[]>(true)
-assertEqual<InferredBad, 'not number'[]>(true)
+assertEqual<InferredBad, ('not number' | undefined)[]>(true)
 assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,
