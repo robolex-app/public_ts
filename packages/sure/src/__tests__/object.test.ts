@@ -43,15 +43,13 @@ assertEqual<
 assertEqual<
   InferredBad,
   {
-    age?: 'not number' | undefined
-    firstName?: 'not string (sure)' | undefined
-    middleName?: 'not string (pure)' | undefined
-    lastName?: 'not string (raw)' | undefined
-    address?:
-      | {
-          country?: 'not string' | undefined
-        }
-      | undefined
+    age?: 'not number'
+    firstName?: 'not string (sure)'
+    middleName?: 'not string (pure)'
+    lastName?: 'not string (raw)'
+    address?: {
+      country?: 'not string'
+    }
   }
 >(true)
 
@@ -67,7 +65,7 @@ assertEqual<
       lastName: (value: unknown) => readonly [true, string] | readonly [false, 'not string (raw)']
       address: Sure<
         {
-          country?: 'not string' | undefined
+          country?: 'not string'
         },
         {
           country: string
