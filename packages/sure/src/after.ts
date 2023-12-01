@@ -10,7 +10,10 @@ If it returns a bad value, then the bad value is returned.
 If it returns a good value, then the new @see second function will be run.
  */
 
-export function after<TFirst extends Sure<unknown, unknown, any>, TSecond extends Sure<unknown, unknown, any>>(
+export function after<
+  TFirst extends Sure<unknown, unknown, any>,
+  TSecond extends Sure<unknown, unknown, InferGood<TFirst>>,
+>(
   first: TFirst,
   second: TSecond
 ): Sure<
@@ -27,7 +30,12 @@ export function after<TFirst extends Sure<unknown, unknown, any>, TSecond extend
     value => {
       const [good, out] = first(value)
 
-      return good ? second(out) : bad(out)
+      return good
+        ? second(
+            // @ts-expect-error TODO: check
+            out
+          )
+        : bad(out)
     },
     {
       first,

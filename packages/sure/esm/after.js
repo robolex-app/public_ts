@@ -12,7 +12,11 @@ export function after(first, second) {
     // @ts-expect-error TODO: check
     return sure(value => {
         const [good, out] = first(value);
-        return good ? second(out) : bad(out);
+        return good
+            ? second(
+            // @ts-expect-error TODO: check
+            out)
+            : bad(out);
     }, {
         first,
         second,
