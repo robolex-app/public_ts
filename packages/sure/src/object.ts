@@ -29,9 +29,14 @@ export function object<
   { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
   { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
   unknown,
-  MetaObj<TSchema>
+  MetaObj<{
+    parent: typeof object
+
+    schema: TSchema
+  }>
 > {
-  const struct = sure(
+  // @ts-expect-error - TODO: expected
+  return sure(
     value => {
       if (!isObject(value)) {
         return bad({})
@@ -67,7 +72,4 @@ export function object<
       schema,
     }
   )
-
-  // @ts-expect-error
-  return struct
 }

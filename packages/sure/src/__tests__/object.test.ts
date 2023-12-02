@@ -59,22 +59,48 @@ assertEqual<
   InferredMeta,
   {
     meta: {
-      age: Sure<'not number', number, unknown, MetaNever>
-      firstName: Sure<'not string (sure)', string, unknown, MetaNever>
-      middleName: Sure<'not string (pure)', string, unknown, MetaNever>
-      lastName: (value: unknown) => readonly [true, string] | readonly [false, 'not string (raw)']
-      address: Sure<
-        {
-          country?: 'not string'
-        },
-        {
-          country: string
-        },
+      parent: <TPropFail, TPropGood, TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>>(
+        schema: TSchema
+      ) => Sure<
+        { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
+        { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
         unknown,
         MetaObj<{
-          country: Sure<'not string', string, unknown, MetaObj<undefined>>
+          parent: typeof object
+          schema: TSchema
         }>
       >
+      schema: {
+        age: Sure<'not number', number, unknown, MetaNever>
+        firstName: Sure<'not string (sure)', string, unknown, MetaNever>
+        middleName: Sure<'not string (pure)', string, unknown, MetaNever>
+        lastName: (value: unknown) => readonly [true, string] | readonly [false, 'not string (raw)']
+        address: Sure<
+          {
+            country?: 'not string'
+          },
+          {
+            country: string
+          },
+          unknown,
+          MetaObj<{
+            parent: <TPropFail, TPropGood, TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>>(
+              schema: TSchema
+            ) => Sure<
+              { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
+              { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
+              unknown,
+              MetaObj<{
+                parent: typeof object
+                schema: TSchema
+              }>
+            >
+            schema: {
+              country: Sure<'not string', string, unknown, MetaObj<undefined>>
+            }
+          }>
+        >
+      }
     }
   }
 >(true)
