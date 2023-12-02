@@ -39,3 +39,5 @@ export function union<
     }
   )
 }
+
+export const or = union

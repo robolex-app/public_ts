@@ -8,9 +8,28 @@ function isObject(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null
 }
 
-export function optional<TSchema extends Sure<unknown, unknown, any>>(schema: TSchema) {
+/**
+ * Makes a object property `optional`
+ * It doesn't make it nullable or undefinedable
+ *
+ * The `optional` function will be checked `only` by the `object` function.
+ * In all other cases it will the value will not be perceived as optional.
+ */
+export function optional<TSchema extends Sure<unknown, unknown, any>>(
+  schema: TSchema
+): Sure<
+  InferBad<TSchema>,
+  InferGood<TSchema>,
+  unknown,
+  MetaObj<{
+    parent: typeof optional
+
+    schema: TSchema
+  }>
+> {
   // IMPORTANT: It's important to pass a new function here
   //            since `sure` will update the function with the meta
+  // @ts-expect-error
   return sure(value => schema(value), {
     parent: optional,
 
@@ -46,8 +65,11 @@ export function object<
       const groupGood = {}
 
       for (const [key, sureFunction] of Object.entries(schema)) {
-        // TODO: Make different between `| undefined` and `?: somthing`
-        // check if key actually exists
+        const isOptional = isObject(sureFunction.meta) && sureFunction.meta.parent === optional
+
+        if (isOptional && !(key in value)) {
+          continue
+        }
 
         const [good, unsure] = sureFunction(value[key])
 

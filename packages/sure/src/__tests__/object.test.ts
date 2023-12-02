@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { object, bad, number, string, good, pure, sure } from '../index.js'
+import { object, bad, number, string, good, pure, sure, optional, union, literal, is, or } from '../index.js'
 import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
@@ -7,10 +7,10 @@ const someObj = object({
   age: number,
 
   // with inner sure
-  firstName: pure(value => (typeof value === 'string' ? good(value) : bad('not string (sure)' as const))),
+  firstName: pure(value => (typeof value === 'string' ? good(value) : bad('not string (sure)'))),
 
   // with inner pure
-  middleName: pure(value => (typeof value === 'string' ? good(value) : bad('not string (pure)' as const))),
+  middleName: pure(value => (typeof value === 'string' ? good(value) : bad('not string (pure)'))),
 
   // with inner raw
   lastName: (value: unknown) =>
@@ -163,5 +163,46 @@ describe('object', () => {
         middleName: 'not string (pure)',
       })
     )
+  })
+
+  describe('optionals', () => {
+    it('should support optional properties', () => {
+      const schema = object({
+        name: string,
+        age: optional(number),
+      })
+
+      // Ok when age is number
+      expect(schema({ name: 'John', age: 12 })) //
+        .toStrictEqual([true, { name: 'John', age: 12 }])
+
+      // Not allow when age is undefined
+      expect(schema({ name: 'John', age: undefined })) //
+        .toStrictEqual([false, { age: 'not number' }])
+
+      // Allow when age is not present !!
+      expect(schema({ name: 'John' })) //
+        .toStrictEqual([true, { name: 'John' }])
+    })
+
+    it('should combine with undefined and/or null', () => {
+      const schema = object({
+        name: string,
+        age: optional(or(number, is(undefined))),
+      })
+
+      expect(schema({ name: 'John', age: 12 })) //
+        .toStrictEqual([true, { name: 'John', age: 12 }])
+
+      expect(schema({ name: 'John', age: undefined })) //
+        .toStrictEqual([true, { name: 'John', age: undefined }])
+
+      expect(schema({ name: 'John', age: null })) //
+        // TODO: The error seems meh
+        .toStrictEqual([false, { age: 'not literal undefined (undefined)' }])
+
+      expect(schema({ name: 'John' })) //
+        .toStrictEqual([true, { name: 'John' }])
+    })
   })
 })

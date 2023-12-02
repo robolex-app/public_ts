@@ -13,3 +13,4 @@ export function union(first, second) {
         second,
     });
 }
+export const or = union;

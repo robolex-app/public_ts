@@ -29,4 +29,14 @@ export const boolean = (x) => {
         ? good(x)
         : bad('not boolean');
 };
+export const undef = (value) => {
+    return value === undefined //
+        ? good(value)
+        : bad('not undefined');
+};
+export const nil = (value) => {
+    return value === null //
+        ? good(value)
+        : bad('not null');
+};
 export const unknown = pure(x => good(x));
