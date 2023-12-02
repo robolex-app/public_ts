@@ -33,4 +33,16 @@ export const boolean = (x: unknown) => {
     : bad('not boolean' as const)
 }
 
+export const undef = (value: unknown) => {
+  return value === undefined //
+    ? good(value)
+    : bad('not undefined' as const)
+}
+
+export const nil = (value: unknown) => {
+  return value === null //
+    ? good(value)
+    : bad('not null' as const)
+}
+
 export const unknown = pure(x => good(x))

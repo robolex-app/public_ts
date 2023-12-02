@@ -35,7 +35,20 @@ assertEqual<
       },
       unknown,
       MetaObj<{
-        name: Sure<'not string', string, unknown, MetaObj<undefined>>
+        parent: <TPropFail, TPropGood, TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>>(
+          schema: TSchema
+        ) => Sure<
+          { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
+          { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
+          unknown,
+          MetaObj<{
+            parent: typeof object
+            schema: TSchema
+          }>
+        >
+        schema: {
+          name: Sure<'not string', string, unknown, MetaObj<undefined>>
+        }
       }>
     >
     second: Sure<
@@ -47,7 +60,20 @@ assertEqual<
       },
       unknown,
       MetaObj<{
-        age: Sure<'not number', number, unknown, MetaNever>
+        parent: <TPropFail, TPropGood, TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>>(
+          schema: TSchema
+        ) => Sure<
+          { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
+          { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
+          unknown,
+          MetaObj<{
+            parent: typeof object
+            schema: TSchema
+          }>
+        >
+        schema: {
+          age: Sure<'not number', number, unknown, MetaNever>
+        }
       }>
     >
   }>
