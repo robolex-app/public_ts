@@ -8,6 +8,16 @@ function isObject(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null
 }
 
+export function optional<TSchema extends Sure<unknown, unknown, any>>(schema: TSchema) {
+  // IMPORTANT: It's important to pass a new function here
+  //            since `sure` will update the function with the meta
+  return sure(value => schema(value), {
+    parent: optional,
+
+    schema,
+  })
+}
+
 export function object<
   //
   TPropFail,
@@ -21,35 +31,42 @@ export function object<
   unknown,
   MetaObj<TSchema>
 > {
-  const struct = sure(value => {
-    if (!isObject(value)) {
-      return bad({})
-    }
-
-    const groupFail = {}
-    const groupGood = {}
-
-    for (const [key, sureFunction] of Object.entries(schema)) {
-      // TODO: Make different between `| undefined` and `?: somthing`
-      // check if key actually exists
-
-      const [good, unsure] = sureFunction(value[key])
-
-      if (good) {
-        // @ts-expect-error
-        groupGood[key] = unsure
-      } else {
-        // @ts-expect-error
-        groupFail[key] = unsure
+  const struct = sure(
+    value => {
+      if (!isObject(value)) {
+        return bad({})
       }
-    }
 
-    if (Object.keys(groupFail).length) {
-      return bad(groupFail)
-    }
+      const groupFail = {}
+      const groupGood = {}
 
-    return good(groupGood)
-  }, schema)
+      for (const [key, sureFunction] of Object.entries(schema)) {
+        // TODO: Make different between `| undefined` and `?: somthing`
+        // check if key actually exists
+
+        const [good, unsure] = sureFunction(value[key])
+
+        if (good) {
+          // @ts-expect-error
+          groupGood[key] = unsure
+        } else {
+          // @ts-expect-error
+          groupFail[key] = unsure
+        }
+      }
+
+      if (Object.keys(groupFail).length) {
+        return bad(groupFail)
+      }
+
+      return good(groupGood)
+    },
+    {
+      parent: object,
+
+      schema,
+    }
+  )
 
   // @ts-expect-error
   return struct
