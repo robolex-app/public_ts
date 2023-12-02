@@ -18,7 +18,11 @@ assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,
   {
-    meta: Sure<'not number', number, unknown, MetaNever>
+    meta: {
+      parent: typeof array
+
+      schema: Sure<'not number', number, unknown, MetaNever>
+    }
   }
 >(true)
 

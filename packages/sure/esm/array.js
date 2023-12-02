@@ -25,7 +25,10 @@ export function array(schema) {
             return bad(bads);
         }
         return good(goods);
-    }, schema);
+    }, {
+        parent: array,
+        schema,
+    });
     // @ts-expect-error Expected error
     return struct;
 }
