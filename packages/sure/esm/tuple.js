@@ -1,9 +1,12 @@
 import { bad, good, sure } from './core.js';
-export function tupleRest(struct) {
-    const val = sure(struct, {
-        func: tupleRest,
+import { isObject } from './object.js';
+export function spread(struct) {
+    // IMPORTANT: It's important to pass a new function here
+    const val = sure(value => struct(value), {
+        parent: spread,
         initial: struct.meta,
     });
+    // @ts-expect-error - this is fine
     return val;
 }
 export function tuple(arr) {
@@ -17,6 +20,9 @@ export function tuple(arr) {
         for (let i = 0; i < arr.length; i++) {
             // @ts-expect-error
             const elem = arr[i];
+            if (isObject(elem.meta) && elem.meta.parent === spread) {
+                // Iterathe through the elements until it doesn't work.
+            }
             const [good, unsure] = elem(value[i]);
             if (good) {
                 goods.push(unsure);
@@ -34,7 +40,11 @@ export function tuple(arr) {
             return bad(bads);
         }
         return good(goods);
-    }, arr);
+    }, {
+        parent: tuple,
+        initial: arr,
+    });
+    struct.meta;
     // @ts-expect-error
     return struct;
 }
