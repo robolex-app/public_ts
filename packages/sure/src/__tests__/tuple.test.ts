@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { tuple, number, string, boolean, good, bad, spread, array } from '../index.js'
+import { tuple, number, string, boolean, good, bad, spread, array, nil, undef } from '../index.js'
 import type {
   InferGood,
   InferBad,
@@ -139,5 +139,90 @@ describe('array', () => {
     assertEqual<InferredGood, [string, ...number[], string]>(true)
 
     schema(['hello', 1, 2, 3, 'world'])
+  })
+
+  it('more complex', () => {
+    const smallSchema = tuple([
+      //
+      undef,
+      spread(array(string)),
+      number,
+    ])
+
+    type InferGood_01 = InferGood<typeof smallSchema>
+    type InferBad_01 = InferBad<typeof smallSchema>
+    type InferInput_01 = InferInput<typeof smallSchema>
+    type InferMeta_01 = InferMeta<typeof smallSchema>
+
+    assertEqual<InferInput_01, unknown>(true)
+
+    assertEqual<InferGood_01, [undefined, ...string[], number]>(true)
+    assertEqual<
+      InferBad_01,
+      [
+        //
+        'not undefined' | undefined,
+        ...('not string' | undefined)[],
+        'not number' | undefined,
+      ]
+    >(true)
+
+    assertEqual<
+      InferMeta_01,
+      MetaObj<{
+        parent: <Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]] | []>(
+          arr: Arr
+        ) => Sure<
+          TupleInferBads<Arr>,
+          TupleInferGoods<Arr>,
+          unknown,
+          MetaObj<{
+            parent: typeof tuple
+            schema: Arr
+          }>
+        >
+        schema: [
+          (value: unknown) => Good<undefined> | Bad<'not undefined'>,
+          Sure<
+            ('not string' | undefined)[],
+            string[],
+            unknown,
+            MetaObj<{
+              parent: <Arr extends Sure<unknown, unknown[], unknown>>(
+                struct: Arr
+              ) => Sure<
+                InferBad<Arr>,
+                InferGood<Arr>,
+                unknown,
+                MetaObj<{
+                  parent: typeof spread
+                  initial: unknown
+                }>
+              >
+              initial: unknown
+            }>
+          >,
+          Sure<'not number', number, unknown, MetaNever>,
+        ]
+      }>
+    >(true)
+
+    const schema = tuple([
+      //
+      string,
+      spread(array(number)),
+
+      nil,
+
+      spread(smallSchema),
+    ])
+
+    type InferredGood = InferGood<typeof schema>
+    type InferredBad = InferBad<typeof schema>
+
+    assertEqual<InferredGood, [string, ...number[], null, ...[undefined, ...string[], number]]>(true)
+
+    // INFO & TODO: The actual type is `[string, ...(string | number | null | undefined)[], number]`
+    //  but it's not possible to type it like this. Needs more docs
   })
 })
