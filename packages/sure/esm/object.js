@@ -2,7 +2,7 @@ import { sure, good, bad } from './core.js';
 /**
 Necessary because `typeof x` is not a type guard.
  */
-function isObject(x) {
+export function isObject(x) {
     return typeof x === 'object' && x !== null;
 }
 /**

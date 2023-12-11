@@ -4,7 +4,7 @@ import type { Sure, InferGood, InferBad, MetaNever, MetaObj } from './core.js'
 /**
 Necessary because `typeof x` is not a type guard.
  */
-function isObject(x: unknown): x is Record<string, unknown> {
+export function isObject(x: unknown): x is Record<string, unknown> {
   return typeof x === 'object' && x !== null
 }
 
