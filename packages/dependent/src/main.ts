@@ -189,7 +189,7 @@ export function last<T>(arr: T[]): T | undefined {
  * @param arr Array with some values
  * @param pred The predicate
  */
-export function split<T>(arr: T[], pred: (elem: T, index: number) => boolean): { good: T[]; bad: T[] } {
+export function split<T>(arr: ReadonlyArray<T>, pred: (elem: T, index: number) => boolean): { good: T[]; bad: T[] } {
   const good = arr.filter((elem, index) => pred(elem, index))
   const bad = arr.filter((elem, index) => !pred(elem, index))
 
