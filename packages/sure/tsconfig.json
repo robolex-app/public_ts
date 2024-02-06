@@ -4,7 +4,9 @@
 
     "rootDir": "src",
     "outDir": "esm",
-    "declaration": false,
+
+    // Add .d.ts files beside the .ts so @typescript/ata works when loading types
+    "declaration": true,
     "declarationMap": false
   },
   "extends": "tsconfig/base-esm.json",
