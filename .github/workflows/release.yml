@@ -12,40 +12,30 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
         with:
-          fetch-depth: 0
-          submodules: true
+          version: 8.6.9
 
-      - name: Set up Node
-        uses: actions/setup-node@v1
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.16.1
+          cache: 'pnpm'
 
-      - name: Checkout zod-deno
-        uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.ZOD_BOT_TOKEN }}
-          repository: colinhacks/zod-deno
-          path: deno/lib
+      - run: pnpm install
 
-      - name: Install dependencies
-        run: |
-          yarn install
-
-      - name: Build
-        run: |
-          yarn clean
-          yarn build
-          cp logo.svg deno/lib
-          cp README.md deno/lib
+      - run: pnpm -F @robolex/sure run build
+      - run: pnpm -F @robolex/sure run tsc:ci
+      - run: pnpm -F @robolex/sure run test:ci
 
       - id: publish
         name: Publish to NPM
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          dry-run: false
+          package: 'packages/sure'
 
       - name: Post-publish
         if: steps.publish.outputs.type != 'none'
@@ -57,16 +47,6 @@ jobs:
         run: |
           echo "Version in package.json has not changed. Skipping."
           exit 0
-
-      - name: Push to Deno
-        if: steps.publish.outputs.type != 'none'
-        working-directory: deno/lib
-        run: |
-          git config --global user.email "zodbot@colinhacks.com"
-          git config --global user.name "Zod Bot"
-          git add . -f
-          git commit -m "Build from zod $GITHUB_SHA" --allow-empty
-          git push
 
       - name: Configure changelog
         if: steps.publish.outputs.type != 'none'
@@ -102,18 +82,18 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Create Deno release
-        if: steps.publish.outputs.type != 'none'
-        id: create_deno_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.ZOD_BOT_TOKEN }}
-        with:
-          tag_name: v${{ steps.publish.outputs.version }}
-          release_name: v${{ steps.publish.outputs.version }}
-          commitish: refs/heads/main
-          body: ${{steps.github_release.outputs.changelog}}
-          draft: false
-          prerelease: false
-          owner: colinhacks
-          repo: zod-deno
+      # - name: Create Deno release
+      #   if: steps.publish.outputs.type != 'none'
+      #   id: create_deno_release
+      #   uses: actions/create-release@latest
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.ZOD_BOT_TOKEN }}
+      #   with:
+      #     tag_name: v${{ steps.publish.outputs.version }}
+      #     release_name: v${{ steps.publish.outputs.version }}
+      #     commitish: refs/heads/main
+      #     body: ${{steps.github_release.outputs.changelog}}
+      #     draft: false
+      #     prerelease: false
+      #     owner: colinhacks
+      #     repo: zod-deno
