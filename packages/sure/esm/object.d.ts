@@ -1,4 +1,22 @@
 import type { Sure, InferGood, InferBad, MetaObj } from './core.js';
+import { KVPair, Objectify, Prettify, Unionize } from './utils.js';
+type PickOptionalsGood<T extends KVPair<Sure>> = T extends {
+    v: Sure<unknown, unknown, any, MetaObj<{
+        parent: typeof optional;
+    }>>;
+} ? {
+    k: T['k'];
+    v: InferGood<T['v']>;
+} : never;
+type PickNonOptionals<T extends KVPair<Sure>> = T extends {
+    v: Sure<unknown, unknown, any, MetaObj<{
+        parent: typeof optional;
+    }>>;
+} ? never : {
+    k: T['k'];
+    v: InferGood<T['v']>;
+};
+export type InferSchemaGood<T extends Record<string, Sure>> = Prettify<Partial<Objectify<PickOptionalsGood<Unionize<T>>>> & Objectify<PickNonOptionals<Unionize<T>>>>;
 /**
  * Makes a object property `optional`
  * It doesn't make it nullable or undefinedable
@@ -12,9 +30,8 @@ export declare function optional<TSchema extends Sure<unknown, unknown, any>>(sc
 }>>;
 export declare function object<TPropFail, TPropGood, TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>>(schema: TSchema): Sure<{
     [K in keyof TSchema & string]?: InferBad<TSchema[K]>;
-}, {
-    [K in keyof TSchema & string]: InferGood<TSchema[K]>;
-}, unknown, MetaObj<{
+}, InferSchemaGood<TSchema>, unknown, MetaObj<{
     parent: typeof object;
     schema: TSchema;
 }>>;
+export {};

@@ -1,5 +1,36 @@
 import { sure, good, bad } from './core.js'
 import type { Sure, InferGood, InferBad, MetaNever, MetaObj } from './core.js'
+import { KVPair, Objectify, Prettify, Unionize } from './utils.js'
+
+type PickOptionalsGood<T extends KVPair<Sure>> = T extends {
+  v: Sure<
+    unknown,
+    unknown,
+    any,
+    MetaObj<{
+      parent: typeof optional
+    }>
+  >
+}
+  ? { k: T['k']; v: InferGood<T['v']> }
+  : never
+
+type PickNonOptionals<T extends KVPair<Sure>> = T extends {
+  v: Sure<
+    unknown,
+    unknown,
+    any,
+    MetaObj<{
+      parent: typeof optional
+    }>
+  >
+}
+  ? never
+  : { k: T['k']; v: InferGood<T['v']> }
+
+export type InferSchemaGood<T extends Record<string, Sure>> = Prettify<
+  Partial<Objectify<PickOptionalsGood<Unionize<T>>>> & Objectify<PickNonOptionals<Unionize<T>>>
+>
 
 /**
 Necessary because `typeof x` is not a type guard.
@@ -46,7 +77,7 @@ export function object<
   schema: TSchema
 ): Sure<
   { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
-  { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
+  InferSchemaGood<TSchema>,
   unknown,
   MetaObj<{
     parent: typeof object

@@ -1,0 +1,43 @@
+# .github/release.yml
+
+name: Release on npm (canary)
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'packages/sure/**'
+      - '.github/workflows/release-canary.yml'
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.9
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.16.1
+          cache: 'pnpm'
+
+      - run: pnpm install
+
+      - run: pnpm -F @robolex/sure run build
+      - run: pnpm -F @robolex/sure run tsc:ci
+      - run: pnpm -F @robolex/sure run test:ci
+
+      - name: Set version
+        run: |
+          npm --no-git-tag-version version minor
+          npm --no-git-tag-version version $(npm pkg get version | sed 's/"//g')-canary.$(date +'%Y%m%dT%H%M%S')
+
+      - id: publish
+        name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: canary

@@ -17,6 +17,8 @@ assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,
   MetaObj<{
+    parent: typeof union
+
     first: Sure<'not number', number, unknown, MetaNever>
     second: Sure<'not string', string, unknown, MetaObj<undefined>>
   }>

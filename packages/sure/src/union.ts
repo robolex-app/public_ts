@@ -20,7 +20,12 @@ export function union<
   TFirstGood | TSecondGood,
   // Variance
   TFirstInput & TSecondInput,
-  MetaObj<{ first: typeof first; second: typeof second }>
+  MetaObj<{
+    parent: typeof union
+
+    first: typeof first
+    second: typeof second
+  }>
 > {
   return sure(
     // @ts-expect-error Should be fixed at the definition of sure, I think.
@@ -34,6 +39,8 @@ export function union<
       return second(value)
     },
     {
+      parent: union,
+
       first,
       second,
     }
