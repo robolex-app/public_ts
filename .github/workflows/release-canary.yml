@@ -4,9 +4,9 @@ name: Release on npm (canary)
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
     paths:
-      - 'src/**'
+      - 'packages/sure/**'
       - '.github/workflows/release-canary.yml'
 jobs:
   build_and_publish:
@@ -27,10 +27,8 @@ jobs:
       - run: pnpm install
 
       - run: pnpm -F @robolex/sure run build
-
-        #
-      # - run: pnpm -F @robolex/sure run tsc:ci
-      # - run: pnpm -F @robolex/sure run test:ci
+      - run: pnpm -F @robolex/sure run tsc:ci
+      - run: pnpm -F @robolex/sure run test:ci
 
       - name: Set version
         run: |
