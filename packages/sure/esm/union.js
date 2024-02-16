@@ -9,6 +9,7 @@ export function union(first, second) {
         }
         return second(value);
     }, {
+        parent: union,
         first,
         second,
     });

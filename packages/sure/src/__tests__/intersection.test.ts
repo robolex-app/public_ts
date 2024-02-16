@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { number, intersection, string, object } from '../index.js'
-import type { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../index.js'
+import type { InferBad, InferGood, InferInput, InferMeta, InferSchemaGood, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 
 const option1 = object({
@@ -35,17 +35,7 @@ assertEqual<
       },
       unknown,
       MetaObj<{
-        parent: <TPropFail, TPropGood, TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>>(
-          schema: TSchema
-        ) => Sure<
-          { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
-          { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
-          unknown,
-          MetaObj<{
-            parent: typeof object
-            schema: TSchema
-          }>
-        >
+        parent: typeof object
         schema: {
           name: Sure<'not string', string, unknown, MetaObj<undefined>>
         }
@@ -60,17 +50,7 @@ assertEqual<
       },
       unknown,
       MetaObj<{
-        parent: <TPropFail, TPropGood, TSchema extends Record<string, Sure<TPropFail, TPropGood, unknown>>>(
-          schema: TSchema
-        ) => Sure<
-          { [K in keyof TSchema & string]?: InferBad<TSchema[K]> },
-          { [K in keyof TSchema & string]: InferGood<TSchema[K]> },
-          unknown,
-          MetaObj<{
-            parent: typeof object
-            schema: TSchema
-          }>
-        >
+        parent: typeof object
         schema: {
           age: Sure<'not number', number, unknown, MetaNever>
         }

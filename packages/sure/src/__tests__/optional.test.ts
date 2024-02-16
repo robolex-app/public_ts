@@ -9,85 +9,96 @@ import {
   number,
   object,
   optional,
+  or,
   string,
+  undef,
 } from '../index.js'
 
 import { assertEqual } from './typeTestUtils.js'
 
-// https://effectivetypescript.com/2020/05/12/unionize-objectify/
-type Unionize<T extends object> = {
-  [k in keyof T]: { k: k; v: T[k] }
-}[keyof T]
-
-type KVPair = { k: PropertyKey; v: unknown }
-type Objectify<T extends KVPair> = {
-  [k in T['k']]: Extract<T, { k: k }>['v']
-}
-
-type OmitKV<T extends KVPair, V> = T extends { v: V } ? never : T
-type PickKV<T extends KVPair, V> = T extends { v: V } ? T : never
-
-// object with optional
 const optionalObj = object({
   name: string,
+  // There's a difference, see `exactOptionalPropertyTypes`
   age: optional(number),
+  lastName: optional(or(string, undef)),
+
+  height: number,
 })
 
 // TypeChecks
-type InferredGood_optionalObj = InferGood<typeof optionalObj>
-type InferredBad_optionalObj = InferBad<typeof optionalObj>
-type InferredInput_optionalObj = InferInput<typeof optionalObj>
-type InferredMeta_optionalObj = InferMeta<typeof optionalObj>
+type InferredGood = InferGood<typeof optionalObj>
+type InferredBad = InferBad<typeof optionalObj>
+type InferredInput = InferInput<typeof optionalObj>
+type InferredMeta = InferMeta<typeof optionalObj>
 
-type JustPart = {
-  name: Sure<'not string', string, unknown, MetaObj<undefined>>
-  age: Sure<
-    'not number',
-    number,
-    unknown,
-    MetaObj<{
-      parent: typeof optional
-      schema: Sure<'not number', number, unknown, MetaNever>
-    }>
-  >
-}
-
-type unionJustPart = Unionize<JustPart>
-
-type HasOptional<T extends Sure> = InferMeta<T> extends MetaObj<{ parent: typeof optional }> ? 'yes' : 'no'
-
-const optNum = optional(number)
-const nonOptNum = number
-
-type TestHasOptional = HasOptional<typeof optNum>
-type TestHasOptional2 = HasOptional<typeof nonOptNum>
-
-type JustNonOptionals<
-  //
-  TSchema extends Record<string, Sure<unknown, unknown, any>>,
-> = {
-  [K in keyof TSchema & string]: InferMeta<TSchema[K]> extends MetaObj<{ parent: typeof optional }>
-    ? never
-    : InferGood<TSchema[K]>
-}
-
-type JustOptionals<
-  //
-  TSchema extends Record<string, Sure<unknown, unknown, any>>,
-> = {
-  [K in keyof TSchema & string]?: InferMeta<TSchema[K]> extends MetaObj<{ parent: typeof optional }>
-    ? InferGood<TSchema[K]>
-    : never
-}
-
-type Test = JustNonOptionals<JustPart>
-type Test2 = JustOptionals<JustPart>
-
-assertEqual<InferredGood_optionalObj, { name: string; age?: number }>(true)
 assertEqual<
-  InferredBad_optionalObj,
+  InferredGood,
   {
-    age?: 'not number'
-    name?: 'not string'
+    name: string
+    age?: number
+    lastName?: string | undefined
+    height: number
   }
+>(true)
+
+assertEqual<
+  InferredBad,
+  {
+    name?: 'not string'
+    age?: 'not number'
+    lastName?: 'not string' | 'not undefined'
+    height?: 'not number'
+  }
+>(true)
+
+assertEqual<InferredInput, unknown>(true)
+
+assertEqual<
+  InferredMeta,
+  MetaObj<{
+    parent: typeof object
+    schema: {
+      name: typeof string
+      age: Sure<
+        'not number',
+        number,
+        unknown,
+        MetaObj<{
+          parent: typeof optional
+          schema: typeof number
+        }>
+      >
+      lastName: Sure<
+        'not string' | 'not undefined',
+        string | undefined,
+        unknown,
+        MetaObj<{
+          parent: typeof optional
+          schema: Sure<
+            'not string' | 'not undefined',
+            string | undefined,
+            unknown,
+            MetaObj<{
+              parent: typeof or
+
+              first: Sure<'not string', string, unknown, MetaObj<undefined>>
+              second: Sure<'not undefined', undefined, unknown, MetaNever | MetaObj>
+            }>
+          >
+        }>
+      >
+      height: typeof number
+    }
+  }>
+>(true)
+
+assertEqual<
+  typeof optionalObj,
+  Sure<
+    //
+    InferredBad,
+    InferredGood,
+    InferredInput,
+    InferredMeta
+  >
 >(true)
