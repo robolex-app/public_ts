@@ -12,24 +12,25 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
         with:
-          fetch-depth: 0
-          submodules: true
+          version: 8.6.9
 
-      - name: Set up Node
-        uses: actions/setup-node@v1
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.16.1
+          cache: 'pnpm'
 
-      - name: Install dependencies
-        run: |
-          yarn install
+      - run: pnpm install
 
-      - name: Build
-        run: |
-          yarn clean
-          yarn build
+      - run: pnpm -F @robolex/sure run build
+
+        #
+      # - run: pnpm -F @robolex/sure run tsc:ci
+      # - run: pnpm -F @robolex/sure run test:ci
 
       - name: Set version
         run: |
@@ -41,5 +42,4 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          dry-run: false
           tag: canary
