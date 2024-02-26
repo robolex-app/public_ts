@@ -138,7 +138,7 @@ const sureBig = after(
                 number,
                 unknown,
                 MetaObj<{
-                  first: (value: unknown) => Good<number> | Bad<'not number'>
+                  first: typeof sureNumber
                   second: (
                     val: number
                   ) => Good<number> | Bad<'not integer'> | Bad<'not positive'> | Bad<'too old, sorry'>
@@ -149,30 +149,14 @@ const sureBig = after(
           }>
         >
 
-        second: Sure<
-          {
-            name: "john's below 30 are too young"
-          },
-          {
-            age: number
-            name: string
-          },
-          {
-            age: number
-            name: string
-          },
-          MetaNever
-        >
-
-        // second: (val: {
-        //     age: number;
-        //     name: string;
-        // }) => Good<{
-        //     age: number;
-        //     name: string;
-        // }> | Bad<{
-        //     name: "john's below 30 are too young";
-        // }>;
+        second: (val: { age: number; name: string }) =>
+          | Good<{
+              age: number
+              name: string
+            }>
+          | Bad<{
+              name: "john's below 30 are too young"
+            }>
       }
     }
   >(true)
