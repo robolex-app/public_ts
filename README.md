@@ -1,13 +1,15 @@
-
 ## Headless Type-safe validation library for Javascript
 
 As with other validation libaries like `zod`, `yup`, `io-ts`, `superstruct`, `valibot`, etc...
 
 You can easily validate any `unknown` value using:
+
 ```ts
+import { object, string, number } from '@robolex/sure'
+
 const validator = object({
-    name: string,
-    age: number,
+  name: string,
+  age: number,
 })
 ```
 
@@ -16,9 +18,9 @@ that you can define your `string` validator like this:
 
 ```ts
 const string = (value: unknown) => {
-    if (typeof value === 'string') return [true, value] as const
+  if (typeof value === 'string') return [true, value] as const
 
-    return [false, 'not string'] as const
+  return [false, 'not string'] as const
 }
 ```
 
@@ -39,33 +41,22 @@ If you want to do this in `zod`, you'll have to understand the difference betwee
 
 You'll also encounters lots of interesting issues related to how these 3 methods combine with each other.
 
-
-
-
-##
-
-This is the core of the package (the types are stripped).
-
-https://github.com/robolex-app/public_ts/blob/e2af35c1d4d6342a1338b92f2a69639a64cdb286/packages/sure/esm/core.js#L1-L11
-
-Everything else is based on the idea that a function can either return a `[true, <validated thing>]` or a `[false, <some failure message>]`
-
 ## The core library in this:
 
 `./esm/core.js`
 
-```
+```ts
 export function sure(insure, meta) {
-    return Object.assign(insure, { meta });
+  return Object.assign(insure, { meta })
 }
 export function pure(insure) {
-    return insure;
+  return insure
 }
 export function bad(val) {
-    return [false, val];
+  return [false, val]
 }
 export function good(val) {
-    return [true, val];
+  return [true, val]
 }
 ```
 
@@ -73,11 +64,70 @@ Everything else is based on the core types and those 4 functions.
 
 ## Common utilities:
 
+Of course, there are the basic utilities
+
 ### object
+
+```ts
+import { object, optional, string, number } from '@robolex/sure'
+import type { InferGood } from '@robolex/sure'
+
+const validator = object({
+  name: string,
+  age: optional(number),
+})
+
+// The `optional` is a real optional
+// It's not a `number | undefined`
+
+type GoodValue = InferGood<typeof validator>
+```
+
 ### array
+
+```ts
+import { array, string } from '@robolex/sure'
+
+const validator = array(string)
+```
+
 ### tuple
+
+```ts
+import { tuple, string, number } from '@robolex/sure'
+
+const validator = tuple(string, number)
+
+type GoodValue = InferGood<typeof validator>
+```
+
 ### literal
+
+```ts
+import { literal, string } from '@robolex/sure'
+
+const validator === literal('hello')
+
+type GoodValue = InferGood<typeof validator>
+```
+
 ### recursive
+
+There's some basic support for recursive values
+
+```ts
+
+```
+
 ### union
 
-### after ?
+### after
+
+This is the `refine` function from `zod`, but it's much simpler to use.
+It runs the first validator, and if it's successful, it runs the second validator.
+It returns the first bad value it encounters.
+
+```ts
+import { after }
+
+```
