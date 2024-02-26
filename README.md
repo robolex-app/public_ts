@@ -94,9 +94,9 @@ const validator = array(string)
 ### tuple
 
 ```ts
-import { tuple, string, number } from '@robolex/sure'
+import { tuple, string, number, InferGood } from '@robolex/sure'
 
-const validator = tuple(string, number)
+const validator = tuple([string, number])
 
 type GoodValue = InferGood<typeof validator>
 ```
@@ -104,9 +104,9 @@ type GoodValue = InferGood<typeof validator>
 ### literal
 
 ```ts
-import { literal, string } from '@robolex/sure'
+import { literal, string, InferGood } from '@robolex/sure'
 
-const validator === literal('hello')
+const validator = literal('hello')
 
 type GoodValue = InferGood<typeof validator>
 ```
@@ -115,10 +115,6 @@ type GoodValue = InferGood<typeof validator>
 
 There's some basic support for recursive values
 
-```ts
-
-```
-
 ### union
 
 ### after
@@ -126,8 +122,3 @@ There's some basic support for recursive values
 This is the `refine` function from `zod`, but it's much simpler to use.
 It runs the first validator, and if it's successful, it runs the second validator.
 It returns the first bad value it encounters.
-
-```ts
-import { after }
-
-```
