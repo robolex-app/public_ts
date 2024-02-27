@@ -34,7 +34,7 @@ const someTuple = tuple([number, string, boolean])
         parent: typeof tuple
         schema: [
           Sure<'not number', number, unknown, MetaNever>,
-          Sure<'not string', string, unknown, MetaObj<undefined>>,
+          typeof string,
           (x: unknown) => Good<boolean> | Bad<'not boolean'>,
         ]
       }
@@ -57,29 +57,61 @@ const spreadedTuple = tuple([number, spread(array(string)), boolean])
     InferredMeta,
     {
       meta: {
-        parent: typeof tuple
+        parent: <Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]] | []>(
+          arr: Arr
+        ) => Sure<
+          TupleInferBads<Arr>,
+          TupleInferGoods<Arr>,
+          unknown,
+          MetaObj<{
+            parent: typeof tuple
+            schema: Arr
+          }>
+        >
         schema: [
-          typeof number,
+          Sure<'not number', number, unknown, MetaNever>,
           Sure<
             ('not string' | undefined)[],
             string[],
             unknown,
             MetaObj<{
               parent: <Arr extends Sure<unknown, unknown[], unknown>>(
-                struct: Arr
+                schema: Arr
               ) => Sure<
                 InferBad<Arr>,
                 InferGood<Arr>,
                 unknown,
                 MetaObj<{
                   parent: typeof spread
-                  initial: unknown
+                  schema: Arr
                 }>
               >
-              initial: unknown
+              schema: Sure<
+                ('not string' | undefined)[],
+                string[],
+                unknown,
+                MetaObj<{
+                  parent: <
+                    TPropFail,
+                    TPropGood,
+                    TSchema extends Sure<TPropFail, TPropGood, unknown, MetaNever | MetaObj>,
+                  >(
+                    schema: TSchema
+                  ) => Sure<
+                    (InferBad<TSchema> | undefined)[],
+                    InferGood<TSchema>[],
+                    unknown,
+                    MetaObj<{
+                      parent: typeof array
+                      schema: TSchema
+                    }>
+                  >
+                  schema: typeof string
+                }>
+              >
             }>
           >,
-          typeof boolean,
+          (x: unknown) => Good<boolean> | Bad<'not boolean'>,
         ]
       }
     }
@@ -144,19 +176,61 @@ describe('array', () => {
     assertEqual<
       InferredMeta,
       MetaObj<{
-        parent: typeof tuple
+        parent: <Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]] | []>(
+          arr: Arr
+        ) => Sure<
+          TupleInferBads<Arr>,
+          TupleInferGoods<Arr>,
+          unknown,
+          MetaObj<{
+            parent: typeof tuple
+            schema: Arr
+          }>
+        >
         schema: [
-          Sure<'not string', string, unknown, MetaObj<undefined>>,
+          typeof string,
           Sure<
             ('not number' | undefined)[],
             number[],
             unknown,
             MetaObj<{
-              parent: typeof spread
-              initial: unknown
+              parent: <Arr extends Sure<unknown, unknown[], unknown>>(
+                schema: Arr
+              ) => Sure<
+                InferBad<Arr>,
+                InferGood<Arr>,
+                unknown,
+                MetaObj<{
+                  parent: typeof spread
+                  schema: Arr
+                }>
+              >
+              schema: Sure<
+                ('not number' | undefined)[],
+                number[],
+                unknown,
+                MetaObj<{
+                  parent: <
+                    TPropFail,
+                    TPropGood,
+                    TSchema extends Sure<TPropFail, TPropGood, unknown, MetaNever | MetaObj>,
+                  >(
+                    schema: TSchema
+                  ) => Sure<
+                    (InferBad<TSchema> | undefined)[],
+                    InferGood<TSchema>[],
+                    unknown,
+                    MetaObj<{
+                      parent: typeof array
+                      schema: TSchema
+                    }>
+                  >
+                  schema: Sure<'not number', number, unknown, MetaNever>
+                }>
+              >
             }>
           >,
-          Sure<'not string', string, unknown, MetaObj<undefined>>,
+          typeof string,
         ]
       }>
     >(true)
@@ -232,17 +306,39 @@ describe('array', () => {
             unknown,
             MetaObj<{
               parent: <Arr extends Sure<unknown, unknown[], unknown>>(
-                struct: Arr
+                schema: Arr
               ) => Sure<
                 InferBad<Arr>,
                 InferGood<Arr>,
                 unknown,
                 MetaObj<{
                   parent: typeof spread
-                  initial: unknown
+                  schema: Arr
                 }>
               >
-              initial: unknown
+              schema: Sure<
+                ('not string' | undefined)[],
+                string[],
+                unknown,
+                MetaObj<{
+                  parent: <
+                    TPropFail,
+                    TPropGood,
+                    TSchema extends Sure<TPropFail, TPropGood, unknown, MetaNever | MetaObj>,
+                  >(
+                    schema: TSchema
+                  ) => Sure<
+                    (InferBad<TSchema> | undefined)[],
+                    InferGood<TSchema>[],
+                    unknown,
+                    MetaObj<{
+                      parent: typeof array
+                      schema: TSchema
+                    }>
+                  >
+                  schema: typeof string
+                }>
+              >
             }>
           >,
           Sure<'not number', number, unknown, MetaNever>,
