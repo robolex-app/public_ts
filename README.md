@@ -1,5 +1,7 @@
 ## Headless Type-safe validation library for Javascript
 
+You can view this markdown rendered with complete Typescript support on https://tsx.md/github.com/robolex-app/public_ts/blob/main/README.md
+
 As with other validation libaries like `zod`, `yup`, `io-ts`, `superstruct`, `valibot`, etc...
 
 You can easily validate any `unknown` value using:
