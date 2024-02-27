@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, assert } from 'vitest'
 import { tuple, number, string, boolean, good, bad, spread, array, nil, undef } from '../index.js'
 import type {
   InferGood,
@@ -18,28 +18,73 @@ import { assertEqual } from './typeTestUtils.js'
 const someTuple = tuple([number, string, boolean])
 
 // Type Checks
-type InferredSure = typeof someTuple
-type InferredGood = InferGood<typeof someTuple>
-type InferredBad = InferBad<typeof someTuple>
-type InferredInput = InferInput<typeof someTuple>
-type InferredMeta = InferMeta<typeof someTuple>
+{
+  type InferredGood = InferGood<typeof someTuple>
+  type InferredBad = InferBad<typeof someTuple>
+  type InferredInput = InferInput<typeof someTuple>
+  type InferredMeta = InferMeta<typeof someTuple>
 
-assertEqual<InferredGood, [number, string, boolean]>(true)
-assertEqual<InferredBad, ['not number' | undefined, 'not string' | undefined, 'not boolean' | undefined]>(true)
-assertEqual<InferredInput, unknown>(true)
-assertEqual<
-  InferredMeta,
-  {
-    meta: {
-      parent: typeof tuple
-      schema: [
-        Sure<'not number', number, unknown, MetaNever>,
-        Sure<'not string', string, unknown, MetaObj<undefined>>,
-        (x: unknown) => Good<boolean> | Bad<'not boolean'>,
-      ]
+  assertEqual<InferredInput, unknown>(true)
+  assertEqual<InferredGood, [number, string, boolean]>(true)
+  assertEqual<InferredBad, ['not number' | undefined, 'not string' | undefined, 'not boolean' | undefined]>(true)
+  assertEqual<
+    InferredMeta,
+    {
+      meta: {
+        parent: typeof tuple
+        schema: [
+          Sure<'not number', number, unknown, MetaNever>,
+          Sure<'not string', string, unknown, MetaObj<undefined>>,
+          (x: unknown) => Good<boolean> | Bad<'not boolean'>,
+        ]
+      }
     }
-  }
->(true)
+  >(true)
+}
+
+const spreadedTuple = tuple([number, spread(array(string)), boolean])
+
+{
+  type InferredGood = InferGood<typeof spreadedTuple>
+  type InferredBad = InferBad<typeof spreadedTuple>
+  type InferredInput = InferInput<typeof spreadedTuple>
+  type InferredMeta = InferMeta<typeof spreadedTuple>
+
+  assertEqual<InferredInput, unknown>(true)
+  assertEqual<InferredGood, [number, ...string[], boolean]>(true)
+  assertEqual<InferredBad, ['not number' | undefined, ...('not string' | undefined)[], 'not boolean' | undefined]>(true)
+  assertEqual<
+    InferredMeta,
+    {
+      meta: {
+        parent: typeof tuple
+        schema: [
+          typeof number,
+          Sure<
+            ('not string' | undefined)[],
+            string[],
+            unknown,
+            MetaObj<{
+              parent: <Arr extends Sure<unknown, unknown[], unknown>>(
+                struct: Arr
+              ) => Sure<
+                InferBad<Arr>,
+                InferGood<Arr>,
+                unknown,
+                MetaObj<{
+                  parent: typeof spread
+                  initial: unknown
+                }>
+              >
+              initial: unknown
+            }>
+          >,
+          typeof boolean,
+        ]
+      }
+    }
+  >(true)
+}
 
 describe('array', () => {
   it('should return good value', () => {
@@ -117,7 +162,7 @@ describe('array', () => {
     >(true)
   })
 
-  it('should allow spread tuples', () => {
+  it('DX: should allow spread tuples', () => {
     const arrSchema = [
       //
       string,
@@ -137,8 +182,6 @@ describe('array', () => {
     type InferredGood = InferGood<typeof schema>
 
     assertEqual<InferredGood, [string, ...number[], string]>(true)
-
-    schema(['hello', 1, 2, 3, 'world'])
   })
 
   it('more complex', () => {
@@ -224,5 +267,20 @@ describe('array', () => {
 
     // INFO & TODO: The actual type is `[string, ...(string | number | null | undefined)[], number]`
     //  but it's not possible to type it like this. Needs more docs
+  })
+
+  it.skip('UNIT: should actually validate at runtime', () => {
+    const smallSchema = tuple([
+      //
+      undef,
+      spread(array(string)),
+      number,
+    ])
+
+    const value = smallSchema([undefined, 'adf', 'aaa', 3])
+
+    const expected: InferGood<typeof smallSchema> = [undefined, 'adf', 'aaa', 3]
+
+    expect(value).toStrictEqual(good(expected))
   })
 })

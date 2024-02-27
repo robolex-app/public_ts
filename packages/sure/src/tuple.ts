@@ -41,21 +41,20 @@ export type TupleInferBads<T> = T extends readonly [infer First, ...infer InferR
   : []
 
 export function spread<Arr extends Sure<unknown, unknown[], unknown>>(
-  struct: Arr
+  schema: Arr
 ): Sure<
   InferBad<Arr>,
   InferGood<Arr>,
   unknown,
   MetaObj<{
     parent: typeof spread
-    initial: unknown
+    schema: typeof schema
   }>
 > {
   // IMPORTANT: It's important to pass a new function here
-  const val = sure(value => struct(value), {
+  const val = sure(value => schema(value), {
     parent: spread,
-
-    initial: struct.meta,
+    schema,
   })
 
   // @ts-expect-error - this is fine
