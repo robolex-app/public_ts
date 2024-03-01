@@ -155,15 +155,16 @@ It runs the first validator, and if it's successful, it runs the second validato
 It returns the first bad value it encounters.
 
 ```ts
-import { after, string, number, InferGood, InferBad } from '@robolex/sure'
+import { after, string, number, bad, good, InferGood, InferBad } from '@robolex/sure'
+import { isIBAN } from 'validator'
 
-const isIBAN = after(string, val => {
+const ibanSchema = after(string, val => {
   // `val` is already inferred as a `string`
   if (isIBAN(val)) return good(val)
 
   return bad(val)
 })
 
-type InferredGood = InferGood<typeof isIBAN>
-type InferedBad = InferBad<typeof isIBAN>
+type InferredGood = InferGood<typeof ibanSchema>
+type InferedBad = InferBad<typeof ibanSchema>
 ```
