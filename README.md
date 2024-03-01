@@ -33,7 +33,7 @@ This is actually how the `string` from the initial example is defined.
 <Insert link to the article regarding conditional validation of forms here>
 
 Validating a value as `string` or `number` is easy in any of the aforementioned libraries.
-What's not easy, is validting an IBAN using `validator.js`, or validating an IBAN, but showing different error messages for countries whose IBAN your
+What's not easy, is validating an IBAN using `validator.js`, or validating an IBAN, but showing different error messages for countries whose IBAN your
 SaaS doesn't currently support, but will support in the next quarter.
 
 If you want to do this in `zod`, you'll have to understand the difference between
