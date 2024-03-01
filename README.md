@@ -162,7 +162,7 @@ const ibanSchema = after(string, val => {
   // `val` is already inferred as a `string`
   if (isIBAN(val)) return good(val)
 
-  return bad(val)
+  return bad('not iban')
 })
 
 type InferredGood = InferGood<typeof ibanSchema>
