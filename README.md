@@ -64,9 +64,38 @@ export function good(val) {
 
 Everything else is based on the core types and those 4 functions.
 
+## Custom validators:
+
+If you want to validate that something is an IBAN you can just define a function:
+
+```ts
+import { pure, sure, bad, good, Sure, InferGood, InferBad } from '@robolex/sure'
+import { isIBAN } from 'validator'
+
+const ibanSchema = pure(value => {
+  if (typeof value === 'string' && isIBAN) return good(value)
+
+  return bad('not an IBAN')
+})
+
+// if you don't want to use the utility function you can do it like this:
+
+const ibanSchema2 = (value => {
+  if (typeof value === 'string' && isIBAN) return [true, value] as const
+
+  return [false, 'not an IBAN'] as const
+}) satisfies Sure
+
+// The `satisfies` is not strictly necessary, but it provides the type-guarantee that
+// your function holds all the necessary requirements to be considered a schema
+
+type InferredGoodIban = InferGood<typeof ibanSchema2>
+type InferredBadIban = InferBad<typeof ibanSchema2>
+```
+
 ## Common utilities:
 
-Of course, there are the basic utilities
+Of course, there are the basic utilities, for things you'd expect from other type-safe libraries:
 
 ### object
 
@@ -79,7 +108,7 @@ const validator = object({
   age: optional(number),
 })
 
-// The `optional` is a real optional
+// The `optional` is a real optional if you use `exactOptionalPropertyTypes`
 // It's not a `number | undefined`
 
 type GoodValue = InferGood<typeof validator>
@@ -124,3 +153,17 @@ There's some basic support for recursive values
 This is the `refine` function from `zod`, but it's much simpler to use.
 It runs the first validator, and if it's successful, it runs the second validator.
 It returns the first bad value it encounters.
+
+```ts
+import { after, string, number, InferGood, InferBad } from '@robolex/sure'
+
+const isIBAN = after(string, val => {
+  // `val` is already inferred as a `string`
+  if (isIBAN(val)) return good(val)
+
+  return bad(val)
+})
+
+type InferredGood = InferGood<typeof isIBAN>
+type InferedBad = InferBad<typeof isIBAN>
+```
