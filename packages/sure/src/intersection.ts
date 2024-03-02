@@ -45,3 +45,5 @@ export function intersection<
     }
   )
 }
+
+export const and = intersection

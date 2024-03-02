@@ -18,3 +18,4 @@ export function intersection(first, second) {
         second,
     });
 }
+export const and = intersection;

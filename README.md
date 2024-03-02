@@ -73,7 +73,7 @@ import { pure, sure, bad, good, Sure, InferGood, InferBad } from '@robolex/sure'
 import { isIBAN } from 'validator'
 
 const ibanSchema = pure(value => {
-  if (typeof value === 'string' && isIBAN) return good(value)
+  if (typeof value === 'string' && isIBAN(value)) return good(value)
 
   return bad('not an IBAN')
 })
@@ -81,7 +81,7 @@ const ibanSchema = pure(value => {
 // if you don't want to use the utility function you can do it like this:
 
 const ibanSchema2 = (value => {
-  if (typeof value === 'string' && isIBAN) return [true, value] as const
+  if (typeof value === 'string' && isIBAN(value)) return [true, value] as const
 
   return [false, 'not an IBAN'] as const
 }) satisfies Sure
@@ -112,6 +112,7 @@ Nevertheless, there are currently several primitives:
 
 ```ts
 import { string, number, boolean, nil, undef, unknown } from '@robolex/sure'
+import type { InferGood } from '@robolex/sure'
 
 type InferString = InferGood<typeof string>
 type InferNumber = InferGood<typeof number>
@@ -137,6 +138,12 @@ const validator = object({
 // The `optional` is a real optional if you use `exactOptionalPropertyTypes`
 // It's not a `number | undefined`
 
+/*
+type GoodValue = {
+    age?: number;
+    name: string;
+}
+*/
 type GoodValue = InferGood<typeof validator>
 ```
 
@@ -148,6 +155,11 @@ type GoodValue = InferGood<typeof validator>
 import { array, string } from '@robolex/sure'
 
 const validator = array(string)
+
+/*
+type GoodValue = string[]
+*/
+type GoodValue = InferGood<typeof validator>
 ```
 
 ### **`after`**
@@ -167,7 +179,14 @@ const ibanSchema = after(string, val => {
   return bad('not iban')
 })
 
+/*
+type InferredGood = string
+*/
 type InferredGood = InferGood<typeof ibanSchema>
+
+/*
+type InferedBad = "not string" | "not iban"
+*/
 type InferedBad = InferBad<typeof ibanSchema>
 ```
 
@@ -182,6 +201,9 @@ import { tuple, string, number, InferGood } from '@robolex/sure'
 
 const validator = tuple([string, number])
 
+/*
+type GoodValue = [string, number]
+*/
 type GoodValue = InferGood<typeof validator>
 ```
 
@@ -194,6 +216,9 @@ import { literal, string, InferGood } from '@robolex/sure'
 
 const validator = literal('hello')
 
+/*
+type GoodValue = "hello"
+*/
 type GoodValue = InferGood<typeof validator>
 ```
 
@@ -202,14 +227,17 @@ type GoodValue = InferGood<typeof validator>
 [/packages/sure/esm/union.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/union.js)
 
 ```ts
-import { union, string, number, undef, InferGood } from '@robolex/sure'
+import { or, string, number, undef, InferGood } from '@robolex/sure'
 
 const maybeString = or(string, undef)
 
+/*
+type GoodValue = string | undefined
+*/
 type GoodValue = InferGood<typeof maybeString>
 ```
 
-### `intersection` = `and`
+### `intersection`
 
 [/packages/sure/esm/intersection.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/intersection.js)
 
@@ -225,6 +253,13 @@ const simple = and(
   })
 )
 
+/*
+type GoodValue = {
+    name: string;
+} & {
+    age: number;
+}
+*/
 type GoodValue = InferGood<typeof simple>
 ```
 
@@ -239,7 +274,8 @@ The idea here is that it's not possible to know the shape of the recursive eleme
 This was implemented mostly to test the limits of the library.
 
 ```ts
-import { object, string, array, recursive, recursiveElem } from '@robolex/sure'
+import { object, string, array, resurse, recursiveElem } from '@robolex/sure'
+import type { InferGood } from '@robolex/sure'
 
 const baseObj = object({
   name: string,
@@ -249,6 +285,10 @@ const baseObj = object({
 const recurseSure = recurse(baseObj, recurseSure => {
   return array(recurseSure)
 })
+
+/*
+ */
+type GoodValue = InferGood<typeof recurseSure>
 ```
 
 ## The `meta` property in the validation function

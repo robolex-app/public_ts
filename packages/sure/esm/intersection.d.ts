@@ -3,3 +3,4 @@ export declare function intersection<TFirstBad, TFirstGood extends Record<string
     first: typeof first;
     second: typeof second;
 }>>;
+export declare const and: typeof intersection;
