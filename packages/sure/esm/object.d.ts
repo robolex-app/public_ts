@@ -18,6 +18,10 @@ type PickNonOptionals<T extends KVPair<Sure>> = T extends {
 };
 export type InferSchemaGood<T extends Record<string, Sure>> = Prettify<Partial<Objectify<PickOptionalsGood<Unionize<T>>>> & Objectify<PickNonOptionals<Unionize<T>>>>;
 /**
+Necessary because `typeof x` is not a type guard.
+ */
+export declare function isObject(x: unknown): x is Record<string, unknown>;
+/**
  * Makes a object property `optional`
  * It doesn't make it nullable or undefinedable
  *

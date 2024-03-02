@@ -1,10 +1,20 @@
 import { bad, good, sure } from './core.js';
-import { isObject } from './object.js';
-export function spread(struct) {
+/**
+ * @deprecated
+ *
+ * It's possible to add a spread operator.
+ * But it's seems that it would add a lot of complexity and will have to link the library too much.
+ *
+ * A tuple would have to know about both the spread and an array.
+ *
+ * It made sense for `object` and `optional`, since they're linked.
+ * But for tuples it can be more clearly implemented as a separate user-land function.
+ */
+export function spread_NOT_IMPLEMENTED(schema) {
     // IMPORTANT: It's important to pass a new function here
-    const val = sure(value => struct(value), {
-        parent: spread,
-        initial: struct.meta,
+    const val = sure(value => schema(value), {
+        parent: spread_NOT_IMPLEMENTED,
+        schema,
     });
     // @ts-expect-error - this is fine
     return val;
@@ -20,9 +30,6 @@ export function tuple(arr) {
         for (let i = 0; i < arr.length; i++) {
             // @ts-expect-error
             const elem = arr[i];
-            if (isObject(elem.meta) && elem.meta.parent === spread) {
-                // Iterathe through the elements until it doesn't work.
-            }
             const [good, unsure] = elem(value[i]);
             if (good) {
                 goods.push(unsure);
