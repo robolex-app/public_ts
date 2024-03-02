@@ -1,9 +1,22 @@
 import { bad, good, sure } from './core.js';
-export function tupleRest(struct) {
-    const val = sure(struct, {
-        func: tupleRest,
-        initial: struct.meta,
+/**
+ * @deprecated
+ *
+ * It's possible to add a spread operator.
+ * But it's seems that it would add a lot of complexity and will have to link the library too much.
+ *
+ * A tuple would have to know about both the spread and an array.
+ *
+ * It made sense for `object` and `optional`, since they're linked.
+ * But for tuples it can be more clearly implemented as a separate user-land function.
+ */
+export function spread_NOT_IMPLEMENTED(schema) {
+    // IMPORTANT: It's important to pass a new function here
+    const val = sure(value => schema(value), {
+        parent: spread_NOT_IMPLEMENTED,
+        schema,
     });
+    // @ts-expect-error - this is fine
     return val;
 }
 export function tuple(arr) {
@@ -34,7 +47,11 @@ export function tuple(arr) {
             return bad(bads);
         }
         return good(goods);
-    }, arr);
+    }, {
+        parent: tuple,
+        initial: arr,
+    });
+    struct.meta;
     // @ts-expect-error
     return struct;
 }
