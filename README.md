@@ -287,6 +287,13 @@ const recurseSure = recurse(baseObj, recurseSure => {
 })
 
 /*
+type GoodValue = {
+    name: string;
+    children: {
+        name: string;
+        children: typeof RecurseSymbol;
+    }[];
+}
  */
 type GoodValue = InferGood<typeof recurseSure>
 ```
@@ -298,3 +305,18 @@ Things like `object` that return another function which is the actual validator,
 At the moment I don't personally use this feature.
 
 They were added to allow introspection of the validation schema in cases where it might be necessary to
+
+Decided how to store any metadata was a tought decision, especially when validators are simple functions.
+
+The `meta` is a property that can be directly set to a function.
+
+```ts
+export type MetaNever = { meta?: never }
+export type MetaObj<TMeta = unknown> = { meta: TMeta }
+```
+
+This type tells us that a function can either NOT have a `meta` property, or it can have `meta` property that you don't know the type of.
+
+This idea can be applied to any function whatsoever, since any function can either have a `meta` property or not. Most functions don't.
+
+This seemed like the less invasive option.
