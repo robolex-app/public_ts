@@ -1,10 +1,12 @@
-## Headless Type-safe validation library for Javascript
+> **I highly recommend reading this with full Typescript support in the code-snippets**
+>
+> [tsx.md/github.com/robolex-app/public_ts/blob/main/README.md]([https://tsx.md/github.com/robolex-app/public_ts/blob/main/README.md])
 
-You can view this markdown rendered with complete Typescript support on https://tsx.md/github.com/robolex-app/public_ts/blob/main/README.md
+## Headless Type-safe validation library for Javascript
 
 As with other validation libaries like `zod`, `yup`, `io-ts`, `superstruct`, `valibot`, etc...
 
-You can easily validate any `unknown` value using:
+You can easily validate any value using:
 
 ```ts
 import { object, string, number } from '@robolex/sure'
@@ -30,9 +32,14 @@ This is actually how the `string` from the initial example is defined.
 
 ## Why a new library?
 
-<Insert link to the article regarding conditional validation of forms here>
+I've written a lengthy article about the problems I've encountered while trying to validate a simple form, and not wanting to get forced into some custom strane DSL.
 
-Validating a value as `string` or `number` is easy in any of the aforementioned libraries.
+It's a good read, I promise.
+
+[tsx.md/blog/valid_form](https://tsx.md/blog/valid_form)
+
+The gist of it is that validating a value as `string` or `number` is easy in any of the aforementioned libraries.
+
 What's not easy, is validating an IBAN using `validator.js`, or validating an IBAN, but showing different error messages for countries whose IBAN your
 SaaS doesn't currently support, but will support in the next quarter.
 
@@ -42,6 +49,13 @@ If you want to do this in `zod`, you'll have to understand the difference betwee
 `transform` https://zod.dev/?id=transform
 
 You'll also encounters lots of interesting issues related to how these 3 methods combine with each other.
+
+## Type for the `errors`
+
+The type of which type of "errors" you can receive is usually not enforced.
+
+This library takes a different approach and considers errors as first class citizens.
+That was the main reason the function `bad` isn't called `error` since it's not something I like to throw, it's something I want to know and understand.
 
 ## The core library in this:
 
@@ -237,9 +251,14 @@ type GoodValue = string | undefined
 type GoodValue = InferGood<typeof maybeString>
 ```
 
-### `intersection`
+## Advanced utilities
+
+### `intersection` = `and`
 
 [/packages/sure/esm/intersection.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/intersection.js)
+
+Currently `and` (which is a different name for `intersection`) works only on objects, since I use object destructuring when returning
+the final value.
 
 ```ts
 import { and, object, string, number, InferGood } from '@robolex/sure'
