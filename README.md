@@ -274,7 +274,7 @@ The idea here is that it's not possible to know the shape of the recursive eleme
 This was implemented mostly to test the limits of the library.
 
 ```ts
-import { object, string, array, resurse, recursiveElem } from '@robolex/sure'
+import { object, string, array, recurse, recursiveElem } from '@robolex/sure'
 import type { InferGood } from '@robolex/sure'
 
 const baseObj = object({
