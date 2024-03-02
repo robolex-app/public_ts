@@ -1,5 +1,5 @@
 import { describe, it, expect, assert } from 'vitest'
-import { tuple, number, string, boolean, good, bad, spread, array, nil, undef } from '../index.js'
+import { tuple, number, string, boolean, good, bad, spread_NOT_IMPLEMENTED, array, nil, undef } from '../index.js'
 import type {
   InferGood,
   InferBad,
@@ -45,7 +45,7 @@ const someTuple = tuple([number, string, boolean])
 const myTuple = tuple([
   //
   string,
-  spread(array(number)),
+  spread_NOT_IMPLEMENTED(array(number)),
   string,
 ])
 
@@ -96,7 +96,7 @@ const myTuple = tuple([
               InferGood<Arr>,
               unknown,
               MetaObj<{
-                parent: typeof spread
+                parent: typeof spread_NOT_IMPLEMENTED
                 schema: Arr
               }>
             >
@@ -134,7 +134,7 @@ const myTuple = tuple([
 const smallSchema = tuple([
   //
   undef,
-  spread(array(string)),
+  spread_NOT_IMPLEMENTED(array(string)),
   number,
 ])
 
@@ -185,7 +185,7 @@ const smallSchema = tuple([
               InferGood<Arr>,
               unknown,
               MetaObj<{
-                parent: typeof spread
+                parent: typeof spread_NOT_IMPLEMENTED
                 schema: Arr
               }>
             >
@@ -220,7 +220,7 @@ const smallSchema = tuple([
   >(true)
 }
 
-describe('array', () => {
+describe('tuple', () => {
   it('should return good value', () => {
     const value = someTuple([1, 'hello', true])
 
@@ -241,7 +241,7 @@ describe('array', () => {
     const arrSchema = [
       //
       string,
-      spread(array(number)),
+      spread_NOT_IMPLEMENTED(array(number)),
     ] as const
 
     type InferSchema = TupleInferGoods<typeof arrSchema>
@@ -253,7 +253,7 @@ describe('array', () => {
     const arrSchema = [
       //
       string,
-      spread(array(number)),
+      spread_NOT_IMPLEMENTED(array(number)),
       string,
     ] as const
 
@@ -262,7 +262,7 @@ describe('array', () => {
     const schema = tuple([
       //
       string,
-      spread(array(number)),
+      spread_NOT_IMPLEMENTED(array(number)),
       string,
     ])
 
@@ -275,11 +275,11 @@ describe('array', () => {
     const schema = tuple([
       //
       string,
-      spread(array(number)),
+      spread_NOT_IMPLEMENTED(array(number)),
 
       nil,
 
-      spread(smallSchema),
+      spread_NOT_IMPLEMENTED(smallSchema),
     ])
 
     type InferredGood = InferGood<typeof schema>
@@ -294,7 +294,7 @@ describe('array', () => {
     const smallSchema = tuple([
       //
       undef,
-      spread(array(string)),
+      spread_NOT_IMPLEMENTED(array(string)),
       number,
     ])
 

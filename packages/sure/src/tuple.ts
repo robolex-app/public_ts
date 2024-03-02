@@ -12,7 +12,7 @@ export type TupleInferGoods_old<T> = T extends readonly [infer First, ...infer I
 export type TupleInferGoods<T> = //
   T extends readonly [infer First, ...infer InferRest]
     ? First extends Sure<unknown, infer Good, any, infer Meta>
-      ? Meta extends MetaObj<{ parent: typeof spread }>
+      ? Meta extends MetaObj<{ parent: typeof spread_NOT_IMPLEMENTED }>
         ? // try spreading the rest if it's an array
           Good extends readonly unknown[]
           ? [...Good, ...TupleInferGoods<InferRest>]
@@ -30,7 +30,7 @@ export type TupleInferBads_old<T> = T extends readonly [infer First, ...infer In
 
 export type TupleInferBads<T> = T extends readonly [infer First, ...infer InferRest]
   ? First extends Sure<infer Bad, unknown, any, infer Meta>
-    ? Meta extends MetaObj<{ parent: typeof spread }>
+    ? Meta extends MetaObj<{ parent: typeof spread_NOT_IMPLEMENTED }>
       ? // try spreading the rest if it's an array
         Bad extends readonly unknown[]
         ? [...Bad, ...TupleInferBads<InferRest>]
@@ -40,20 +40,31 @@ export type TupleInferBads<T> = T extends readonly [infer First, ...infer InferR
     : []
   : []
 
-export function spread<Arr extends Sure<unknown, unknown[], unknown>>(
+/**
+ * @deprecated
+ *
+ * It's possible to add a spread operator.
+ * But it's seems that it would add a lot of complexity and will have to link the library too much.
+ *
+ * A tuple would have to know about both the spread and an array.
+ *
+ * It made sense for `object` and `optional`, since they're linked.
+ * But for tuples it can be more clearly implemented as a separate user-land function.
+ */
+export function spread_NOT_IMPLEMENTED<Arr extends Sure<unknown, unknown[], unknown>>(
   schema: Arr
 ): Sure<
   InferBad<Arr>,
   InferGood<Arr>,
   unknown,
   MetaObj<{
-    parent: typeof spread
+    parent: typeof spread_NOT_IMPLEMENTED
     schema: typeof schema
   }>
 > {
   // IMPORTANT: It's important to pass a new function here
   const val = sure(value => schema(value), {
-    parent: spread,
+    parent: spread_NOT_IMPLEMENTED,
     schema,
   })
 
@@ -87,10 +98,6 @@ export function tuple<Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown,
       for (let i = 0; i < arr.length; i++) {
         // @ts-expect-error
         const elem: Sure<unknown, unknown, any> = arr[i]
-
-        if (isObject(elem.meta) && elem.meta.parent === spread) {
-          // Iterathe through the elements until it doesn't work.
-        }
 
         const [good, unsure] = elem(value[i])
 

@@ -1,10 +1,10 @@
-import { MetaObj, Sure, array, number, spread, string, tuple } from '../../index.js'
+import { MetaObj, Sure, array, number, spread_NOT_IMPLEMENTED, string, tuple } from '../../index.js'
 
 // Doesn't work
 export type TupleInferGoods01<T> = //
   T extends readonly [infer First, ...infer InferRest]
     ? First extends Sure<unknown, infer Good, any, infer Meta>
-      ? Meta extends { parent: typeof spread }
+      ? Meta extends { parent: typeof spread_NOT_IMPLEMENTED }
         ? // try spreading the rest if it's an array
           Good extends readonly unknown[]
           ? [...Good, ...TupleInferGoods01<InferRest>]
@@ -17,7 +17,7 @@ export type TupleInferGoods01<T> = //
 const sample = [
   //
   string,
-  spread(array(number)),
+  spread_NOT_IMPLEMENTED(array(number)),
   string,
 ] as const
 
@@ -30,7 +30,7 @@ type Check01 = TupleInferGoods01<Sample>
 export type TupleInferGoods_02<T> = //
   T extends readonly [infer First, ...infer InferRest]
     ? First extends Sure<unknown, infer Good, any, infer Meta>
-      ? Meta extends MetaObj<{ parent: typeof spread }>
+      ? Meta extends MetaObj<{ parent: typeof spread_NOT_IMPLEMENTED }>
         ? // try spreading the rest if it's an array
           Good extends readonly unknown[]
           ? [...Good, ...TupleInferGoods_02<InferRest>]
@@ -47,6 +47,6 @@ type Check02 = TupleInferGoods_02<Sample>
 const schema = [
   //
   string,
-  spread(array(number)),
+  spread_NOT_IMPLEMENTED(array(number)),
   string,
 ] as const
