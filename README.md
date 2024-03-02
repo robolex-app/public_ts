@@ -73,7 +73,7 @@ import { pure, sure, bad, good, Sure, InferGood, InferBad } from '@robolex/sure'
 import { isIBAN } from 'validator'
 
 const ibanSchema = pure(value => {
-  if (typeof value === 'string' && isIBAN) return good(value)
+  if (typeof value === 'string' && isIBAN(value)) return good(value)
 
   return bad('not an IBAN')
 })
@@ -81,7 +81,7 @@ const ibanSchema = pure(value => {
 // if you don't want to use the utility function you can do it like this:
 
 const ibanSchema2 = (value => {
-  if (typeof value === 'string' && isIBAN) return [true, value] as const
+  if (typeof value === 'string' && isIBAN(value)) return [true, value] as const
 
   return [false, 'not an IBAN'] as const
 }) satisfies Sure
@@ -97,7 +97,34 @@ type InferredBadIban = InferBad<typeof ibanSchema2>
 
 Of course, there are the basic utilities, for things you'd expect from other type-safe libraries:
 
-### object
+### primitives
+
+[/packages/sure/esm/primitives.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/primitives.js)
+
+The library doesn't provide too many primitives, the idea being, that _you already know how to check if something is a string_.
+
+Other libraries have lots of different views about what a string is (empty or not), or what a number is (NaN or infinity).
+
+Usually I want to validate if something is a positive integer, or if something is a valid age.
+In that case I just write a function, that's all.
+
+Nevertheless, there are currently several primitives:
+
+```ts
+import { string, number, boolean, nil, undef, unknown } from '@robolex/sure'
+import type { InferGood } from '@robolex/sure'
+
+type InferString = InferGood<typeof string>
+type InferNumber = InferGood<typeof number>
+type InferBoolean = InferGood<typeof boolean>
+type InferNil = InferGood<typeof nil>
+type InferUndef = InferGood<typeof undef>
+type InferUnknown = InferGood<typeof unknown>
+```
+
+### `object` and `optional`
+
+[/packages/sure/esm/object.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/object.js)
 
 ```ts
 import { object, optional, string, number } from '@robolex/sure'
@@ -111,44 +138,31 @@ const validator = object({
 // The `optional` is a real optional if you use `exactOptionalPropertyTypes`
 // It's not a `number | undefined`
 
+/*
+type GoodValue = {
+    age?: number;
+    name: string;
+}
+*/
 type GoodValue = InferGood<typeof validator>
 ```
 
-### array
+### `array`
+
+[/packages/sure/esm/array.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/array.js)
 
 ```ts
 import { array, string } from '@robolex/sure'
 
 const validator = array(string)
-```
 
-### tuple
-
-```ts
-import { tuple, string, number, InferGood } from '@robolex/sure'
-
-const validator = tuple([string, number])
-
+/*
+type GoodValue = string[]
+*/
 type GoodValue = InferGood<typeof validator>
 ```
 
-### literal
-
-```ts
-import { literal, string, InferGood } from '@robolex/sure'
-
-const validator = literal('hello')
-
-type GoodValue = InferGood<typeof validator>
-```
-
-### recursive
-
-There's some basic support for recursive values
-
-### union
-
-### after
+### **`after`**
 
 This is the `refine` function from `zod`, but it's much simpler to use.
 It runs the first validator, and if it's successful, it runs the second validator.
@@ -165,6 +179,144 @@ const ibanSchema = after(string, val => {
   return bad('not iban')
 })
 
+/*
+type InferredGood = string
+*/
 type InferredGood = InferGood<typeof ibanSchema>
+
+/*
+type InferedBad = "not string" | "not iban"
+*/
 type InferedBad = InferBad<typeof ibanSchema>
 ```
+
+## Other utilities
+
+### `tuple`
+
+[/packages/sure/esm/tuple.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/tuple.js)
+
+```ts
+import { tuple, string, number, InferGood } from '@robolex/sure'
+
+const validator = tuple([string, number])
+
+/*
+type GoodValue = [string, number]
+*/
+type GoodValue = InferGood<typeof validator>
+```
+
+### `literal`
+
+[/packages/sure/esm/literal.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/literal.js)
+
+```ts
+import { literal, string, InferGood } from '@robolex/sure'
+
+const validator = literal('hello')
+
+/*
+type GoodValue = "hello"
+*/
+type GoodValue = InferGood<typeof validator>
+```
+
+### `union` = `or`
+
+[/packages/sure/esm/union.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/union.js)
+
+```ts
+import { or, string, number, undef, InferGood } from '@robolex/sure'
+
+const maybeString = or(string, undef)
+
+/*
+type GoodValue = string | undefined
+*/
+type GoodValue = InferGood<typeof maybeString>
+```
+
+### `intersection`
+
+[/packages/sure/esm/intersection.js](https://github.com/robolex-app/public_ts/blob/main/packages/sure/esm/intersection.js)
+
+```ts
+import { and, object, string, number, InferGood } from '@robolex/sure'
+
+const simple = and(
+  object({
+    name: string,
+  }),
+  object({
+    age: number,
+  })
+)
+
+/*
+type GoodValue = {
+    name: string;
+} & {
+    age: number;
+}
+*/
+type GoodValue = InferGood<typeof simple>
+```
+
+### `recursive`
+
+The `recursive` function is a bit more complex, basically, you have an object and you can say that one of the fields is expected to be recursive.
+
+Afterwards you can use the `recurse` function to define the shape of the recursive element.
+
+The idea here is that it's not possible to know the shape of the recursive element before you define the object that contains it.
+
+This was implemented mostly to test the limits of the library.
+
+```ts
+import { object, string, array, recurse, recursiveElem } from '@robolex/sure'
+import type { InferGood } from '@robolex/sure'
+
+const baseObj = object({
+  name: string,
+  children: recursiveElem,
+})
+
+const recurseSure = recurse(baseObj, recurseSure => {
+  return array(recurseSure)
+})
+
+/*
+type GoodValue = {
+    name: string;
+    children: {
+        name: string;
+        children: typeof RecurseSymbol;
+    }[];
+}
+ */
+type GoodValue = InferGood<typeof recurseSure>
+```
+
+## The `meta` property in the validation function
+
+Things like `object` that return another function which is the actual validator, can have data that's attached to them.
+
+At the moment I don't personally use this feature.
+
+They were added to allow introspection of the validation schema in cases where it might be necessary to
+
+Decided how to store any metadata was a tought decision, especially when validators are simple functions.
+
+The `meta` is a property that can be directly set to a function.
+
+```ts
+export type MetaNever = { meta?: never }
+export type MetaObj<TMeta = unknown> = { meta: TMeta }
+```
+
+This type tells us that a function can either NOT have a `meta` property, or it can have `meta` property that you don't know the type of.
+
+This idea can be applied to any function whatsoever, since any function can either have a `meta` property or not. Most functions don't.
+
+This seemed like the less invasive option.
