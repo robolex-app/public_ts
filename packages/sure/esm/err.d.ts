@@ -1,2 +1,2 @@
-import { Sure } from './index.js';
-export declare const err: <TInput, TGood, TSure extends Sure<unknown, TGood, TInput>>(schema: TSure) => (input: TInput) => TGood;
+import { InferGood, InferInput, Sure } from './index.js';
+export declare const err: <TSure extends Sure>(schema: TSure) => (input: InferInput<TSure>) => InferGood<TSure>;
