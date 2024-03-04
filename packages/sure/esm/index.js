@@ -8,3 +8,4 @@ export * from './tuple.js';
 export * from './union.js';
 export * from './intersection.js';
 export * from './recursive.js';
+export * from './err.js';
