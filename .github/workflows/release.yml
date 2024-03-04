@@ -36,6 +36,7 @@ jobs:
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: 'packages/sure'
+          tag: 'latest'
 
       - name: Post-publish
         if: steps.publish.outputs.type != 'none'
