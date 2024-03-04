@@ -6,7 +6,7 @@ on:
     branches:
       - 'main'
     paths:
-      - 'packages/sure/**'
+      - 'packages/sure/src/**'
       - '.github/workflows/release-canary.yml'
 jobs:
   build_and_publish:
