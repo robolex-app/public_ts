@@ -1,6 +1,6 @@
 > **I highly recommend reading this with full Typescript support in the code-snippets**
 >
-> [tsx.md/github.com/robolex-app/public_ts/blob/main/README.md]([https://tsx.md/github.com/robolex-app/public_ts/blob/main/README.md])
+> [tsx.md/github.com/robolex-app/public_ts/blob/main/README.md](https://tsx.md/github.com/robolex-app/public_ts/blob/main/README.md)
 
 ## Headless Type-safe validation library for Javascript
 
