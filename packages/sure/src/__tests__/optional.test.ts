@@ -70,17 +70,7 @@ assertEqual<
           number,
           unknown,
           MetaObj<{
-            parent: <TSchema extends Sure<unknown, unknown, any>>(
-              schema: TSchema
-            ) => Sure<
-              InferBad<TSchema>,
-              InferGood<TSchema>,
-              unknown,
-              MetaObj<{
-                parent: typeof optional
-                schema: TSchema
-              }>
-            >
+            type: 'optional'
             schema: Sure<'not number', number, unknown, MetaNever>
           }>
         >
@@ -89,17 +79,7 @@ assertEqual<
           string | undefined,
           unknown,
           MetaObj<{
-            parent: <TSchema extends Sure<unknown, unknown, any>>(
-              schema: TSchema
-            ) => Sure<
-              InferBad<TSchema>,
-              InferGood<TSchema>,
-              unknown,
-              MetaObj<{
-                parent: typeof optional
-                schema: TSchema
-              }>
-            >
+            type: 'optional'
             schema: Sure<
               'not string' | 'not undefined',
               string | undefined,
