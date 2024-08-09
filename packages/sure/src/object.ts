@@ -80,7 +80,7 @@ export function object<
   InferSchemaGood<TSchema>,
   unknown,
   MetaObj<{
-    parent: typeof object
+    type: 'object'
 
     schema: TSchema
   }>

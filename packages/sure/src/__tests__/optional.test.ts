@@ -54,7 +54,7 @@ assertEqual<InferredInput, unknown>(true)
 assertEqual<
   InferredMeta,
   MetaObj<{
-    parent: typeof object
+    type: 'object'
     schema: {
       name: typeof string
       age: Sure<

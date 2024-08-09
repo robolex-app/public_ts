@@ -122,23 +122,23 @@ const sureBig = after(
       meta: {
         first: Sure<
           {
-            age?: 'not number' | 'not integer' | 'not positive' | 'too old, sorry'
+            age?: 'not number' | 'not positive' | 'not integer' | 'too old, sorry'
             name?: 'not string'
           },
           {
-            age: number
             name: string
+            age: number
           },
           unknown,
           MetaObj<{
-            parent: typeof object
+            type: 'object'
             schema: {
               age: Sure<
-                'not number' | 'not integer' | 'not positive' | 'too old, sorry',
+                'not number' | 'not positive' | 'not integer' | 'too old, sorry',
                 number,
                 unknown,
                 MetaObj<{
-                  first: typeof sureNumber
+                  first: (value: unknown) => Good<number> | Bad<'not number'>
                   second: (
                     val: number
                   ) => Good<number> | Bad<'not integer'> | Bad<'not positive'> | Bad<'too old, sorry'>
@@ -148,11 +148,10 @@ const sureBig = after(
             }
           }>
         >
-
-        second: (val: { age: number; name: string }) =>
+        second: (val: { name: string; age: number }) =>
           | Good<{
-              age: number
               name: string
+              age: number
             }>
           | Bad<{
               name: "john's below 30 are too young"

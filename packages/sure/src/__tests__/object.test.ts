@@ -59,7 +59,7 @@ assertEqual<
   InferredMeta,
   {
     meta: {
-      parent: typeof object
+      type: 'object'
       schema: {
         age: Sure<'not number', number, unknown, MetaNever>
         firstName: Sure<'not string (sure)', string, unknown, MetaNever>
@@ -74,7 +74,7 @@ assertEqual<
           },
           unknown,
           MetaObj<{
-            parent: typeof object
+            type: 'object'
             schema: {
               country: Sure<'not string', string, unknown, MetaObj<undefined>>
             }
