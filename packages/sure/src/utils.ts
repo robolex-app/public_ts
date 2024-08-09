@@ -19,3 +19,22 @@ export type Prettify<T> = {
 export type PrettifyRec<T> = {
   [K in keyof T]: PrettifyRec<T[K]>
 } & {}
+
+type PropKey = string | number | symbol
+
+/**
+ * Check source.
+ * Maps over an object using `Object.entries` and returns a new object.
+ */
+export function objMapEntries<
+  //
+  Obj extends Record<PropKey, unknown>,
+  ResultKey extends PropKey,
+  ResultValue,
+>(
+  value: Obj,
+  callback: (entry: [key: keyof Obj, value: Obj[keyof Obj]]) => readonly [ResultKey, ResultValue]
+): Record<ResultKey, ResultValue> {
+  // @ts-expect-error We expect an error here
+  return Object.fromEntries(Object.entries(value).map(callback))
+}

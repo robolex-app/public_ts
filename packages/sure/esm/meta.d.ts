@@ -12,6 +12,22 @@ export type InferJustMeta<T> = T extends Sure<unknown, unknown, any, {
     type: 'object';
     schema: ExtractPrimitives<CSchema>;
 } : T extends Sure<unknown, unknown, any, {
+    meta: {
+        type: 'optional';
+        schema: infer CSchema;
+    };
+}> ? {
+    type: 'optional';
+    schema: InferJustMeta<CSchema>;
+} : T extends Sure<unknown, unknown, any, {
+    meta: {
+        type: 'array';
+        schema: infer CSchema;
+    };
+}> ? {
+    type: 'array';
+    schema: InferJustMeta<CSchema>;
+} : T extends Sure<unknown, unknown, any, {
     meta: infer Meta;
 }> ? Meta : 'unknown';
-export declare function justMeta<TSchema extends Sure<unknown, unknown, any>>(schema: TSchema): PrettifyRec<InferJustMeta<TSchema>>;
+export declare function justMeta<TSchema extends Sure<unknown, unknown, any>>(insure: TSchema): PrettifyRec<InferJustMeta<TSchema>>;

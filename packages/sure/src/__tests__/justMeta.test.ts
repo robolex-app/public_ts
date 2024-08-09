@@ -1,16 +1,17 @@
 import { describe, expect, it } from 'vitest'
 import { MetaNever, MetaObj } from '../core.js'
 import { InferJustMeta, ExtractPrimitives, justMeta } from '../meta.js'
-import { object } from '../object.js'
+import { object, optional } from '../object.js'
 import { string, number } from '../primitives.js'
 import { PrettifyRec } from '../utils.js'
 import { assertEqual } from './typeTestUtils.js'
+import { array } from '../array.js'
 
 const simpleObj = object({
-  name: string,
+  name: optional(string),
   age: number,
   info: object({
-    country: string,
+    country: array(string),
   }),
 })
 
@@ -19,20 +20,29 @@ type SimplifyMeta<TMeta extends MetaNever | MetaObj> = TMeta extends MetaObj<inf
 type InferredJustMeta = InferJustMeta<typeof simpleObj>
 type Prett = PrettifyRec<InferredJustMeta>
 
+const temp = optional(number)
+type tempType = InferJustMeta<typeof temp>
+
 assertEqual<
   Prett,
   {
     type: 'object'
     schema: {
       name: {
-        type: 'string'
+        type: 'optional'
+        schema: {
+          type: 'string'
+        }
       }
       age: 'unknown'
       info: {
         type: 'object'
         schema: {
           country: {
-            type: 'string'
+            type: 'array'
+            schema: {
+              type: 'string'
+            }
           }
         }
       }
@@ -59,14 +69,20 @@ describe('justMeta', () => {
         type: 'object'
         schema: {
           name: {
-            type: 'string'
+            type: 'optional'
+            schema: {
+              type: 'string'
+            }
           }
           age: 'unknown'
           info: {
             type: 'object'
             schema: {
               country: {
-                type: 'string'
+                type: 'array'
+                schema: {
+                  type: 'string'
+                }
               }
             }
           }
@@ -74,18 +90,24 @@ describe('justMeta', () => {
       }
     >(true)
 
-    expect(result).toBe({
+    expect(result).toStrictEqual({
       type: 'object',
       schema: {
         name: {
-          type: 'string',
+          type: 'optional',
+          schema: {
+            type: 'string',
+          },
         },
         age: 'unknown',
         info: {
           type: 'object',
           schema: {
             country: {
-              type: 'string',
+              type: 'array',
+              schema: {
+                type: 'string',
+              },
             },
           },
         },
