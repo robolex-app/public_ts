@@ -51,7 +51,7 @@ export function array<
       return good(goods)
     },
     {
-      parent: array,
+      type: 'array',
 
       schema,
     }

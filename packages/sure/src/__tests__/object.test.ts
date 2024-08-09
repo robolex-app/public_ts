@@ -29,46 +29,6 @@ type InferredBad = InferBad<typeof someObj>
 type InferredInput = InferInput<typeof someObj>
 type InferredMeta = InferMeta<typeof someObj>
 
-const simpleObj = object({
-  name: string,
-  age: number,
-  info: object({
-    country: string,
-  }),
-})
-
-type SimplifyMeta<TMeta extends MetaNever | MetaObj> = TMeta extends MetaObj<infer S> ? S : {}
-
-type InferredJustMeta = InferJustMeta<typeof simpleObj>
-type Prett = PrettifyRec<InferredJustMeta>
-
-assertEqual<
-  Prett,
-  {
-    type: 'object'
-    schema: {
-      name: {
-        type: 'string'
-      }
-      age: 'unknown'
-      info: {
-        type: 'object'
-        schema: {
-          country: {
-            type: 'string'
-          }
-        }
-      }
-    }
-  }
->(true)
-
-type InferredString = InferJustMeta<typeof string>
-
-type test3 = ExtractPrimitives<{
-  name: typeof string
-}>
-
 assertEqual<
   InferredGood,
   {

@@ -120,7 +120,7 @@ export function object<
       return good(groupGood)
     },
     {
-      parent: object,
+      type: 'object',
 
       schema,
     }

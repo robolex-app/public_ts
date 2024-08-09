@@ -31,7 +31,7 @@ const someTuple = tuple([number, string, boolean])
     InferredMeta,
     {
       meta: {
-        parent: typeof tuple
+        type: 'tuple'
         schema: [
           Sure<'not number', number, unknown, MetaNever>,
           typeof string,
@@ -72,17 +72,7 @@ const myTuple = tuple([
     InferredMeta,
     {
       meta: {
-        parent: <Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]] | []>(
-          arr: Arr
-        ) => Sure<
-          TupleInferBads<Arr>,
-          TupleInferGoods<Arr>,
-          unknown,
-          MetaObj<{
-            parent: typeof tuple
-            schema: Arr
-          }>
-        >
+        type: 'tuple'
         schema: [
           typeof string,
           Sure<
@@ -149,17 +139,7 @@ const smallSchema = tuple([
     InferredMeta,
     {
       meta: {
-        parent: <Arr extends [] | [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]]>(
-          arr: Arr
-        ) => Sure<
-          TupleInferBads<Arr>,
-          TupleInferGoods<Arr>,
-          unknown,
-          MetaObj<{
-            parent: typeof tuple
-            schema: Arr
-          }>
-        >
+        type: 'tuple'
         schema: [
           (value: unknown) => Good<undefined> | Bad<'not undefined'>,
           Sure<

@@ -80,7 +80,7 @@ export function tuple<Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown,
   TupleInferGoods<Arr>,
   unknown,
   MetaObj<{
-    parent: typeof tuple
+    type: 'tuple'
 
     schema: Arr
   }>
@@ -121,7 +121,7 @@ export function tuple<Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown,
       return good(goods)
     },
     {
-      parent: tuple,
+      type: 'tuple',
 
       initial: arr,
     }
