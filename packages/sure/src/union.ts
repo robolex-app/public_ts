@@ -21,7 +21,7 @@ export function union<
   // Variance
   TFirstInput & TSecondInput,
   MetaObj<{
-    parent: typeof union
+    type: 'union'
 
     first: typeof first
     second: typeof second
@@ -39,7 +39,7 @@ export function union<
       return second(value)
     },
     {
-      parent: union,
+      type: 'union',
 
       first,
       second,

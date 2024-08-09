@@ -53,40 +53,75 @@ assertEqual<InferredInput, unknown>(true)
 
 assertEqual<
   InferredMeta,
-  MetaObj<{
-    type: 'object'
-    schema: {
-      name: typeof string
-      age: Sure<
-        'not number',
-        number,
-        unknown,
-        MetaObj<{
-          parent: typeof optional
-          schema: typeof number
-        }>
-      >
-      lastName: Sure<
-        'not string' | 'not undefined',
-        string | undefined,
-        unknown,
-        MetaObj<{
-          parent: typeof optional
-          schema: Sure<
-            'not string' | 'not undefined',
-            string | undefined,
-            unknown,
-            MetaObj<{
-              parent: typeof or
-
-              first: Sure<'not string', string, unknown, MetaObj<undefined>>
-              second: Sure<'not undefined', undefined, unknown, MetaNever | MetaObj>
-            }>
-          >
-        }>
-      >
+  {
+    meta: {
+      type: 'object'
+      schema: {
+        name: Sure<
+          'not string',
+          string,
+          unknown,
+          MetaObj<{
+            type: 'string'
+          }>
+        >
+        age: Sure<
+          'not number',
+          number,
+          unknown,
+          MetaObj<{
+            parent: <TSchema extends Sure<unknown, unknown, any>>(
+              schema: TSchema
+            ) => Sure<
+              InferBad<TSchema>,
+              InferGood<TSchema>,
+              unknown,
+              MetaObj<{
+                parent: typeof optional
+                schema: TSchema
+              }>
+            >
+            schema: Sure<'not number', number, unknown, MetaNever>
+          }>
+        >
+        lastName: Sure<
+          'not string' | 'not undefined',
+          string | undefined,
+          unknown,
+          MetaObj<{
+            parent: <TSchema extends Sure<unknown, unknown, any>>(
+              schema: TSchema
+            ) => Sure<
+              InferBad<TSchema>,
+              InferGood<TSchema>,
+              unknown,
+              MetaObj<{
+                parent: typeof optional
+                schema: TSchema
+              }>
+            >
+            schema: Sure<
+              'not string' | 'not undefined',
+              string | undefined,
+              unknown,
+              MetaObj<{
+                type: 'union'
+                first: Sure<
+                  'not string',
+                  string,
+                  unknown,
+                  MetaObj<{
+                    type: 'string'
+                  }>
+                >
+                second: Sure<'not undefined', undefined, unknown, MetaNever | MetaObj>
+              }>
+            >
+          }>
+        >
+      }
     }
-  }>
+  }
 >(true)
 
 assertEqual<

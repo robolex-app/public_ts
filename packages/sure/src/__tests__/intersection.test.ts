@@ -39,7 +39,7 @@ assertEqual<
         MetaObj<{
           type: 'object'
           schema: {
-            name: Sure<'not string', string, unknown, MetaObj<undefined>>
+            name: typeof string
           }
         }>
       >

@@ -15,3 +15,7 @@ export type PickKV<T extends KVPair, V> = T extends { v: V } ? T : never
 export type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
+
+export type PrettifyRec<T> = {
+  [K in keyof T]: PrettifyRec<T[K]>
+} & {}

@@ -84,7 +84,7 @@ const myTuple = tuple([
           }>
         >
         schema: [
-          Sure<'not string', string, unknown, MetaObj<undefined>>,
+          typeof string,
           Sure<
             ('not number' | undefined)[],
             number[],
@@ -107,12 +107,12 @@ const myTuple = tuple([
                 unknown,
                 MetaObj<{
                   type: 'array'
-                  schema: Sure<'not number', number, unknown, MetaNever>
+                  schema: typeof number
                 }>
               >
             }>
           >,
-          Sure<'not string', string, unknown, MetaObj<undefined>>,
+          typeof string,
         ]
       }
     }
@@ -184,7 +184,14 @@ const smallSchema = tuple([
                 unknown,
                 MetaObj<{
                   type: 'array'
-                  schema: Sure<'not string', string, unknown, MetaObj<undefined>>
+                  schema: Sure<
+                    'not string',
+                    string,
+                    unknown,
+                    MetaObj<{
+                      type: 'string'
+                    }>
+                  >
                 }>
               >
             }>

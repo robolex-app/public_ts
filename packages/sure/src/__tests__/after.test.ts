@@ -147,7 +147,7 @@ const sureBig = after(
                   ) => Good<number> | Bad<'not integer'> | Bad<'not positive'> | Bad<'too old, sorry'>
                 }>
               >
-              name: Sure<'not string', string, unknown, MetaObj<undefined>>
+              name: typeof string
             }
           }>
         >

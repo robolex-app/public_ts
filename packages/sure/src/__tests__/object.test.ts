@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { object, bad, number, string, good, pure, sure, optional, union, literal, is, or } from '../index.js'
 import type { InferBad, InferGood, InferInput, InferMeta, InferSchemaGood, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
+import { Prettify, PrettifyRec } from '../utils.js'
+import { ExtractPrimitives, InferJustMeta } from '../meta.js'
 
 const someObj = object({
   age: number,
@@ -26,6 +28,46 @@ type InferredGood = InferGood<typeof someObj>
 type InferredBad = InferBad<typeof someObj>
 type InferredInput = InferInput<typeof someObj>
 type InferredMeta = InferMeta<typeof someObj>
+
+const simpleObj = object({
+  name: string,
+  age: number,
+  info: object({
+    country: string,
+  }),
+})
+
+type SimplifyMeta<TMeta extends MetaNever | MetaObj> = TMeta extends MetaObj<infer S> ? S : {}
+
+type InferredJustMeta = InferJustMeta<typeof simpleObj>
+type Prett = PrettifyRec<InferredJustMeta>
+
+assertEqual<
+  Prett,
+  {
+    type: 'object'
+    schema: {
+      name: {
+        type: 'string'
+      }
+      age: 'unknown'
+      info: {
+        type: 'object'
+        schema: {
+          country: {
+            type: 'string'
+          }
+        }
+      }
+    }
+  }
+>(true)
+
+type InferredString = InferJustMeta<typeof string>
+
+type test3 = ExtractPrimitives<{
+  name: typeof string
+}>
 
 assertEqual<
   InferredGood,
@@ -76,7 +118,7 @@ assertEqual<
           MetaObj<{
             type: 'object'
             schema: {
-              country: Sure<'not string', string, unknown, MetaObj<undefined>>
+              country: typeof string
             }
           }>
         >
