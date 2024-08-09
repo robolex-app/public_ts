@@ -21,6 +21,7 @@ export function after<
   InferGood<TSecond>,
   InferInput<TFirst>,
   MetaObj<{
+    type: 'after'
     first: typeof first
     second: typeof second
   }>
