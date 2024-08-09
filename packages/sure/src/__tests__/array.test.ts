@@ -19,7 +19,7 @@ assertEqual<
   InferredMeta,
   {
     meta: {
-      parent: typeof array
+      type: 'array'
 
       schema: Sure<'not number', number, unknown, MetaNever>
     }
