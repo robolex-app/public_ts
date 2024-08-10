@@ -20,8 +20,14 @@ assertEqual<
   {
     meta: {
       type: 'array'
-
-      schema: Sure<'not number', number, unknown, MetaNever>
+      schema: Sure<
+        'not number',
+        number,
+        unknown,
+        MetaObj<{
+          type: 'number'
+        }>
+      >
     }
   }
 >(true)

@@ -21,11 +21,16 @@ export const string = sure(
  *
  * The pure function returnes exactly the passed function
  */
-export const number = pure(x => {
-  return typeof x === 'number' //
-    ? good(x)
-    : bad('not number' as const)
-})
+export const number = sure(
+  x => {
+    return typeof x === 'number' //
+      ? good(x)
+      : bad('not number' as const)
+  },
+  {
+    type: 'number' as const,
+  }
+)
 
 /**
  * Defined without using the `sure` or `pure` functions

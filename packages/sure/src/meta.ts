@@ -130,3 +130,40 @@ export function justMeta<TSchema extends Sure<unknown, unknown, any>>(
 
   return undefined as any
 }
+
+export function metaToJsonSchema<TMeta>(meta: TMeta): any {
+  if (!meta) {
+    return {
+      type: 'unknown',
+    }
+  }
+
+  // @ts-expect-error figure out
+  if (meta.type === 'object') {
+    // go through each and check if it's optional
+    const optionalKeys: string[] = []
+    // @ts-expect-error asdfsd
+    const withoutOptional = objMapEntries(meta.schema as any, ([key, value]) => {
+      if (value.type === 'optional') {
+        // @ts-expect-error asdfsd
+        optionalKeys.push(key)
+        return [key, value.schema]
+      }
+
+      return [key, value]
+    })
+
+    const required = Object.keys(withoutOptional).filter(key => !optionalKeys.includes(key))
+
+    return {
+      type: 'object',
+      properties: objMapEntries(withoutOptional, ([key, value]) => {
+        return [key, metaToJsonSchema(value)]
+      }),
+      required,
+    }
+  }
+
+  //
+  return meta
+}

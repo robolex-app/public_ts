@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { MetaNever, MetaObj } from '../core.js'
-import { InferJustMeta, ExtractPrimitives, justMeta } from '../meta.js'
+import { InferJustMeta, ExtractPrimitives, justMeta, metaToJsonSchema } from '../meta.js'
 import { object, optional } from '../object.js'
 import { string, number } from '../primitives.js'
 import { PrettifyRec } from '../utils.js'
 import { assertEqual } from './typeTestUtils.js'
 import { array } from '../array.js'
+
+import { Ajv } from 'ajv'
 
 const simpleObj = object({
   name: optional(string),
@@ -34,7 +36,9 @@ assertEqual<
           type: 'string'
         }
       }
-      age: undefined
+      age: {
+        type: 'number'
+      }
       info: {
         type: 'object'
         schema: {
@@ -74,7 +78,9 @@ describe('justMeta', () => {
               type: 'string'
             }
           }
-          age: undefined
+          age: {
+            type: 'number'
+          }
           info: {
             type: 'object'
             schema: {
@@ -99,7 +105,9 @@ describe('justMeta', () => {
             type: 'string',
           },
         },
-        age: undefined,
+        age: {
+          type: 'number',
+        },
         info: {
           type: 'object',
           schema: {
@@ -113,5 +121,43 @@ describe('justMeta', () => {
         },
       },
     })
+  })
+})
+
+describe('toJsonSchema', () => {
+  it('works', () => {
+    const result = justMeta(simpleObj)
+    const jsonSchema = metaToJsonSchema(result)
+
+    expect(jsonSchema).toStrictEqual({
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+        },
+        age: {
+          type: 'number',
+        },
+        info: {
+          type: 'object',
+          properties: {
+            country: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+      required: ['age', 'info'],
+    })
+
+    const ajv = new Ajv()
+    const validate = ajv.compile(jsonSchema)
+
+    const valid = validate({})
+
+    expect(jsonSchema).toStrictEqual({})
   })
 })

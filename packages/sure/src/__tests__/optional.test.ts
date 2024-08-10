@@ -71,7 +71,14 @@ assertEqual<
           unknown,
           MetaObj<{
             type: 'optional'
-            schema: Sure<'not number', number, unknown, MetaNever>
+            schema: Sure<
+              'not number',
+              number,
+              unknown,
+              MetaObj<{
+                type: 'number'
+              }>
+            >
           }>
         >
         lastName: Sure<

@@ -33,8 +33,22 @@ const someTuple = tuple([number, string, boolean])
       meta: {
         type: 'tuple'
         schema: [
-          Sure<'not number', number, unknown, MetaNever>,
-          typeof string,
+          Sure<
+            'not number',
+            number,
+            unknown,
+            MetaObj<{
+              type: 'number'
+            }>
+          >,
+          Sure<
+            'not string',
+            string,
+            unknown,
+            MetaObj<{
+              type: 'string'
+            }>
+          >,
           (x: unknown) => Good<boolean> | Bad<'not boolean'>,
         ]
       }
@@ -176,7 +190,14 @@ const smallSchema = tuple([
               >
             }>
           >,
-          Sure<'not number', number, unknown, MetaNever>,
+          Sure<
+            'not number',
+            number,
+            unknown,
+            MetaObj<{
+              type: 'number'
+            }>
+          >,
         ]
       }
     }

@@ -39,7 +39,14 @@ assertEqual<
         MetaObj<{
           type: 'object'
           schema: {
-            name: typeof string
+            name: Sure<
+              'not string',
+              string,
+              unknown,
+              MetaObj<{
+                type: 'string'
+              }>
+            >
           }
         }>
       >
@@ -54,7 +61,14 @@ assertEqual<
         MetaObj<{
           type: 'object'
           schema: {
-            age: Sure<'not number', number, unknown, MetaNever>
+            age: Sure<
+              'not number',
+              number,
+              unknown,
+              MetaObj<{
+                type: 'number'
+              }>
+            >
           }
         }>
       >

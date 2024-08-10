@@ -20,16 +20,14 @@ export type PrettifyRec<T> = {
   [K in keyof T]: PrettifyRec<T[K]>
 } & {}
 
-type PropKey = string | number | symbol
-
 /**
  * Check source.
  * Maps over an object using `Object.entries` and returns a new object.
  */
 export function objMapEntries<
   //
-  Obj extends Record<PropKey, unknown>,
-  ResultKey extends PropKey,
+  Obj extends Record<string, unknown>,
+  ResultKey extends string,
   ResultValue,
 >(
   value: Obj,

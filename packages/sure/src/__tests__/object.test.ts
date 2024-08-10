@@ -63,7 +63,14 @@ assertEqual<
     meta: {
       type: 'object'
       schema: {
-        age: Sure<'not number', number, unknown, MetaNever>
+        age: Sure<
+          'not number',
+          number,
+          unknown,
+          MetaObj<{
+            type: 'number'
+          }>
+        >
         firstName: Sure<'not string (sure)', string, unknown, MetaNever>
         middleName: Sure<'not string (pure)', string, unknown, MetaNever>
         lastName: (value: unknown) => readonly [true, string] | readonly [false, 'not string (raw)']
@@ -78,7 +85,14 @@ assertEqual<
           MetaObj<{
             type: 'object'
             schema: {
-              country: typeof string
+              country: Sure<
+                'not string',
+                string,
+                unknown,
+                MetaObj<{
+                  type: 'string'
+                }>
+              >
             }
           }>
         >

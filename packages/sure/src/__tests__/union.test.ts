@@ -19,7 +19,14 @@ assertEqual<
   {
     meta: {
       type: 'union'
-      first: Sure<'not number', number, unknown, MetaNever>
+      first: Sure<
+        'not number',
+        number,
+        unknown,
+        MetaObj<{
+          type: 'number'
+        }>
+      >
       second: Sure<
         'not string',
         string,
