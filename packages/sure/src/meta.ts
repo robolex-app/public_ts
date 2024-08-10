@@ -10,8 +10,6 @@ export type ExtractPrimitives<TSchema> = {
 export type InferJustMeta<T 
 // extends Sure<unknown, unknown, any, {}>
 > =
-
-
   // for objects
   T extends Sure<unknown, unknown, any, {meta: {
     type: 'object'
@@ -47,7 +45,9 @@ export type InferJustMeta<T
     T extends Sure<unknown, unknown, any, {meta: infer Meta}>
     ? Meta :
    
-      'unknown'
+  // Here we'll not be able to differentiate MetaNever from MetaObj<undefined>
+  // Both will be extracted as `undefined`
+  undefined
 
 export function justMeta<TSchema extends Sure<unknown, unknown, any>>(
   insure: TSchema
@@ -91,5 +91,5 @@ export function justMeta<TSchema extends Sure<unknown, unknown, any>>(
     return insure.meta as any
   }
 
-  return 'unknown' as any
+  return undefined as any
 }

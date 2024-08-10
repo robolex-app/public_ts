@@ -34,7 +34,7 @@ assertEqual<
           type: 'string'
         }
       }
-      age: 'unknown'
+      age: undefined
       info: {
         type: 'object'
         schema: {
@@ -74,7 +74,7 @@ describe('justMeta', () => {
               type: 'string'
             }
           }
-          age: 'unknown'
+          age: undefined
           info: {
             type: 'object'
             schema: {
@@ -99,7 +99,7 @@ describe('justMeta', () => {
             type: 'string',
           },
         },
-        age: 'unknown',
+        age: undefined,
         info: {
           type: 'object',
           schema: {
