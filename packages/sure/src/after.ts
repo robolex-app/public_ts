@@ -31,14 +31,17 @@ export function after<
     value => {
       const [good, out] = first(value)
 
-      return good
-        ? second(
-            // @ts-expect-error TODO: check
-            out
-          )
-        : bad(out)
+      if (good) {
+        return second(
+          // @ts-expect-error TODO: check
+          out
+        )
+      }
+
+      return bad(out)
     },
     {
+      type: 'after',
       first,
       second,
     }
