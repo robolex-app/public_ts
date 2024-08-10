@@ -5,9 +5,8 @@ import { PrettifyRec, objMapEntries } from './utils.js'
 export type ExtractPrimitives<TSchema> = {
   [t in keyof TSchema]: InferJustMeta<TSchema[t]>
 }
-
 // prettier-ignore
-export type InferJustMeta<T 
+export type InferJustMetaOld<T 
 // extends Sure<unknown, unknown, any, {}>
 > =
   // for objects
@@ -48,6 +47,44 @@ export type InferJustMeta<T
   // Here we'll not be able to differentiate MetaNever from MetaObj<undefined>
   // Both will be extracted as `undefined`
   undefined
+
+// prettier-ignore
+export type InferJustMeta<
+  T,
+  // extends Sure<unknown, unknown, any, {}>
+> = T extends Sure<unknown, unknown, any, { meta: infer Meta }>
+  ? // for objects
+    Meta extends {
+      type: 'object'
+      schema: infer CSchema
+    } 
+    ? {
+        type: 'object'
+        schema: ExtractPrimitives<CSchema>
+      } 
+    : // for optional
+    Meta extends {
+        type: 'optional'
+        schema: infer CSchema
+      }
+    ? {
+        type: 'optional'
+        schema: InferJustMeta<CSchema>
+      }
+    : // for array
+    Meta extends {
+        type: 'array'
+        schema: infer CSchema
+      }
+    ? {
+        type: 'array'
+        schema: InferJustMeta<CSchema>
+      }
+    : // for any other type
+      Meta
+  : // Here we'll not be able to differentiate MetaNever from MetaObj<undefined>
+    // Both will be extracted as `undefined`
+    undefined
 
 export function justMeta<TSchema extends Sure<unknown, unknown, any>>(
   insure: TSchema
