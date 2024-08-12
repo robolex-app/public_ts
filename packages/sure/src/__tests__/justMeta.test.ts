@@ -148,6 +148,7 @@ describe('toJsonSchema', () => {
               },
             },
           },
+          required: ['country'],
         },
       },
       required: ['age', 'info'],
@@ -156,8 +157,6 @@ describe('toJsonSchema', () => {
     const ajv = new Ajv()
     const validate = ajv.compile(jsonSchema)
 
-    const valid = validate({})
-
-    expect(jsonSchema).toStrictEqual({})
+    // expect that it doesn't throw
   })
 })

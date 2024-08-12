@@ -97,6 +97,7 @@ export function justMeta<TSchema extends Sure<unknown, unknown, any>>(
   if (insure.meta?.type === 'object') {
     const { schema, ...rest } = insure.meta as any
 
+    // @ts-expect-error more explicit?
     const ret = objMapEntries(schema, ([key, value]) => {
       return [key, justMeta(value)]
     })
@@ -161,6 +162,15 @@ export function metaToJsonSchema<TMeta>(meta: TMeta): any {
         return [key, metaToJsonSchema(value)]
       }),
       required,
+    }
+  }
+
+  // @ts-expect-error figure out
+  if (meta.type === 'array') {
+    return {
+      type: 'array',
+      // rename schema to items here
+      items: metaToJsonSchema(meta.schema),
     }
   }
 
