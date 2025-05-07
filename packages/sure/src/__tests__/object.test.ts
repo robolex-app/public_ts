@@ -3,7 +3,7 @@ import { object, bad, number, string, good, pure, sure, optional, union, literal
 import type { InferBad, InferGood, InferInput, InferMeta, InferSchemaGood, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
 import { Prettify, PrettifyRec } from '../utils.js'
-import { ExtractPrimitives, InferJustMeta } from '../meta.js'
+import { ExtractPrimitives, InferJustMeta } from '../meta_wip.js'
 
 const someObj = object({
   age: number,

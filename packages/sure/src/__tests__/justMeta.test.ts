@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { MetaNever, MetaObj } from '../core.js'
-import { InferJustMeta, ExtractPrimitives, justMeta, metaToJsonSchema } from '../meta.js'
+import { InferJustMeta, ExtractPrimitives, justMeta, metaToJsonSchema } from '../meta_wip.js'
 import { object, optional } from '../object.js'
 import { string, number } from '../primitives.js'
 import { PrettifyRec } from '../utils.js'
