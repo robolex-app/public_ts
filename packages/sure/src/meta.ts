@@ -169,7 +169,7 @@ export function metaToJsonSchema<TMeta>(meta: TMeta): any {
   if (meta.type === 'array') {
     return {
       type: 'array',
-      // rename schema to items here
+      // @ts-expect-error rename schema to items here
       items: metaToJsonSchema(meta.schema),
     }
   }

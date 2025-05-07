@@ -65,7 +65,6 @@ type test3 = ExtractPrimitives<{
 describe('justMeta', () => {
   it('works', () => {
     const result = justMeta(simpleObj)
-    console.log(result)
 
     assertEqual<
       typeof result,
