@@ -60,6 +60,7 @@ const combined = after(sureNumber, positiveNum)
   assertEqual<
     InferredMeta,
     MetaObj<{
+      type: 'after'
       first: typeof sureNumber
       second: typeof positiveNum
     }>
@@ -120,9 +121,10 @@ const sureBig = after(
     InferredMeta,
     {
       meta: {
+        type: 'after'
         first: Sure<
           {
-            age?: 'not number' | 'not integer' | 'not positive' | 'too old, sorry'
+            age?: 'not number' | 'not positive' | 'not integer' | 'too old, sorry'
             name?: 'not string'
           },
           {
@@ -131,24 +133,24 @@ const sureBig = after(
           },
           unknown,
           MetaObj<{
-            parent: typeof object
+            type: 'object'
             schema: {
               age: Sure<
-                'not number' | 'not integer' | 'not positive' | 'too old, sorry',
+                'not number' | 'not positive' | 'not integer' | 'too old, sorry',
                 number,
                 unknown,
                 MetaObj<{
-                  first: typeof sureNumber
+                  type: 'after'
+                  first: (value: unknown) => Good<number> | Bad<'not number'>
                   second: (
                     val: number
                   ) => Good<number> | Bad<'not integer'> | Bad<'not positive'> | Bad<'too old, sorry'>
                 }>
               >
-              name: Sure<'not string', string, unknown, MetaObj<undefined>>
+              name: typeof string
             }
           }>
         >
-
         second: (val: { age: number; name: string }) =>
           | Good<{
               age: number

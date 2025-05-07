@@ -19,7 +19,11 @@ export function intersection<
   TFirstGood & TSecondGood,
   // Variance
   TFirstInput & TSecondInput,
-  MetaObj<{ first: typeof first; second: typeof second }>
+  MetaObj<{
+    type: 'intersection'
+    first: typeof first
+    second: typeof second
+  }>
 > {
   return sure(
     // @ts-expect-error Should be fixed at the definition of sure, I think.
@@ -40,6 +44,7 @@ export function intersection<
       return good({ ...unsureFirst, ...unsureSecond })
     },
     {
+      type: 'intersection',
       first,
       second,
     }

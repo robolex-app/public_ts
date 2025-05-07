@@ -40,6 +40,7 @@ assertEqual<InferredInput, string | number>(true)
 assertEqual<
   InferredMeta,
   MetaObj<{
+    type: 'after'
     first: typeof coerceNumber
     second: typeof positive
   }>

@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { object, bad, number, string, good, pure, sure, optional, union, literal, is, or } from '../index.js'
 import type { InferBad, InferGood, InferInput, InferMeta, InferSchemaGood, MetaNever, MetaObj, Sure } from '../index.js'
 import { assertEqual } from './typeTestUtils.js'
+import { Prettify, PrettifyRec } from '../utils.js'
+import { ExtractPrimitives, InferJustMeta } from '../meta_wip.js'
 
 const someObj = object({
   age: number,
@@ -59,9 +61,16 @@ assertEqual<
   InferredMeta,
   {
     meta: {
-      parent: typeof object
+      type: 'object'
       schema: {
-        age: Sure<'not number', number, unknown, MetaNever>
+        age: Sure<
+          'not number',
+          number,
+          unknown,
+          MetaObj<{
+            type: 'number'
+          }>
+        >
         firstName: Sure<'not string (sure)', string, unknown, MetaNever>
         middleName: Sure<'not string (pure)', string, unknown, MetaNever>
         lastName: (value: unknown) => readonly [true, string] | readonly [false, 'not string (raw)']
@@ -74,9 +83,16 @@ assertEqual<
           },
           unknown,
           MetaObj<{
-            parent: typeof object
+            type: 'object'
             schema: {
-              country: Sure<'not string', string, unknown, MetaObj<undefined>>
+              country: Sure<
+                'not string',
+                string,
+                unknown,
+                MetaObj<{
+                  type: 'string'
+                }>
+              >
             }
           }>
         >

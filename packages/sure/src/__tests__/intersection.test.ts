@@ -25,38 +25,55 @@ assertEqual<InferredBad, { name?: 'not string' } | { age?: 'not number' }>(true)
 assertEqual<InferredInput, unknown>(true) // The input needs more tests
 assertEqual<
   InferredMeta,
-  MetaObj<{
-    first: Sure<
-      {
-        name?: 'not string'
-      },
-      {
-        name: string
-      },
-      unknown,
-      MetaObj<{
-        parent: typeof object
-        schema: {
-          name: Sure<'not string', string, unknown, MetaObj<undefined>>
-        }
-      }>
-    >
-    second: Sure<
-      {
-        age?: 'not number'
-      },
-      {
-        age: number
-      },
-      unknown,
-      MetaObj<{
-        parent: typeof object
-        schema: {
-          age: Sure<'not number', number, unknown, MetaNever>
-        }
-      }>
-    >
-  }>
+  {
+    meta: {
+      type: 'intersection'
+      first: Sure<
+        {
+          name?: 'not string'
+        },
+        {
+          name: string
+        },
+        unknown,
+        MetaObj<{
+          type: 'object'
+          schema: {
+            name: Sure<
+              'not string',
+              string,
+              unknown,
+              MetaObj<{
+                type: 'string'
+              }>
+            >
+          }
+        }>
+      >
+      second: Sure<
+        {
+          age?: 'not number'
+        },
+        {
+          age: number
+        },
+        unknown,
+        MetaObj<{
+          type: 'object'
+          schema: {
+            age: Sure<
+              'not number',
+              number,
+              unknown,
+              MetaObj<{
+                type: 'number'
+              }>
+            >
+          }
+        }>
+      >
+    }
+  }
 >(true)
 
 //

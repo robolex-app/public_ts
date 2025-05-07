@@ -1,4 +1,3 @@
-import { as } from 'vitest/dist/reporters-5f784f42.js'
 import { InferBad, InferGood, InferInput, InferMeta, MetaNever, MetaObj, Sure } from '../../core.js'
 import { assertEqual } from '../typeTestUtils.js'
 

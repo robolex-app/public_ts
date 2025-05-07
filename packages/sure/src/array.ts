@@ -13,7 +13,7 @@ export function array<
   Array<InferGood<TSchema>>,
   unknown,
   MetaObj<{
-    parent: typeof array
+    type: 'array'
 
     schema: TSchema
   }>
@@ -51,7 +51,7 @@ export function array<
       return good(goods)
     },
     {
-      parent: array,
+      type: 'array',
 
       schema,
     }

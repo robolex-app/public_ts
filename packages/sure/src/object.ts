@@ -8,7 +8,7 @@ type PickOptionalsGood<T extends KVPair<Sure>> = T extends {
     unknown,
     any,
     MetaObj<{
-      parent: typeof optional
+      type: 'optional'
     }>
   >
 }
@@ -21,7 +21,7 @@ type PickNonOptionals<T extends KVPair<Sure>> = T extends {
     unknown,
     any,
     MetaObj<{
-      parent: typeof optional
+      type: 'optional'
     }>
   >
 }
@@ -53,7 +53,7 @@ export function optional<TSchema extends Sure<unknown, unknown, any>>(
   InferGood<TSchema>,
   unknown,
   MetaObj<{
-    parent: typeof optional
+    type: 'optional'
 
     schema: TSchema
   }>
@@ -62,7 +62,7 @@ export function optional<TSchema extends Sure<unknown, unknown, any>>(
   //            since `sure` will update the function with the meta
   // @ts-expect-error
   return sure(value => schema(value), {
-    parent: optional,
+    type: 'optional',
 
     schema,
   })
@@ -80,7 +80,7 @@ export function object<
   InferSchemaGood<TSchema>,
   unknown,
   MetaObj<{
-    parent: typeof object
+    type: 'object'
 
     schema: TSchema
   }>
@@ -96,7 +96,7 @@ export function object<
       const groupGood = {}
 
       for (const [key, sureFunction] of Object.entries(schema)) {
-        const isOptional = isObject(sureFunction.meta) && sureFunction.meta.parent === optional
+        const isOptional = isObject(sureFunction.meta) && sureFunction.meta.type === 'optional'
 
         if (isOptional && !(key in value)) {
           continue
@@ -120,7 +120,7 @@ export function object<
       return good(groupGood)
     },
     {
-      parent: object,
+      type: 'object',
 
       schema,
     }

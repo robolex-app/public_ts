@@ -1,4 +1,4 @@
-import { Primitive, bad, good, pure } from './core.js'
+import { Primitive, bad, good, pure, sure } from './core.js'
 
 export const literal = <
   // so that `as const` is not needed
@@ -6,16 +6,21 @@ export const literal = <
 >(
   value: T
 ) => {
-  return pure(
-    val =>
-      val === value //
-        ? good<T>(
-            // @ts-expect-error We do an explicit check above
-            val
-          )
-        : bad(`not literal ${typeof value} (${String(value)})` as const)
+  return sure(
+    val => {
+      if (val === value) {
+        return good<T>(
+          // @ts-expect-error We do an explicit check above
+          val
+        )
+      }
 
-    // TODO: add meta with `value`
+      return bad(`not literal ${typeof value} (${String(value)})` as const)
+    },
+    {
+      type: 'literal',
+      value,
+    }
   )
 }
 

@@ -21,6 +21,7 @@ export function after<
   InferGood<TSecond>,
   InferInput<TFirst>,
   MetaObj<{
+    type: 'after'
     first: typeof first
     second: typeof second
   }>
@@ -30,14 +31,17 @@ export function after<
     value => {
       const [good, out] = first(value)
 
-      return good
-        ? second(
-            // @ts-expect-error TODO: check
-            out
-          )
-        : bad(out)
+      if (good) {
+        return second(
+          // @ts-expect-error TODO: check
+          out
+        )
+      }
+
+      return bad(out)
     },
     {
+      type: 'after',
       first,
       second,
     }

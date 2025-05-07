@@ -19,9 +19,15 @@ assertEqual<
   InferredMeta,
   {
     meta: {
-      parent: typeof array
-
-      schema: Sure<'not number', number, unknown, MetaNever>
+      type: 'array'
+      schema: Sure<
+        'not number',
+        number,
+        unknown,
+        MetaObj<{
+          type: 'number'
+        }>
+      >
     }
   }
 >(true)

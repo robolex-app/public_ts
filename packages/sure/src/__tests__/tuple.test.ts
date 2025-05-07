@@ -31,10 +31,24 @@ const someTuple = tuple([number, string, boolean])
     InferredMeta,
     {
       meta: {
-        parent: typeof tuple
+        type: 'tuple'
         schema: [
-          Sure<'not number', number, unknown, MetaNever>,
-          typeof string,
+          Sure<
+            'not number',
+            number,
+            unknown,
+            MetaObj<{
+              type: 'number'
+            }>
+          >,
+          Sure<
+            'not string',
+            string,
+            unknown,
+            MetaObj<{
+              type: 'string'
+            }>
+          >,
           (x: unknown) => Good<boolean> | Bad<'not boolean'>,
         ]
       }
@@ -70,64 +84,42 @@ const myTuple = tuple([
 
   assertEqual<
     InferredMeta,
-    MetaObj<{
-      parent: <Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]] | []>(
-        arr: Arr
-      ) => Sure<
-        TupleInferBads<Arr>,
-        TupleInferGoods<Arr>,
-        unknown,
-        MetaObj<{
-          parent: typeof tuple
-          schema: Arr
-        }>
-      >
-      schema: [
-        typeof string,
-        Sure<
-          ('not number' | undefined)[],
-          number[],
-          unknown,
-          MetaObj<{
-            parent: <Arr extends Sure<unknown, unknown[], unknown>>(
-              schema: Arr
-            ) => Sure<
-              InferBad<Arr>,
-              InferGood<Arr>,
-              unknown,
-              MetaObj<{
-                parent: typeof spread_NOT_IMPLEMENTED
+    {
+      meta: {
+        type: 'tuple'
+        schema: [
+          typeof string,
+          Sure<
+            ('not number' | undefined)[],
+            number[],
+            unknown,
+            MetaObj<{
+              parent: <Arr extends Sure<unknown, unknown[], unknown>>(
                 schema: Arr
-              }>
-            >
-            schema: Sure<
-              ('not number' | undefined)[],
-              number[],
-              unknown,
-              MetaObj<{
-                parent: <
-                  TPropFail,
-                  TPropGood,
-                  TSchema extends Sure<TPropFail, TPropGood, unknown, MetaNever | MetaObj>,
-                >(
-                  schema: TSchema
-                ) => Sure<
-                  (InferBad<TSchema> | undefined)[],
-                  InferGood<TSchema>[],
-                  unknown,
-                  MetaObj<{
-                    parent: typeof array
-                    schema: TSchema
-                  }>
-                >
-                schema: Sure<'not number', number, unknown, MetaNever>
-              }>
-            >
-          }>
-        >,
-        typeof string,
-      ]
-    }>
+              ) => Sure<
+                InferBad<Arr>,
+                InferGood<Arr>,
+                unknown,
+                MetaObj<{
+                  parent: typeof spread_NOT_IMPLEMENTED
+                  schema: Arr
+                }>
+              >
+              schema: Sure<
+                ('not number' | undefined)[],
+                number[],
+                unknown,
+                MetaObj<{
+                  type: 'array'
+                  schema: typeof number
+                }>
+              >
+            }>
+          >,
+          typeof string,
+        ]
+      }
+    }
   >(true)
 }
 
@@ -159,64 +151,56 @@ const smallSchema = tuple([
 
   assertEqual<
     InferredMeta,
-    MetaObj<{
-      parent: <Arr extends [Sure<unknown, unknown, any>, ...Sure<unknown, unknown, any>[]] | []>(
-        arr: Arr
-      ) => Sure<
-        TupleInferBads<Arr>,
-        TupleInferGoods<Arr>,
-        unknown,
-        MetaObj<{
-          parent: typeof tuple
-          schema: Arr
-        }>
-      >
-      schema: [
-        (value: unknown) => Good<undefined> | Bad<'not undefined'>,
-        Sure<
-          ('not string' | undefined)[],
-          string[],
-          unknown,
-          MetaObj<{
-            parent: <Arr extends Sure<unknown, unknown[], unknown>>(
-              schema: Arr
-            ) => Sure<
-              InferBad<Arr>,
-              InferGood<Arr>,
-              unknown,
-              MetaObj<{
-                parent: typeof spread_NOT_IMPLEMENTED
+    {
+      meta: {
+        type: 'tuple'
+        schema: [
+          (value: unknown) => Good<undefined> | Bad<'not undefined'>,
+          Sure<
+            ('not string' | undefined)[],
+            string[],
+            unknown,
+            MetaObj<{
+              parent: <Arr extends Sure<unknown, unknown[], unknown>>(
                 schema: Arr
-              }>
-            >
-            schema: Sure<
-              ('not string' | undefined)[],
-              string[],
-              unknown,
-              MetaObj<{
-                parent: <
-                  TPropFail,
-                  TPropGood,
-                  TSchema extends Sure<TPropFail, TPropGood, unknown, MetaNever | MetaObj>,
-                >(
-                  schema: TSchema
-                ) => Sure<
-                  (InferBad<TSchema> | undefined)[],
-                  InferGood<TSchema>[],
-                  unknown,
-                  MetaObj<{
-                    parent: typeof array
-                    schema: TSchema
-                  }>
-                >
-                schema: typeof string
-              }>
-            >
-          }>
-        >,
-        Sure<'not number', number, unknown, MetaNever>,
-      ]
-    }>
+              ) => Sure<
+                InferBad<Arr>,
+                InferGood<Arr>,
+                unknown,
+                MetaObj<{
+                  parent: typeof spread_NOT_IMPLEMENTED
+                  schema: Arr
+                }>
+              >
+              schema: Sure<
+                ('not string' | undefined)[],
+                string[],
+                unknown,
+                MetaObj<{
+                  type: 'array'
+                  schema: Sure<
+                    'not string',
+                    string,
+                    unknown,
+                    MetaObj<{
+                      type: 'string'
+                    }>
+                  >
+                }>
+              >
+            }>
+          >,
+          Sure<
+            'not number',
+            number,
+            unknown,
+            MetaObj<{
+              type: 'number'
+            }>
+          >,
+        ]
+      }
+    }
   >(true)
 }
 
